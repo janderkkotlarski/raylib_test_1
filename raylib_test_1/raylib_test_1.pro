@@ -22,8 +22,8 @@ INCLUDEPATH += C:/raylib/raylib/src
 
 LIBS += -LC:/raylib/MinGW/bin
 LIBS += -LC:\raylib\src\external\glfw
-LIBS += -Iexternal -lraylib -lopengl32 -lgdi32 -lwinmm
-# -lglfw3 -lopenal32
+LIBS += -lraylib -lopengl32 -lgdi32 -lwinmm
+# -Iexternal -lglfw3 -lopenal32
 
 SOURCES += \
         main.cpp
