@@ -19,9 +19,11 @@ CONFIG(release, debug|release) {
 }
 
 INCLUDEPATH += C:/raylib/raylib/src
+INCLUDEPATH += C:/raylib/raylib
 
 LIBS += -LC:/raylib/MinGW/bin
-LIBS += -LC:\raylib\src\external\glfw
+# LIBS += -LC:/raylib/src/externa/glfw
+# LIBS += -LC:/raylib/raylib
 LIBS += -lraylib -lopengl32 -lgdi32 -lwinmm
 # -Iexternal -lglfw3 -lopenal32
 

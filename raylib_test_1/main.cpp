@@ -1,13 +1,19 @@
 #include <iostream>
 
+
+
 #include "raylib.h"
 
-int main(void)
+#include "raylib.hpp"
+
+int main()
 {
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
+
+    raylib::Window window(screenWidth, screenHeight, "raylib [core] example - 3d camera free");
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - 3d camera free");
 
