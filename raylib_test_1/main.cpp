@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include "raylib.h"
 
@@ -65,8 +66,12 @@ int main()
   const float adjusted
   { speed/fps };
 
-  raylib::Vector3 cube_position
-  { 1.0f, 0.0f, 0.0f };
+  const float side
+  { 1.0f };
+
+  std::vector <raylib::Vector3> cube_positions
+  { raylib::Vector3(1.0f, 0.0f, 0.0f),
+    raylib::Vector3(1.0f, 2.0f, 0.0f)};
 
   const raylib::Vector3 forward
   { 1.0f, 0.0f, 0.0f };
@@ -162,7 +167,8 @@ int main()
 
       camera.BeginMode3D();
       {
-        cube_position.DrawCube(1.0f, 1.0f, 1.0f, ORANGE);
+        for (raylib::Vector3 position: cube_positions)
+        { position.DrawCube(side, side, side, ORANGE); }
 
         // DrawCubeWires(cubePosition, 2.0f, 2.0f, 2.0f, MAROON);
 
