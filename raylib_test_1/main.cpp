@@ -6,14 +6,47 @@
 
 raylib::Vector3 add_vector3(const raylib::Vector3 &vec_1,
                             const raylib::Vector3 &vec_2)
+noexcept
 {
-  raylib::Vector3 vec_3;
+  raylib::Vector3 out_vec;
 
-  vec_3.x = vec_1.x + vec_2.x;
-  vec_3.y = vec_1.y + vec_2.y;
-  vec_3.z = vec_1.z + vec_2.z;
+  out_vec.x = vec_1.x + vec_2.x;
+  out_vec.y = vec_1.y + vec_2.y;
+  out_vec.z = vec_1.z + vec_2.z;
 
-  return vec_3;
+  return out_vec;
+}
+
+raylib::Vector3 multiply_vector3(const raylib::Vector3 &vec_1,
+                                 const float mult)
+noexcept
+{
+  raylib::Vector3 out_vec;
+
+  out_vec.x = vec_1.x*mult;
+  out_vec.y = vec_1.y*mult;
+  out_vec.z = vec_1.z*mult;
+
+  return out_vec;
+}
+
+raylib::Vector3 divide_vector3(const raylib::Vector3 &vec_1,
+                               const float div)
+{
+  raylib::Vector3 out_vec;
+
+  if (div == 0.0f )
+  {
+    std::cerr << "Do not divide by 0!" << std::endl;
+
+    throw 1;
+  }
+
+  out_vec.x = vec_1.x/div;
+  out_vec.y = vec_1.y/div;
+  out_vec.z = vec_1.z/div;
+
+  return out_vec;
 }
 
 int main()
@@ -23,11 +56,35 @@ int main()
   const int screenWidth = 800;
   const int screenHeight = 800;
 
-  raylib::Vector3 cube_position
-  { 3.0f, 0.0f, 0.0f };
+  const float fps
+  { 60.0f };
 
-  raylib::Vector3 forward
+  const float speed
+  { 1.0f };
+
+  const float adjusted
+  { speed/fps };
+
+  raylib::Vector3 cube_position
   { 1.0f, 0.0f, 0.0f };
+
+  const raylib::Vector3 forward
+  { 1.0f, 0.0f, 0.0f };
+
+  const raylib::Vector3 backward
+  { -1.0f, 0.0f, 0.0f };
+
+  const raylib::Vector3 rightward
+  { 0.0f, -1.0f, 0.0f };
+
+  const raylib::Vector3 leftward
+  { 0.0f, 1.0f, 0.0f };
+
+  const raylib::Vector3 upward
+  { 0.0f, 0.0f, 1.0f };
+
+  const raylib::Vector3 downward
+  { 0.0f, 0.0f, -1.0f };
 
   raylib::Vector3 target
   { forward };
@@ -44,17 +101,16 @@ int main()
 
   camera.position = { 0.0f, 0.0f, 0.0f }; // Camera position
   camera.target = add_vector3(camera.position, forward); // Vector3Add(camera.position, forward);      // Camera looking at point
-  camera.up = { 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
-  camera.fovy = 90.0f;                                // Camera field-of-view Y
+  camera.up = { 0.0f, 0.0f, 1.0f };          // Camera up vector (rotation towards target)
+  camera.fovy = 45.0f;                                // Camera field-of-view Y
   camera.type = CAMERA_PERSPECTIVE;                   // Camera mode type
-
 
 
   // SetCameraMode(camera, CAMERA_FREE); // Set a free camera mode
 
   camera.SetMode(CAMERA_FREE);
 
-  window.SetTargetFPS(60);            // Set our game to run at 60 frames-per-second
+  window.SetTargetFPS(fps);            // Set our game to run at 60 frames-per-second
   //--------------------------------------------------------------------------------------
 
   const raylib::Color background
@@ -65,6 +121,32 @@ int main()
   // Main game loop
   while (!window.ShouldClose())        // Detect window close button or ESC key
   {
+    if (IsKeyDown('W'))
+    { camera.SetPosition(add_vector3(camera.position,
+                                     multiply_vector3(forward, adjusted))); }
+
+    if (IsKeyDown('S'))
+    { camera.SetPosition(add_vector3(camera.position,
+                                     multiply_vector3(backward, adjusted))); }
+
+    if (IsKeyDown('D'))
+    { camera.SetPosition(add_vector3(camera.position,
+                                     multiply_vector3(rightward, adjusted))); }
+
+    if (IsKeyDown('A'))
+    { camera.SetPosition(add_vector3(camera.position,
+                                     multiply_vector3(leftward, adjusted))); }
+
+    if (IsKeyDown('E'))
+    { camera.SetPosition(add_vector3(camera.position,
+                                     multiply_vector3(upward, adjusted))); }
+
+    if (IsKeyDown('Q'))
+    { camera.SetPosition(add_vector3(camera.position,
+                                     multiply_vector3(downward, adjusted))); }
+
+    camera.target = add_vector3(camera.position, forward);
+
     // Update
     //---------------------------------------------------------------------------------
 
@@ -80,7 +162,7 @@ int main()
 
       camera.BeginMode3D();
       {
-        cube_position.DrawCube(2.0f, 2.0f, 2.0f, ORANGE);
+        cube_position.DrawCube(1.0f, 1.0f, 1.0f, ORANGE);
 
         // DrawCubeWires(cubePosition, 2.0f, 2.0f, 2.0f, MAROON);
 

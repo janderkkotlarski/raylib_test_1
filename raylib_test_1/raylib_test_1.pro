@@ -18,14 +18,14 @@ CONFIG(release, debug|release) {
   QMAKE_LFLAGS += -pg
 }
 
-INCLUDEPATH += C:\raylib\raylib\src
-INCLUDEPATH += C:\raylib\raylib
+INCLUDEPATH += C:/raylib/raylib/src
+INCLUDEPATH += C:/raylib/raylib
 
-LIBS += -LC:\raylib\MinGW\bin
-# LIBS += -LC:/raylib/src/externa/glfw
-# LIBS += -LC:/raylib/raylib
-LIBS += -lraylib -lopengl32 -lgdi32 -lwinmm
-# -Iexternal -lglfw3 -lopenal32
+LIBS += -LC:/raylib/MinGW/bin
+LIBS += -LC:/raylib/src/externa/glfw
+LIBS += -LC:/raylib/raylib
+LIBS += -Iexternal -lraylib -lopengl32 -lgdi32 -lwinmm
+#  -lglfw3 -lopenal32
 
 SOURCES += \
         main.cpp
