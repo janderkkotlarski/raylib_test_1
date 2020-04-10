@@ -150,6 +150,11 @@ int main()
     { camera.SetPosition(add_vector3(camera.position,
                                      multiply_vector3(downward, adjusted))); }
 
+
+
+    // if (IsKeyDown('L'))
+    // { camera. }
+
     camera.target = add_vector3(camera.position, forward);
 
     // Update
