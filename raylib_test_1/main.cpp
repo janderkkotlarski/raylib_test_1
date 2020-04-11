@@ -76,7 +76,7 @@ int main()
   { speed/fps };
 
   const float angle
-  { 1.0f };
+  { 2.0f };
 
   const float theta
   { angle/fps };
@@ -109,14 +109,17 @@ int main()
   raylib::Vector3 downward
   { 0.0f, 0.0f, -1.0f };
 
+  raylib::Vector3 position
+  { 0.0f, 0.0f, 0.0f };
+
   raylib::Window window(screenWidth, screenHeight, "Test 1 for raylib");
 
   // Define the camera to look into our 3d world
   raylib::Camera3D camera;  
 
-  camera.position = { 0.0f, 0.0f, 0.0f }; // Camera position
-  camera.target = add_vector3(camera.position, forward); // Vector3Add(camera.position, forward);      // Camera looking at point
-  camera.up = { upward };          // Camera up vector (rotation towards target)
+  camera.position = position; // Camera position
+  camera.target = add_vector3(position, forward); // Vector3Add(camera.position, forward);      // Camera looking at point
+  camera.up = upward;          // Camera up vector (rotation towards target)
   camera.fovy = 45.0f;                                // Camera field-of-view Y
   camera.type = CAMERA_PERSPECTIVE;                   // Camera mode type
 
@@ -139,28 +142,28 @@ int main()
   while (!window.ShouldClose())        // Detect window close button or ESC key
   {
     if (IsKeyDown('W'))
-    { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(forward, velocity))); }
+    { position = add_vector3(camera.position,
+                             multiply_vector3(forward, velocity)); }
 
     if (IsKeyDown('S'))
-    { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(backward, velocity))); }
+    { position = add_vector3(camera.position,
+                             multiply_vector3(backward, velocity)); }
 
     if (IsKeyDown('D'))
-    { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(rightward, velocity))); }
+    { position = add_vector3(camera.position,
+                             multiply_vector3(rightward, velocity)); }
 
     if (IsKeyDown('A'))
-    { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(leftward, velocity))); }
+    { position = add_vector3(camera.position,
+                             multiply_vector3(leftward, velocity)); }
 
     if (IsKeyDown('E'))
-    { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(upward, velocity))); }
+    { position = add_vector3(camera.position,
+                             multiply_vector3(upward, velocity)); }
 
     if (IsKeyDown('Q'))
-    { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(downward, velocity))); }
+    { position = add_vector3(camera.position,
+                             multiply_vector3(downward, velocity)); }
 
     if (IsKeyDown('L'))
     {
@@ -170,17 +173,63 @@ int main()
       leftward = multiply_vector3(rightward, -1.0f);
     }
 
+    if (IsKeyDown('J'))
+    {
+      rotate_front(forward, leftward, theta);
+
+      backward = multiply_vector3(forward, -1.0f);
+      rightward = multiply_vector3(leftward, -1.0f);
+    }
+
+    if (IsKeyDown('I'))
+    {
+      rotate_front(forward, upward, theta);
+
+      backward = multiply_vector3(forward, -1.0f);
+      downward = multiply_vector3(upward, -1.0f);
+
+      camera.up = upward;
+    }
+
+    if (IsKeyDown('K'))
+    {
+      rotate_front(forward, downward, theta);
+
+      backward = multiply_vector3(forward, -1.0f);
+      upward = multiply_vector3(downward, -1.0f);
+
+      camera.up = upward;
+    }
+
+    if (IsKeyDown('O'))
+    {
+      rotate_front(upward, rightward, theta);
+
+      downward = multiply_vector3(upward, -1.0f);
+      leftward = multiply_vector3(rightward, -1.0f);
+
+      camera.up = upward;
+    }
+
+    if (IsKeyDown('U'))
+    {
+      rotate_front(upward, leftward, theta);
+
+      downward = multiply_vector3(upward, -1.0f);
+      rightward = multiply_vector3(leftward, -1.0f);
+
+      camera.up = upward;
+    }
 
 
     // if (IsKeyDown('L'))
     // { camera. }
 
-    camera.target = forward; // add_vector3(camera.position, forward);
-
-    // Update
-    //---------------------------------------------------------------------------------
+    camera.target = add_vector3(position, forward); // add_vector3(camera.position, forward);
 
     camera.Update(); // Update camera
+
+    camera.position = position;
 
     const std::vector <std::string> pos_strings
     { vector3_to_strings(camera.position) };
