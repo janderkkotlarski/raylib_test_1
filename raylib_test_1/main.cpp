@@ -20,6 +20,19 @@ noexcept
   return out_vec;
 }
 
+raylib::Vector3 sub_vector3(const raylib::Vector3 &vec_1,
+                            const raylib::Vector3 &vec_2)
+noexcept
+{
+  raylib::Vector3 out_vec;
+
+  out_vec.x = vec_1.x - vec_2.x;
+  out_vec.y = vec_1.y - vec_2.y;
+  out_vec.z = vec_1.z - vec_2.z;
+
+  return out_vec;
+}
+
 raylib::Vector3 multiply_vector3(const raylib::Vector3 &vec_1,
                                  const float mult)
 noexcept
@@ -151,6 +164,24 @@ noexcept
   }
 }
 
+void wrapper(float &dim,
+             const float wrap)
+noexcept
+{
+  if (wrap > 0.0f &&
+      abs(dim) > wrap)
+  { dim -= 2.0f*wrap*dim/abs(dim); }
+}
+
+void wrapping(raylib::Vector3 &position,
+              const float wrap)
+noexcept
+{
+  wrapper(position.x, wrap);
+  wrapper(position.y, wrap);
+  wrapper(position.z, wrap);
+}
+
 float randist(std::random_device &rand,
               const float dist_min,
               const float dist_max)
@@ -190,6 +221,53 @@ noexcept
   return position;
 }
 
+unsigned char dimming(const float mult,
+                      unsigned char channel)
+noexcept
+{ return static_cast<char>(mult*static_cast<float>(channel)); }
+
+raylib::Color dimmer(const raylib::Vector3 &difference,
+                     raylib::Color &cube_color,
+                     const float decay)
+noexcept
+{
+  const float distance
+  { sqrt(inproduct(difference, difference)) };
+
+  const float mult
+  { pow(decay, distance) };
+
+  return raylib::Color(dimming(mult, cube_color.r), dimming(mult, cube_color.g), dimming(mult, cube_color.b));
+}
+
+void display_cube(const raylib::Vector3 &position,
+                  raylib::Vector3 &cube_position,
+                  const raylib::Vector3 &cube_dims,
+                  const raylib::Vector3 &forward,
+                  raylib::Color &cube_color,
+                  raylib::Color &edge_color,
+                  const float cam_angle,
+                  const float sight,
+                  const float decay)
+noexcept
+{
+  const raylib::Vector3 difference
+  { sub_vector3(cube_position, position) };
+
+  if (inproduct(unit_vectorize(difference), forward) > cam_angle &&
+      inproduct(difference, difference) <= sight*sight)
+  {
+    const raylib::Color dim_color
+    { dimmer(difference, cube_color, decay) };
+
+    const raylib::Color dedge_color
+    { dimmer(difference, edge_color, decay) };
+
+    cube_position.DrawCube(cube_dims, dim_color);
+    cube_position.DrawCubeWires(cube_dims, dedge_color);
+  }
+}
+
 int main()
 {
   // Initialization
@@ -201,7 +279,7 @@ int main()
   { 60.0f };
 
   const float speed
-  { 10.0f };
+  { 5.0f };
 
   const float velocity
   { speed/fps };
@@ -215,24 +293,46 @@ int main()
   const float side
   { 1.0f };
 
+  const float wrap
+  { 20.0f };
+
+  const float decay
+  { 0.5f };
+
+  const float sight
+  { 5.0f };
+
   const raylib::Vector3 cube_dims
   { side, side, side };
 
   const float dist_min
-  { 5.0f };
+  { 3.0f };
 
   const float dist_max
-  { 25.0f };
+  { 20.0f };
+
+  raylib::Color cube_color
+  { 127, 127, 127 };
+
+  raylib::Color edge_color
+  { 255, 255, 255 };
 
   std::random_device rand;
 
+  const bool randomode
+  { true };
+
   const int cube_amount
-  { 100000 };
+  { 1000 };
 
   std::vector <raylib::Vector3> cube_positions;
 
   for(int count{ 0 }; count < cube_amount; ++count)
-  { cube_positions.push_back(raylib::Vector3(ranpos(rand, dist_min, dist_max))); }
+  { cube_positions.push_back(ranpos(rand, dist_min, dist_max)); }
+
+  raylib::Vector3 cube_position
+  { 0.0f, 0.0f, 0.0f };
+  // { ranpos(rand, dist_min, dist_max) };
 
   raylib::Vector3 forward
   { 1.0f, 0.0f, 0.0f };
@@ -267,13 +367,7 @@ int main()
   camera.type = CAMERA_PERSPECTIVE;                   // Camera mode type
 
   const float cam_angle
-  { 0.85 };
-
-  const float sight
-  { 10.0f };
-
-  std::vector <std::string> pos_strings
-  { vector3_to_strings(camera.position) };
+  { 0.5 };
 
   // SetCameraMode(camera, CAMERA_FREE); // Set a free camera mode
 
@@ -293,6 +387,8 @@ int main()
     key_bindings(camera, position, forward, backward,
                  rightward, leftward, upward, downward,
                  velocity, theta);
+
+    wrapping(position, wrap);
 
     camera.target = add_vector3(position, forward);
 
@@ -320,17 +416,18 @@ int main()
 
       camera.BeginMode3D();
       {
-        for (raylib::Vector3 cube_pos: cube_positions)
+        if (randomode)
         {
-          const raylib::Vector3 difference
-          { add_vector3(cube_pos, multiply_vector3(position, -1.0f)) };
-
-          if (inproduct(unit_vectorize(difference), forward) > 0.85 &&
-              inproduct(difference, difference) <= sight*sight)
+          for (raylib::Vector3 cube_pos: cube_positions)
           {
-            cube_pos.DrawCube(cube_dims, DARKPURPLE);
-            cube_pos.DrawCubeWires(cube_dims, ORANGE);
+            display_cube(position, cube_pos, cube_dims, forward,
+                         cube_color, edge_color, cam_angle, sight, decay);
           }
+        }
+        else
+        {
+          display_cube(position, cube_position, cube_dims, forward,
+                       cube_color, edge_color, cam_angle, sight, decay);
         }
       }
 
