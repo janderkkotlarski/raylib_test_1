@@ -1,7 +1,8 @@
 #include <iostream>
+#include <string>
 #include <vector>
 
-#include "raylib.h"
+// #include "raylib.h"
 
 #include "raylib.hpp"
 
@@ -50,6 +51,17 @@ raylib::Vector3 divide_vector3(const raylib::Vector3 &vec_1,
   return out_vec;
 }
 
+std::vector <std::string> vector3_to_strings(const raylib::Vector3 &vec)
+{
+  std::vector <std::string> strings;
+
+  strings.push_back(std::to_string(vec.x));
+  strings.push_back(std::to_string(vec.y));
+  strings.push_back(std::to_string(vec.z));
+
+  return strings;
+}
+
 int main()
 {
   // Initialization
@@ -61,7 +73,7 @@ int main()
   { 60.0f };
 
   const float speed
-  { 1.0f };
+  { 5.0f };
 
   const float adjusted
   { speed/fps };
@@ -72,6 +84,8 @@ int main()
   std::vector <raylib::Vector3> cube_positions
   { raylib::Vector3(1.0f, 0.0f, 0.0f),
     raylib::Vector3(1.0f, 2.0f, 0.0f)};
+
+
 
   const raylib::Vector3 forward
   { 1.0f, 0.0f, 0.0f };
@@ -91,18 +105,16 @@ int main()
   const raylib::Vector3 downward
   { 0.0f, 0.0f, -1.0f };
 
-  raylib::Vector3 target
+  raylib::Vector3 front
   { forward };
 
-  raylib::Vector3 cam_pos
-  { 0.0f, 0.0f, 0.0f };
+  raylib::Vector3 target
+  { front };
 
   raylib::Window window(screenWidth, screenHeight, "Test 1 for raylib");
 
   // Define the camera to look into our 3d world
-  raylib::Camera3D camera;
-
-  target = add_vector3(cam_pos, forward);
+  raylib::Camera3D camera;  
 
   camera.position = { 0.0f, 0.0f, 0.0f }; // Camera position
   camera.target = add_vector3(camera.position, forward); // Vector3Add(camera.position, forward);      // Camera looking at point
@@ -110,6 +122,8 @@ int main()
   camera.fovy = 45.0f;                                // Camera field-of-view Y
   camera.type = CAMERA_PERSPECTIVE;                   // Camera mode type
 
+  std::vector <std::string> pos_strings
+  { vector3_to_strings(camera.position) };
 
   // SetCameraMode(camera, CAMERA_FREE); // Set a free camera mode
 
@@ -155,16 +169,17 @@ int main()
     // if (IsKeyDown('L'))
     // { camera. }
 
-    camera.target = add_vector3(camera.position, forward);
+    camera.target = add_vector3(camera.position, front);
 
     // Update
     //---------------------------------------------------------------------------------
 
     camera.Update(); // Update camera
 
+    std::vector <std::string> pos_strings
+    { vector3_to_strings(camera.position) };
+
     // if (IsKeyDown('Z')) camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
-
-
 
     window.BeginDrawing();
     {
@@ -179,10 +194,22 @@ int main()
 
       }
 
+
+
       camera.EndMode3D();
+
+      DrawFPS(10, 10);
 
       // DrawRectangle( 10, 10, 320, 133, Fade(SKYBLUE, 0.5f));
       // DrawRectangleLines( 10, 10, 320, 133, BLUE);
+
+      const std::string camera_pos
+      { "Camera position:\n{" + pos_strings[0] + ","  + pos_strings[1] + "," + pos_strings[2] };
+
+      const char *array
+      { camera_pos.c_str() };
+
+      DrawText(array, 10, 40, 20, GREEN);
 
       // DrawText("Free camera default controls:", 20, 20, 10, BLACK);
       // DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, DARKGRAY);
