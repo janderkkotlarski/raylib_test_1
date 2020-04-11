@@ -32,26 +32,8 @@ noexcept
   return out_vec;
 }
 
-raylib::Vector3 divide_vector3(const raylib::Vector3 &vec_1,
-                               const float div)
-{
-  raylib::Vector3 out_vec;
-
-  if (div == 0.0f )
-  {
-    std::cerr << "Do not divide by 0!" << std::endl;
-
-    throw 1;
-  }
-
-  out_vec.x = vec_1.x/div;
-  out_vec.y = vec_1.y/div;
-  out_vec.z = vec_1.z/div;
-
-  return out_vec;
-}
-
 std::vector <std::string> vector3_to_strings(const raylib::Vector3 &vec)
+noexcept
 {
   std::vector <std::string> strings;
 
@@ -61,6 +43,21 @@ std::vector <std::string> vector3_to_strings(const raylib::Vector3 &vec)
 
   return strings;
 }
+
+void rotate_front(raylib::Vector3 &front,
+                  raylib::Vector3 &perp,
+                  const float theta)
+{
+  raylib::Vector3 new_front
+  { add_vector3(multiply_vector3(front, cos(theta)), multiply_vector3(perp, sin(theta))) };
+
+  raylib::Vector3 new_perp
+  { add_vector3(multiply_vector3(front, -sin(theta)), multiply_vector3(perp, cos(theta))) };
+
+  front = new_front;
+  perp = new_perp;
+}
+
 
 int main()
 {
@@ -75,34 +72,41 @@ int main()
   const float speed
   { 5.0f };
 
-  const float adjusted
+  const float velocity
   { speed/fps };
+
+  const float angle
+  { 1.0f };
+
+  const float theta
+  { angle/fps };
 
   const float side
   { 1.0f };
+
+  const raylib::Vector3 cube_dims
+  { side, side, side };
 
   std::vector <raylib::Vector3> cube_positions
   { raylib::Vector3(1.0f, 0.0f, 0.0f),
     raylib::Vector3(1.0f, 2.0f, 0.0f)};
 
-
-
-  const raylib::Vector3 forward
+  raylib::Vector3 forward
   { 1.0f, 0.0f, 0.0f };
 
-  const raylib::Vector3 backward
+  raylib::Vector3 backward
   { -1.0f, 0.0f, 0.0f };
 
-  const raylib::Vector3 rightward
+  raylib::Vector3 rightward
   { 0.0f, -1.0f, 0.0f };
 
-  const raylib::Vector3 leftward
+  raylib::Vector3 leftward
   { 0.0f, 1.0f, 0.0f };
 
-  const raylib::Vector3 upward
+  raylib::Vector3 upward
   { 0.0f, 0.0f, 1.0f };
 
-  const raylib::Vector3 downward
+  raylib::Vector3 downward
   { 0.0f, 0.0f, -1.0f };
 
   raylib::Window window(screenWidth, screenHeight, "Test 1 for raylib");
@@ -136,42 +140,59 @@ int main()
   {
     if (IsKeyDown('W'))
     { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(forward, adjusted))); }
+                                     multiply_vector3(forward, velocity))); }
 
     if (IsKeyDown('S'))
     { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(backward, adjusted))); }
+                                     multiply_vector3(backward, velocity))); }
 
     if (IsKeyDown('D'))
     { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(rightward, adjusted))); }
+                                     multiply_vector3(rightward, velocity))); }
 
     if (IsKeyDown('A'))
     { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(leftward, adjusted))); }
+                                     multiply_vector3(leftward, velocity))); }
 
     if (IsKeyDown('E'))
     { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(upward, adjusted))); }
+                                     multiply_vector3(upward, velocity))); }
 
     if (IsKeyDown('Q'))
     { camera.SetPosition(add_vector3(camera.position,
-                                     multiply_vector3(downward, adjusted))); }
+                                     multiply_vector3(downward, velocity))); }
+
+    if (IsKeyDown('L'))
+    {
+      rotate_front(forward, rightward, theta);
+
+      backward = multiply_vector3(forward, -1.0f);
+      leftward = multiply_vector3(rightward, -1.0f);
+    }
 
 
 
     // if (IsKeyDown('L'))
     // { camera. }
 
-    camera.target = add_vector3(camera.position, forward);
+    camera.target = forward; // add_vector3(camera.position, forward);
 
     // Update
     //---------------------------------------------------------------------------------
 
     camera.Update(); // Update camera
 
-    std::vector <std::string> pos_strings
+    const std::vector <std::string> pos_strings
     { vector3_to_strings(camera.position) };
+
+    const std::vector <std::string> front_strings
+    { vector3_to_strings(forward) };
+
+    const std::vector <std::string> right_strings
+    { vector3_to_strings(rightward) };
+
+    const std::vector <std::string> up_strings
+    { vector3_to_strings(upward) };
 
     // if (IsKeyDown('Z')) camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
 
@@ -182,13 +203,12 @@ int main()
       camera.BeginMode3D();
       {
         for (raylib::Vector3 position: cube_positions)
-        { position.DrawCube(side, side, side, ORANGE); }
+        {
+          position.DrawCube(cube_dims, DARKPURPLE);
 
-        // DrawCubeWires(cubePosition, 2.0f, 2.0f, 2.0f, MAROON);
-
+          position.DrawCubeWires(cube_dims, ORANGE);
+        }
       }
-
-
 
       camera.EndMode3D();
 
@@ -200,10 +220,31 @@ int main()
       const std::string camera_pos
       { "Camera position:\n{" + pos_strings[0] + ","  + pos_strings[1] + "," + pos_strings[2] };
 
-      const char *array
+      const std::string camera_front
+      { "Camera front:\n{" + front_strings[0] + ","  + front_strings[1] + "," + front_strings[2] };
+
+      const std::string camera_right
+      { "Camera right:\n{" + right_strings[0] + ","  + right_strings[1] + "," + right_strings[2] };
+
+      const std::string camera_up
+      { "Camera upt:\n{" + up_strings[0] + ","  + up_strings[1] + "," + up_strings[2] };
+
+      const char *array_pos
       { camera_pos.c_str() };
 
-      DrawText(array, 10, 40, 20, GREEN);
+      const char *array_front
+      { camera_front.c_str() };
+
+      const char *array_right
+      { camera_right.c_str() };
+
+      const char *array_up
+      { camera_up.c_str() };
+
+      DrawText(array_pos, 10, 40, 20, GREEN);
+      DrawText(array_front, 10, 100, 20, GREEN);
+      DrawText(array_right, 10, 160, 20, GREEN);
+      DrawText(array_up, 10, 220, 20, GREEN);
 
       // DrawText("Free camera default controls:", 20, 20, 10, BLACK);
       // DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, DARKGRAY);
