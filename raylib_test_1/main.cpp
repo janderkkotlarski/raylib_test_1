@@ -320,7 +320,7 @@ int main()
   std::random_device rand;
 
   const bool randomode
-  { true };
+  { false };
 
   const int cube_amount
   { 1000 };
@@ -367,7 +367,7 @@ int main()
   camera.type = CAMERA_PERSPECTIVE;                   // Camera mode type
 
   const float cam_angle
-  { 0.5 };
+  { 0.3f };
 
   // SetCameraMode(camera, CAMERA_FREE); // Set a free camera mode
 
