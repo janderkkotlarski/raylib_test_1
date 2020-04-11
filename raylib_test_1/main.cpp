@@ -45,7 +45,7 @@ noexcept
   return strings;
 }
 
-void unit_vectorize(raylib::Vector3 &vec)
+raylib::Vector3 unit_vectorize(const raylib::Vector3 &vec)
 noexcept
 {
   const float abs_length
@@ -53,11 +53,19 @@ noexcept
 
   if (abs_length > 0.0f)
   {
-    vec.x /= abs_length;
-    vec.y /= abs_length;
-    vec.z /= abs_length;
+    const raylib::Vector3 out
+    { vec.x/abs_length, vec.y/abs_length, vec.z/abs_length };
+
+    return out;
   }
+
+  return vec;
 }
+
+float inproduct(const raylib::Vector3 &vec_1,
+                const raylib::Vector3 &vec_2)
+noexcept
+{ return vec_1.x*vec_2.x + vec_1.y*vec_2.y + vec_1.z*vec_2.z; }
 
 void rotate_first_second(raylib::Vector3 &first,
                          raylib::Vector3 &second,
@@ -160,6 +168,7 @@ noexcept
 raylib::Vector3 ranpos(std::random_device &rand,
                        const float dist_min,
                        const float dist_max)
+noexcept
 {
   raylib::Vector3 position;
 
@@ -218,7 +227,7 @@ int main()
   std::random_device rand;
 
   const int cube_amount
-  { 5000 };
+  { 100000 };
 
   std::vector <raylib::Vector3> cube_positions;
 
@@ -256,6 +265,12 @@ int main()
   camera.up = upward;          // Camera up vector (rotation towards target)
   camera.fovy = 45.0f;                                // Camera field-of-view Y
   camera.type = CAMERA_PERSPECTIVE;                   // Camera mode type
+
+  const float cam_angle
+  { 0.85 };
+
+  const float sight
+  { 10.0f };
 
   std::vector <std::string> pos_strings
   { vector3_to_strings(camera.position) };
@@ -305,11 +320,17 @@ int main()
 
       camera.BeginMode3D();
       {
-        for (raylib::Vector3 position: cube_positions)
+        for (raylib::Vector3 cube_pos: cube_positions)
         {
-          position.DrawCube(cube_dims, DARKPURPLE);
+          const raylib::Vector3 difference
+          { add_vector3(cube_pos, multiply_vector3(position, -1.0f)) };
 
-          position.DrawCubeWires(cube_dims, ORANGE);
+          if (inproduct(unit_vectorize(difference), forward) > 0.85 &&
+              inproduct(difference, difference) <= sight*sight)
+          {
+            cube_pos.DrawCube(cube_dims, DARKPURPLE);
+            cube_pos.DrawCubeWires(cube_dims, ORANGE);
+          }
         }
       }
 
