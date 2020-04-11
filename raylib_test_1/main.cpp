@@ -105,12 +105,6 @@ int main()
   const raylib::Vector3 downward
   { 0.0f, 0.0f, -1.0f };
 
-  raylib::Vector3 front
-  { forward };
-
-  raylib::Vector3 target
-  { front };
-
   raylib::Window window(screenWidth, screenHeight, "Test 1 for raylib");
 
   // Define the camera to look into our 3d world
@@ -118,7 +112,7 @@ int main()
 
   camera.position = { 0.0f, 0.0f, 0.0f }; // Camera position
   camera.target = add_vector3(camera.position, forward); // Vector3Add(camera.position, forward);      // Camera looking at point
-  camera.up = { 0.0f, 0.0f, 1.0f };          // Camera up vector (rotation towards target)
+  camera.up = { upward };          // Camera up vector (rotation towards target)
   camera.fovy = 45.0f;                                // Camera field-of-view Y
   camera.type = CAMERA_PERSPECTIVE;                   // Camera mode type
 
@@ -169,7 +163,7 @@ int main()
     // if (IsKeyDown('L'))
     // { camera. }
 
-    camera.target = add_vector3(camera.position, front);
+    camera.target = add_vector3(camera.position, forward);
 
     // Update
     //---------------------------------------------------------------------------------
