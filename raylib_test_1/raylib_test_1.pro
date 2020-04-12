@@ -28,4 +28,14 @@ LIBS += -Iexternal -lraylib -lopengl32 -lgdi32 -lwinmm
 #  -lglfw3 -lopenal32
 
 SOURCES += \
-        main.cpp
+        cube_type.cpp \
+        fractacube.cpp \
+        main.cpp \
+        misc_functions.cpp \
+        vec_3_int.cpp
+
+HEADERS += \
+  cube_type.h \
+  fractacube.h \
+  misc_functions.h \
+  vec_3_int.h
