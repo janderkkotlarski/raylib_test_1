@@ -1,18 +1,18 @@
 #include "cube_type.h"
 
-raylib::Color type_color(const cube_type ct)
+Color type_color(const cube_type ct)
 noexcept
 {
-  raylib::Color color
-  { 0, 0, 0 };
+  Color color
+  { 0, 0, 0, 255 };
 
   switch (ct)
   {
     case cube_type::none:
-      color = raylib::Color{ 0, 0, 0 };
+      color = Color{ 0, 0, 0, 255 };
       break;
     case cube_type::concrete:
-      color = raylib::Color{ 127, 127, 127 };
+      color = Color{ 127, 127, 127, 255 };
       break;
   }
 

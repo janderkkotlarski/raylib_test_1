@@ -1,10 +1,12 @@
 #include "misc_functions.h"
 
-raylib::Vector3 add_vector3(const raylib::Vector3 &vec_1,
-                            const raylib::Vector3 &vec_2)
+#include <cmath>
+
+Vector3 add_vector3(const Vector3 &vec_1,
+                            const Vector3 &vec_2)
 noexcept
 {
-  raylib::Vector3 out_vec;
+  Vector3 out_vec;
 
   out_vec.x = vec_1.x + vec_2.x;
   out_vec.y = vec_1.y + vec_2.y;
@@ -13,11 +15,11 @@ noexcept
   return out_vec;
 }
 
-raylib::Vector3 sub_vector3(const raylib::Vector3 &vec_1,
-                            const raylib::Vector3 &vec_2)
+Vector3 sub_vector3(const Vector3 &vec_1,
+                            const Vector3 &vec_2)
 noexcept
 {
-  raylib::Vector3 out_vec;
+  Vector3 out_vec;
 
   out_vec.x = vec_1.x - vec_2.x;
   out_vec.y = vec_1.y - vec_2.y;
@@ -26,11 +28,11 @@ noexcept
   return out_vec;
 }
 
-raylib::Vector3 multiply_vector3(const raylib::Vector3 &vec_1,
+Vector3 multiply_vector3(const Vector3 &vec_1,
                                  const float mult)
 noexcept
 {
-  raylib::Vector3 out_vec;
+  Vector3 out_vec;
 
   out_vec.x = vec_1.x*mult;
   out_vec.y = vec_1.y*mult;
@@ -39,7 +41,7 @@ noexcept
   return out_vec;
 }
 
-std::vector <std::string> vector3_to_strings(const raylib::Vector3 &vec)
+std::vector <std::string> vector3_to_strings(const Vector3 &vec)
 noexcept
 {
   std::vector <std::string> strings;
@@ -51,15 +53,15 @@ noexcept
   return strings;
 }
 
-raylib::Vector3 unit_vectorize(const raylib::Vector3 &vec)
+Vector3 unit_vectorize(const Vector3 &vec)
 noexcept
 {
   const float abs_length
-  { sqrt(vec.x*vec.x + vec.y*vec.y + vec.z*vec.z) };
+  { static_cast<float>(sqrt(vec.x*vec.x + vec.y*vec.y + vec.z*vec.z)) };
 
   if (abs_length > 0.0f)
   {
-    const raylib::Vector3 out
+    const Vector3 out
     { vec.x/abs_length, vec.y/abs_length, vec.z/abs_length };
 
     return out;
@@ -68,22 +70,22 @@ noexcept
   return vec;
 }
 
-float inproduct(const raylib::Vector3 &vec_1,
-                const raylib::Vector3 &vec_2)
+float inproduct(const Vector3 &vec_1,
+                const Vector3 &vec_2)
 noexcept
 { return vec_1.x*vec_2.x + vec_1.y*vec_2.y + vec_1.z*vec_2.z; }
 
-void rotate_first_second(raylib::Vector3 &first,
-                         raylib::Vector3 &second,
-                         raylib::Vector3 &inv_first,
-                         raylib::Vector3 &inv_second,
+void rotate_first_second(Vector3 &first,
+                         Vector3 &second,
+                         Vector3 &inv_first,
+                         Vector3 &inv_second,
                          const float theta)
 noexcept
 {
-  raylib::Vector3 new_first
+  Vector3 new_first
   { add_vector3(multiply_vector3(first, cos(theta)), multiply_vector3(second, sin(theta))) };
 
-  raylib::Vector3 new_second
+  Vector3 new_second
   { add_vector3(multiply_vector3(first, -sin(theta)), multiply_vector3(second, cos(theta))) };
 
   unit_vectorize(new_first);
@@ -96,14 +98,14 @@ noexcept
   inv_second = multiply_vector3(second, -1);
 }
 
-void key_bindings(raylib::Camera &camera,
-                  raylib::Vector3 &position,
-                  raylib::Vector3 &forward,
-                  raylib::Vector3 &backward,
-                  raylib::Vector3 &rightward,
-                  raylib::Vector3 &leftward,
-                  raylib::Vector3 &upward,
-                  raylib::Vector3 &downward,
+void key_bindings(Camera &camera,
+                  Vector3 &position,
+                  Vector3 &forward,
+                  Vector3 &backward,
+                  Vector3 &rightward,
+                  Vector3 &leftward,
+                  Vector3 &upward,
+                  Vector3 &downward,
                   const float velocity,
                   const float theta)
 noexcept
@@ -162,11 +164,11 @@ void wrapper(float &dim,
 noexcept
 {
   if (wrap > 0.0f &&
-      abs(dim) > wrap)
-  { dim -= 2.0f*wrap*dim/abs(dim); }
+      std::abs(dim) > wrap)
+  { dim -= 2.0f*wrap*dim/std::abs(dim); }
 }
 
-void wrapping(raylib::Vector3 &position,
+void wrapping(Vector3 &position,
               const float wrap)
 noexcept
 {
@@ -189,12 +191,12 @@ noexcept
   return dist_min + fraction*(dist_max - dist_min);
 }
 
-raylib::Vector3 ranpos(std::random_device &rand,
+Vector3 ranpos(std::random_device &rand,
                        const float dist_min,
                        const float dist_max)
 noexcept
 {
-  raylib::Vector3 position;
+  Vector3 position;
 
   bool loop
   { true };
@@ -205,9 +207,9 @@ noexcept
     position.y = randist(rand, dist_min, dist_max);
     position.z = randist(rand, dist_min, dist_max);
 
-    if (abs(position.x) > dist_min ||
-        abs(position.y) > dist_min ||
-        abs(position.z) > dist_min)
+    if (std::abs(position.x) > dist_min ||
+        std::abs(position.y) > dist_min ||
+        std::abs(position.z) > dist_min)
     { loop = false; }
   }
 
@@ -219,46 +221,49 @@ unsigned char dimming(const float mult,
 noexcept
 { return static_cast<char>(mult*static_cast<float>(channel)); }
 
-raylib::Color dimmer(const raylib::Vector3 &difference,
-                     raylib::Color &cube_color,
-                     const float decay,
-                     const float multiplier)
+Color dimmer(const Vector3 &difference,
+             Color &cube_color,
+             const float decay,
+             const float multiplier)
 noexcept
 {
   const float distance
-  { sqrt(inproduct(difference, difference)) };
+  { std::sqrt(inproduct(difference, difference)) };
 
   const float mult
-  { pow(decay, distance/multiplier) };
+  { std::pow(decay, distance/multiplier) };
 
-  return raylib::Color(dimming(mult, cube_color.r), dimming(mult, cube_color.g), dimming(mult, cube_color.b));
+  const Color color
+  { dimming(mult, cube_color.r), dimming(mult, cube_color.g), dimming(mult, cube_color.b), 255 };
+
+  return color;
 }
 
-void display_cube(const raylib::Vector3 &position,
-                  raylib::Vector3 &cube_position,
-                  const raylib::Vector3 &cube_dims,
-                  const raylib::Vector3 &forward,
-                  raylib::Color &cube_color,
-                  raylib::Color &edge_color,
+void display_cube(const Vector3 &position,
+                  Vector3 &cube_position,
+                  const Vector3 &cube_dims,
+                  const Vector3 &forward,
+                  Color &cube_color,
+                  Color &edge_color,
                   const float cam_angle,
                   const float sight,
                   const float decay,
                   const float multiplier)
 noexcept
 {
-  const raylib::Vector3 difference
+  const Vector3 difference
   { sub_vector3(cube_position, position) };
 
   if (inproduct(unit_vectorize(difference), forward) > cam_angle &&
       inproduct(difference, difference) <= sight*sight)
   {
-    const raylib::Color dim_color
+    const Color dim_color
     { dimmer(difference, cube_color, decay, multiplier) };
 
-    const raylib::Color dedge_color
+    const Color dedge_color
     { dimmer(difference, edge_color, decay, multiplier) };
 
-    cube_position.DrawCube(cube_dims, dim_color);
-    cube_position.DrawCubeWires(cube_dims, dedge_color);
+    DrawCube(cube_position, cube_dims.x, cube_dims.y, cube_dims.z, dim_color);
+    DrawCubeWires(cube_position, cube_dims.x, cube_dims.y, cube_dims.z, dedge_color);
   }
 }

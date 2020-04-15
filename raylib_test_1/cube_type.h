@@ -1,7 +1,7 @@
 #ifndef CUBE_TYPE_H
 #define CUBE_TYPE_H
 
-#include <raylib.hpp>
+#include <raylib.h>
 
 enum class cube_type
 {
@@ -84,7 +84,7 @@ enum class cube_type
   // blue
 };
 
-raylib::Color type_color()
+Color type_color()
 noexcept;
 
 #endif // CUBE_TYPE_H

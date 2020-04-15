@@ -29,6 +29,7 @@ LIBS += -Iexternal -lraylib -lopengl32 -lgdi32 -lwinmm
 
 SOURCES += \
         cube_type.cpp \
+        dungeon_loop.cpp \
         fractacube.cpp \
         main.cpp \
         misc_functions.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
 
 HEADERS += \
   cube_type.h \
+  dungeon_loop.h \
   fractacube.h \
   misc_functions.h \
   vec_3_int.h

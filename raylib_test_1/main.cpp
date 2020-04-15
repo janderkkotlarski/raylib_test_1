@@ -3,9 +3,7 @@
 #include <vector>
 #include <random>
 
-// #include "raylib.hpp"
-
-#include <raylib.hpp>
+#include <raylib.h>
 
 #include "misc_functions.h"
 #include "fractacube.h"
@@ -47,7 +45,7 @@ int main()
   const float sight
   { multiplier*20.0f };
 
-  const raylib::Vector3 cube_dims
+  const Vector3 cube_dims
   { side, side, side };
 
   const float dist_min
@@ -56,11 +54,11 @@ int main()
   const float dist_max
   { multiplier*20.0f };
 
-  raylib::Color cube_color
-  { 127, 127, 127 };
+  Color cube_color
+  { 127, 127, 127, 255};
 
-  raylib::Color edge_color
-  { 255, 255, 255 };
+  Color edge_color
+  { 255, 255, 255, 255};
 
   fractacube cube
   { 5, 0, 0, cube_type::concrete };
@@ -73,40 +71,41 @@ int main()
   const int cube_amount
   { 1000 };
 
-  std::vector <raylib::Vector3> cube_positions;
+  std::vector <Vector3> cube_positions;
 
   for(int count{ 0 }; count < cube_amount; ++count)
   { cube_positions.push_back(ranpos(rand, dist_min, dist_max)); }
 
-  raylib::Vector3 cube_position
+  Vector3 cube_position
   { 0.0f, 0.0f, 0.0f };
   // { ranpos(rand, dist_min, dist_max) };
 
-  raylib::Vector3 forward
+  Vector3 forward
   { 1.0f, 0.0f, 0.0f };
 
-  raylib::Vector3 backward
+  Vector3 backward
   { -1.0f, 0.0f, 0.0f };
 
-  raylib::Vector3 rightward
+  Vector3 rightward
   { 0.0f, -1.0f, 0.0f };
 
-  raylib::Vector3 leftward
+  Vector3 leftward
   { 0.0f, 1.0f, 0.0f };
 
-  raylib::Vector3 upward
+  Vector3 upward
   { 0.0f, 0.0f, 1.0f };
 
-  raylib::Vector3 downward
+  Vector3 downward
   { 0.0f, 0.0f, -1.0f };
 
-  raylib::Vector3 position
+  Vector3 position
   { 0.0f, 0.0f, 0.0f };
 
-  raylib::Window window(screenWidth, screenHeight, "Test 1 for raylib");
+  InitWindow(screenWidth, screenHeight, "Test 1 for raylib");
 
   // Define the camera to look into our 3d world
-  raylib::Camera3D camera;  
+  Camera3D camera
+  {};
 
   camera.position = position; // Camera position
   camera.target = add_vector3(position, forward); // Vector3Add(camera.position, forward);      // Camera looking at point
@@ -120,18 +119,19 @@ int main()
 
   // SetCameraMode(camera, CAMERA_FREE); // Set a free camera mode
 
-  camera.SetMode(CAMERA_FREE);
+  SetCameraMode(camera, CAMERA_FREE);
 
-  window.SetTargetFPS(fps);            // Set our game to run at 60 frames-per-second
+
+  SetTargetFPS(fps);  // Set our game to run at fps frames-per-second
   //--------------------------------------------------------------------------------------
 
-  const raylib::Color background
-  {0, 0, 0};
+  const Color background
+  {0, 0, 0, 255};
 
   // raylib
 
   // Main game loop
-  while (!window.ShouldClose())        // Detect window close button or ESC key
+  while (!WindowShouldClose())        // Detect window close button or ESC key
   {
     key_bindings(camera, position, forward, backward,
                  rightward, leftward, upward, downward,
@@ -140,8 +140,6 @@ int main()
     wrapping(position, wrap);
 
     camera.target = add_vector3(position, forward);
-
-    camera.Update(); // Update camera
 
     camera.position = position;
 
@@ -159,15 +157,15 @@ int main()
 
     // if (IsKeyDown('Z')) camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
 
-    window.BeginDrawing();
+    BeginDrawing();
     {
       ClearBackground(background);
 
-      camera.BeginMode3D();
+      BeginMode3D(camera);
       {
         if (randomode)
         {
-          for (raylib::Vector3 cube_pos: cube_positions)
+          for (Vector3 cube_pos: cube_positions)
           {
             display_cube(position, cube_pos, cube_dims, forward,
                          cube_color, edge_color, cam_angle, sight, decay, multiplier);
@@ -179,8 +177,7 @@ int main()
                        cube_color, edge_color, cam_angle, sight, decay, multiplier);
         }
       }
-
-      camera.EndMode3D();
+      EndMode3D();
 
       DrawFPS(10, 10);
 
@@ -224,7 +221,7 @@ int main()
       // DrawText("- Z to zoom to (0, 0, 0)", 40, 120, 10, DARKGRAY);
     }
 
-    window.EndDrawing();
+    EndDrawing();
 
   }
 

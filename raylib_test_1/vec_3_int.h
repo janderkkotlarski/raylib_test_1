@@ -1,7 +1,7 @@
 #ifndef VEC_3_INT_H
 #define VEC_3_INT_H
 
-#include <raylib.hpp>
+#include <raylib.h>
 
 class vec_3_int
 {
@@ -20,16 +20,16 @@ public:
             const float z)
   noexcept;
 
-  vec_3_int(const raylib::Vector3 &vec)
+  vec_3_int(const Vector3 &vec)
   noexcept;
 
-  raylib::Vector3 get_Vector3()
+  Vector3 get_Vector3()
   const noexcept
   {
-    return raylib::Vector3 { static_cast<float>(m_x),
-                             static_cast<float>(m_y),
-                             static_cast<float>(m_z) };
-  };
+    return Vector3 { static_cast<float>(m_x),
+                     static_cast<float>(m_y),
+                     static_cast<float>(m_z) };
+};
 
 };
 
