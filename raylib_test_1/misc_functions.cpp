@@ -2,44 +2,7 @@
 
 #include <cmath>
 
-Vector3 add_vector3(const Vector3 &vec_1,
-                            const Vector3 &vec_2)
-noexcept
-{
-  Vector3 out_vec;
-
-  out_vec.x = vec_1.x + vec_2.x;
-  out_vec.y = vec_1.y + vec_2.y;
-  out_vec.z = vec_1.z + vec_2.z;
-
-  return out_vec;
-}
-
-Vector3 sub_vector3(const Vector3 &vec_1,
-                            const Vector3 &vec_2)
-noexcept
-{
-  Vector3 out_vec;
-
-  out_vec.x = vec_1.x - vec_2.x;
-  out_vec.y = vec_1.y - vec_2.y;
-  out_vec.z = vec_1.z - vec_2.z;
-
-  return out_vec;
-}
-
-Vector3 multiply_vector3(const Vector3 &vec_1,
-                                 const float mult)
-noexcept
-{
-  Vector3 out_vec;
-
-  out_vec.x = vec_1.x*mult;
-  out_vec.y = vec_1.y*mult;
-  out_vec.z = vec_1.z*mult;
-
-  return out_vec;
-}
+#include <raymath.h>
 
 std::vector <std::string> vector3_to_strings(const Vector3 &vec)
 noexcept
@@ -53,28 +16,6 @@ noexcept
   return strings;
 }
 
-Vector3 unit_vectorize(const Vector3 &vec)
-noexcept
-{
-  const float abs_length
-  { static_cast<float>(sqrt(vec.x*vec.x + vec.y*vec.y + vec.z*vec.z)) };
-
-  if (abs_length > 0.0f)
-  {
-    const Vector3 out
-    { vec.x/abs_length, vec.y/abs_length, vec.z/abs_length };
-
-    return out;
-  }
-
-  return vec;
-}
-
-float inproduct(const Vector3 &vec_1,
-                const Vector3 &vec_2)
-noexcept
-{ return vec_1.x*vec_2.x + vec_1.y*vec_2.y + vec_1.z*vec_2.z; }
-
 void rotate_first_second(Vector3 &first,
                          Vector3 &second,
                          Vector3 &inv_first,
@@ -83,80 +24,19 @@ void rotate_first_second(Vector3 &first,
 noexcept
 {
   Vector3 new_first
-  { add_vector3(multiply_vector3(first, cos(theta)), multiply_vector3(second, sin(theta))) };
+  { Vector3Add(Vector3Scale(first, cos(theta)), Vector3Scale(second, sin(theta))) };
 
   Vector3 new_second
-  { add_vector3(multiply_vector3(first, -sin(theta)), multiply_vector3(second, cos(theta))) };
+  { Vector3Add(Vector3Scale(first, -sin(theta)), Vector3Scale(second, cos(theta))) };
 
-  unit_vectorize(new_first);
-  unit_vectorize(new_second);
+  Vector3Normalize(new_first);
+  Vector3Normalize(new_second);
 
   first = new_first;
   second = new_second;
 
-  inv_first = multiply_vector3(first, -1);
-  inv_second = multiply_vector3(second, -1);
-}
-
-void key_bindings(Camera &camera,
-                  Vector3 &position,
-                  Vector3 &forward,
-                  Vector3 &backward,
-                  Vector3 &rightward,
-                  Vector3 &leftward,
-                  Vector3 &upward,
-                  Vector3 &downward,
-                  const float velocity,
-                  const float theta)
-noexcept
-{
-  if (IsKeyDown('W'))
-  { position = add_vector3(position, multiply_vector3(forward, velocity)); }
-
-  if (IsKeyDown('S'))
-  { position = add_vector3(position, multiply_vector3(backward, velocity)); }
-
-  if (IsKeyDown('D'))
-  { position = add_vector3(position, multiply_vector3(rightward, velocity)); }
-
-  if (IsKeyDown('A'))
-  { position = add_vector3(position, multiply_vector3(leftward, velocity)); }
-
-  if (IsKeyDown('E'))
-  { position = add_vector3(position, multiply_vector3(upward, velocity)); }
-
-  if (IsKeyDown('Q'))
-  { position = add_vector3(position, multiply_vector3(downward, velocity)); }
-
-  if (IsKeyDown('L'))
-  { rotate_first_second(forward, rightward, backward, leftward, theta); }
-
-  if (IsKeyDown('J'))
-  { rotate_first_second(forward, leftward, backward, rightward, theta); }
-
-  if (IsKeyDown('I'))
-  {
-    rotate_first_second(forward, upward, backward, downward, theta);
-    camera.up = upward;
-  }
-
-  if (IsKeyDown('K'))
-  {
-    rotate_first_second(forward, downward, backward, upward, theta);
-    camera.up = upward;
-  }
-
-  if (IsKeyDown('O'))
-  {
-    rotate_first_second(upward, rightward, downward, leftward, theta);
-    camera.up = upward;
-  }
-
-  if (IsKeyDown('U'))
-  {
-    rotate_first_second(upward, leftward, downward, rightward, theta);
-    camera.up = upward;
-  }
+  inv_first = Vector3Negate(first);
+  inv_second = Vector3Negate(second);
 }
 
 void wrapper(float &dim,
@@ -192,8 +72,8 @@ noexcept
 }
 
 Vector3 ranpos(std::random_device &rand,
-                       const float dist_min,
-                       const float dist_max)
+               const float dist_min,
+               const float dist_max)
 noexcept
 {
   Vector3 position;
@@ -228,7 +108,7 @@ Color dimmer(const Vector3 &difference,
 noexcept
 {
   const float distance
-  { std::sqrt(inproduct(difference, difference)) };
+  { Vector3Length(difference) };
 
   const float mult
   { std::pow(decay, distance/multiplier) };
@@ -251,11 +131,12 @@ void display_cube(const Vector3 &position,
                   const float multiplier)
 noexcept
 {
-  const Vector3 difference
-  { sub_vector3(cube_position, position) };
+  Vector3 difference
+  { Vector3Subtract(cube_position, position) };
 
-  if (inproduct(unit_vectorize(difference), forward) > cam_angle &&
-      inproduct(difference, difference) <= sight*sight)
+  if ((Vector3DotProduct(Vector3Normalize(difference), forward) > cam_angle &&
+      Vector3DotProduct(difference, difference) <= sight*sight) ||
+      Vector3DotProduct(difference, difference) <= multiplier*multiplier)
   {
     const Color dim_color
     { dimmer(difference, cube_color, decay, multiplier) };
