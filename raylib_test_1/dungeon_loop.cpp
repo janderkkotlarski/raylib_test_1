@@ -187,6 +187,81 @@ noexcept
 
 }
 
+void dungeon_loop::display_pos(const int pos_x,
+                               const int pos_y,
+                               const int pos_z)
+noexcept
+{
+  int x_min
+  { pos_x - m_horizon };
+
+  if (x_min < -m_dungeon_radius)
+  { x_min += m_dungeon_span; }
+
+  int x_max
+  { pos_x + m_horizon };
+
+  if (x_max > m_dungeon_radius)
+  { x_max -= m_dungeon_span; }
+
+  int y_min
+  { pos_y - m_horizon };
+
+  if (y_min < -m_dungeon_radius)
+  { y_min += m_dungeon_span; }
+
+  int y_max
+  { pos_y + m_horizon };
+
+  if (y_max > m_dungeon_radius)
+  { y_max -= m_dungeon_span; }
+
+  int z_min
+  { pos_z - m_horizon };
+
+  if (z_min < -m_dungeon_radius)
+  { z_min += m_dungeon_span; }
+
+  int z_max
+  { pos_z + m_horizon };
+
+  if (z_max > m_dungeon_radius)
+  { z_max -= m_dungeon_span; }
+
+  const std::string x_min_string
+  { std::to_string(x_min) };
+
+  const std::string y_min_string
+  { std::to_string(y_min) };
+
+  const std::string z_min_string
+  { std::to_string(z_min) };
+
+  const std::string x_max_string
+  { std::to_string(x_max) };
+
+  const std::string y_max_string
+  { std::to_string(y_max) };
+
+  const std::string z_max_string
+  { std::to_string(z_max) };
+
+  const std::string pos_min_string
+  { "minimum position:\n{" + x_min_string + "," + y_min_string + "," + z_min_string };
+
+  const std::string pos_max_string
+  { "maximum position:\n{" + x_max_string + "," + y_max_string + "," + z_max_string };
+
+  const char *array_pos_min
+  { pos_min_string.c_str() };
+
+  const char *array_pos_max
+  { pos_max_string.c_str() };
+
+  DrawText(array_pos_min, 10, 400, 20, YELLOW);
+  DrawText(array_pos_max, 10, 460, 20, YELLOW);
+}
+
 void dungeon_loop::run()
 {
   while (m_loop)
@@ -207,17 +282,17 @@ void dungeon_loop::run()
 
       m_min_distance = 1000000.0f;
 
+      const int pos_x
+      { static_cast<int>(round(m_position.x/m_multiplier)) };
+
+      const int pos_y
+      { static_cast<int>(round(m_position.y/m_multiplier)) };
+
+      const int pos_z
+      { static_cast<int>(round(m_position.z/m_multiplier)) };
+
       BeginMode3D(m_camera);
       {
-        const int pos_x
-        { static_cast<int>(round(m_position.x/m_multiplier)) };
-
-        const int pos_y
-        { static_cast<int>(round(m_position.y/m_multiplier)) };
-
-        const int pos_z
-        { static_cast<int>(round(m_position.z/m_multiplier)) };
-
         for (int count_x { -m_horizon }; count_x <= m_horizon; ++count_x)
         {
           int coord_x
@@ -332,6 +407,8 @@ void dungeon_loop::run()
       EndMode3D();
 
       this->info_display();
+
+      this->display_pos(pos_x, pos_y, pos_z);
     }
 
     EndDrawing();

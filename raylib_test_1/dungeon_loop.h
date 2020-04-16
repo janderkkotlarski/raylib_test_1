@@ -53,7 +53,7 @@ private:
   { m_multiplier*1.0f };
 
   const int m_dungeon_radius
-  { 5 };
+  { 15 };
 
   const int m_dungeon_span
   { 2*m_dungeon_radius + 1};
@@ -128,6 +128,11 @@ public:
   noexcept;
 
   void info_display()
+  noexcept;
+
+  void display_pos(const int pos_x,
+                   const int pos_y,
+                   const int pos_z)
   noexcept;
 
   void run();
