@@ -5,6 +5,8 @@
 
 #include <raylib.h>
 
+#include "fractacube.h"
+
 const int fps
 { 60 };
 
@@ -51,16 +53,16 @@ private:
   { m_multiplier*1.0f };
 
   const int m_dungeon_radius
-  { 10 };
+  { 5 };
 
   const float m_wrap
   { m_multiplier*(m_dungeon_radius + 0.5f) };
 
   const float m_decay
-  { 0.6f };
+  { 0.5f };
 
   const float m_sight
-  { m_multiplier*20.0f };
+  { m_multiplier*4.0f };
 
   Color m_cube_color
   { 127, 127, 127, 255};
@@ -77,6 +79,8 @@ private:
   const float m_dist_max
   { m_multiplier*20.0f };
 
+  std::vector <std::vector <std::vector <cube_type>>> m_type_volume;
+
   const bool m_randomode
   { false };
 
@@ -84,6 +88,8 @@ private:
   { 1000 };
 
   std::vector <Vector3> m_cube_positions;
+
+  std::vector <fractacube> m_fracta_cubes;
 
   Vector3 m_cube_position
   { 0.0f, 0.0f, 0.0f };
@@ -95,7 +101,7 @@ private:
   { 100.0f };
 
   const float m_cam_field
-  { -0.00001f };
+  { 0.3f };
 
   bool m_loop
   { true };

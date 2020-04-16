@@ -3,11 +3,10 @@
 #include <raymath.h>
 
 #include "misc_functions.h"
-#include "fractacube.h"
 
 dungeon_loop::dungeon_loop()
 noexcept
-  : m_cube_positions(), m_camera()
+  : m_cube_positions(), m_fracta_cubes(), m_camera()
 {
   std::random_device rand;
 
@@ -16,14 +15,30 @@ noexcept
 
   for(int count_x{ -m_dungeon_radius }; count_x <= m_dungeon_radius; ++count_x)
   {
+    std::vector <std::vector <cube_type>> area;
+
     for(int count_y{ -m_dungeon_radius }; count_y <= m_dungeon_radius; ++count_y)
     {
+     std::vector <cube_type> line;
+
       for(int count_z{ -m_dungeon_radius }; count_z <= m_dungeon_radius; ++count_z)
       {
         if (rand() < rand.max()/3)
         { m_cube_positions.push_back(Vector3{ m_multiplier*count_x, m_multiplier*count_y, m_multiplier*count_z }); }
+
+        if (rand() < rand.max()/3)
+        { m_fracta_cubes.push_back(fractacube(count_x, count_y, count_z, cube_type::concrete)); }
+
+        if (rand() < rand.max()/3)
+        { line.push_back(cube_type::concrete); }
+        else
+        { line.push_back(cube_type::none); }
       }
+
+      area.push_back(line);
     }
+
+    m_type_volume.push_back(area);
   }
 
   m_camera.position = m_position; // Camera position
@@ -188,7 +203,7 @@ void dungeon_loop::run()
             }
           }
 
-          for (Vector3 cube_pos: m_cube_positions)
+          for (Vector3 &cube_pos: m_cube_positions)
           {
             display_cube(m_position, cube_pos, m_cube_dims, m_forward,
                          m_cube_color, m_edge_color, m_cam_field, m_sight, m_decay, m_multiplier);
@@ -212,13 +227,19 @@ void dungeon_loop::run()
           }
           */
 
-          fractacube f_cube(4, 0, 0, cube_type::concrete);
+          // fractacube f_cube(1, 0, 0, cube_type::concrete);
 
-          f_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
-                         m_cam_field, m_sight, m_decay, m_multiplier);
+          // f_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
+          //                m_cam_field, m_sight, m_decay, m_multiplier);
 
           // display_cube(m_position, m_cube_position, m_cube_dims, m_forward,
           //              m_cube_color, m_edge_color, m_cam_field, m_sight, m_decay, m_multiplier);
+
+          for (fractacube &f_cube: m_fracta_cubes)
+          {
+            f_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
+                           m_cam_field, m_sight, m_decay, m_multiplier);
+          }
         }
       }
       EndMode3D();

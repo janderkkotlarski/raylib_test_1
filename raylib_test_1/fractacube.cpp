@@ -55,11 +55,11 @@ noexcept
   }
   */
 
-  for (int count_x { 0 }; count_x < 7; ++count_x)
+  for (int count_x { 0 }; count_x < m_division; ++count_x)
   {
-    for (int count_y { 0 }; count_y < 7; ++count_y)
+    for (int count_y { 0 }; count_y < m_division; ++count_y)
     {
-      for (int count_z { 0 }; count_z < 7; ++count_z)
+      for (int count_z { 0 }; count_z < m_division; ++count_z)
       {
         if (m_pattern[count_x][count_y][count_z])
         {
