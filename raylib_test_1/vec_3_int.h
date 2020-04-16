@@ -29,10 +29,8 @@ public:
     return Vector3 { static_cast<float>(m_x),
                      static_cast<float>(m_y),
                      static_cast<float>(m_z) };
-};
+  };
 
 };
-
-
 
 #endif // VEC_3_INT_H

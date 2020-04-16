@@ -78,7 +78,7 @@ private:
   { m_multiplier*20.0f };
 
   const bool m_randomode
-  { true };
+  { false };
 
   const int m_cube_amount
   { 1000 };

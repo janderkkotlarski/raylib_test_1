@@ -3,6 +3,7 @@
 #include <raymath.h>
 
 #include "misc_functions.h"
+#include "fractacube.h"
 
 dungeon_loop::dungeon_loop()
 noexcept
@@ -173,6 +174,20 @@ void dungeon_loop::run()
       {
         if (m_randomode)
         {
+          for(int count_x{ -m_dungeon_radius }; count_x <= m_dungeon_radius; ++count_x)
+          {
+            for(int count_y{ -m_dungeon_radius }; count_y <= m_dungeon_radius; ++count_y)
+            {
+              for(int count_z{ -m_dungeon_radius }; count_z <= m_dungeon_radius; ++count_z)
+              {
+                fractacube f_cube(count_x, count_y, count_z, cube_type::concrete);
+
+                f_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
+                               m_cam_field, m_sight, m_decay, m_multiplier);
+              }
+            }
+          }
+
           for (Vector3 cube_pos: m_cube_positions)
           {
             display_cube(m_position, cube_pos, m_cube_dims, m_forward,
@@ -181,8 +196,29 @@ void dungeon_loop::run()
         }
         else
         {
-          display_cube(m_position, m_cube_position, m_cube_dims, m_forward,
-                       m_cube_color, m_edge_color, m_cam_field, m_sight, m_decay, m_multiplier);
+          /*
+          for(int count_x{ -m_dungeon_radius }; count_x <= m_dungeon_radius; ++count_x)
+          {
+            for(int count_y{ -m_dungeon_radius }; count_y <= m_dungeon_radius; ++count_y)
+            {
+              for(int count_z{ -m_dungeon_radius }; count_z <= m_dungeon_radius; ++count_z)
+              {
+                fractacube f_cube(count_x, count_y, count_z, cube_type::concrete);
+
+                // f_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
+                //                m_cam_field, m_sight, m_decay, m_multiplier);
+              }
+            }
+          }
+          */
+
+          fractacube f_cube(4, 0, 0, cube_type::concrete);
+
+          f_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
+                         m_cam_field, m_sight, m_decay, m_multiplier);
+
+          // display_cube(m_position, m_cube_position, m_cube_dims, m_forward,
+          //              m_cube_color, m_edge_color, m_cam_field, m_sight, m_decay, m_multiplier);
         }
       }
       EndMode3D();
