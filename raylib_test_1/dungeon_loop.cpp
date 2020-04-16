@@ -30,7 +30,7 @@ noexcept
         { m_fracta_cubes.push_back(fractacube(count_x, count_y, count_z, cube_type::concrete)); }
 
         if (rand() < rand.max()/3)
-        { line.push_back(cube_type::concrete); }
+        { line.push_back(cube_type::next); }
         else
         { line.push_back(cube_type::none); }
       }
@@ -323,17 +323,28 @@ void dungeon_loop::run()
               else if (coord_z > m_dungeon_radius)
               { coord_z -= m_dungeon_span; }
 
+              const int index
+              { coord_x + m_dungeon_radius };
+
+              const int indey
+              { coord_y + m_dungeon_radius };
+
+              const int indez
+              { coord_z + m_dungeon_radius };
+
               const cube_type c_type
-              { m_type_volume[unsigned(coord_x + m_dungeon_radius)]
-                             [unsigned(coord_y + m_dungeon_radius)]
-                             [unsigned(coord_z + m_dungeon_radius)] };
+              { m_type_volume[unsigned(index)]
+                             [unsigned(indey)]
+                             [unsigned(indez)] };
 
               if (c_type != cube_type::none)
               {
-                m_fracta_cube.set_pos_type(coord_x,
-                                           coord_y,
-                                           coord_z,
-                                           c_type);
+                if (index >= 0 && index < m_dungeon_span &&
+                    indey >= 0 && indey < m_dungeon_span &&
+                    indez >= 0 && indez < m_dungeon_span)
+                { m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, c_type); }
+                else
+                { m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, cube_type::next); }
 
                 // const float distance
                 // { Vector3Distance(m_position, Vector3Scale(m_fracta_cube.get_position(), m_multiplier)) };
