@@ -125,34 +125,54 @@ noexcept
   const std::vector <std::string> up_strings
   { vector3_to_strings(m_upward) };
 
-  const std::string m_camera_pos
+  const std::string distance_string
+  { std::to_string(m_min_distance) };
+
+  const std::vector <std::string> difference_strings
+  { vector3_to_strings(m_min_difference) };
+
+  const std::string camera_pos
   { "m_camera position:\n{" + pos_strings[0] + ","  + pos_strings[1] + "," + pos_strings[2] };
 
-  const std::string m_camera_front
+  const std::string camera_front
   { "m_camera front:\n{" + front_strings[0] + ","  + front_strings[1] + "," + front_strings[2] };
 
-  const std::string m_camera_right
+  const std::string camera_right
   { "m_camera right:\n{" + right_strings[0] + ","  + right_strings[1] + "," + right_strings[2] };
 
-  const std::string m_camera_up
-  { "m_camera upt:\n{" + up_strings[0] + ","  + up_strings[1] + "," + up_strings[2] };
+  const std::string camera_up
+  { "m_camera up:\n{" + up_strings[0] + ","  + up_strings[1] + "," + up_strings[2] };
+
+  const std::string min_dist
+  { "Minimum distance:\n{" + distance_string };
+
+  const std::string diff
+  { "m_min_difference:\n{" + difference_strings[0] + ","  + difference_strings[1] + "," + difference_strings[2] };
 
   const char *array_pos
-  { m_camera_pos.c_str() };
+  { camera_pos.c_str() };
 
   const char *array_front
-  { m_camera_front.c_str() };
+  { camera_front.c_str() };
 
   const char *array_right
-  { m_camera_right.c_str() };
+  { camera_right.c_str() };
 
   const char *array_up
-  { m_camera_up.c_str() };
+  { camera_up.c_str() };
+
+  const char *array_dist
+  { min_dist.c_str() };
+
+  const char *array_diff
+  { diff.c_str() };
 
   DrawText(array_pos, 10, 40, 20, GREEN);
   DrawText(array_front, 10, 100, 20, GREEN);
   DrawText(array_right, 10, 160, 20, GREEN);
   DrawText(array_up, 10, 220, 20, GREEN);
+  DrawText(array_dist, 10, 280, 20, RED);
+  DrawText(array_diff, 10, 340, 20, RED);
 
   // DrawRectangle( 10, 10, 320, 133, Fade(SKYBLUE, 0.5f));
   // DrawRectangleLines( 10, 10, 320, 133, BLUE);
@@ -184,6 +204,8 @@ void dungeon_loop::run()
     BeginDrawing();
     {
       ClearBackground(Color{ BLACK });
+
+      m_min_distance = 1000000.0f;
 
       BeginMode3D(m_camera);
       {
@@ -246,6 +268,8 @@ void dungeon_loop::run()
           int count_x
           { 0 };
 
+
+
           for (const std::vector <std::vector <cube_type>> &area: m_type_volume)
           {
             int count_y
@@ -265,12 +289,21 @@ void dungeon_loop::run()
                                              count_z - m_dungeon_radius,
                                              point);
 
+                  const float distance
+                  { Vector3Distance(m_position, Vector3Scale(m_fracta_cube.get_position(), m_multiplier)) };
+
                   if (display_selector(m_position,
                                        Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
-                                       m_forward, m_cam_angle, m_sight, m_multiplier))
+                                       m_forward, m_cam_field, m_sight, m_multiplier))
                   {
                     m_fracta_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
                                           m_cam_field, m_sight, m_decay, m_multiplier);
+
+                    if (distance < m_min_distance)
+                    {
+                      m_min_distance = distance;
+                      m_min_difference = Vector3Subtract(Vector3Scale(m_fracta_cube.get_position(), m_multiplier), m_position);
+                    }
                   }
                 }
 

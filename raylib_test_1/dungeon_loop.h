@@ -38,7 +38,7 @@ private:
   { 100.0f };
 
   const float m_speed
-  { 5.0f };
+  { 1.0f };
 
   const float m_velocity
   { m_multiplier*m_speed/fps };
@@ -59,7 +59,7 @@ private:
   { m_multiplier*(m_dungeon_radius + 0.5f) };
 
   const float m_decay
-  { 0.5f };
+  { 0.45f };
 
   const float m_sight
   { 4.0f*m_multiplier };
@@ -107,6 +107,12 @@ private:
 
   bool m_loop
   { true };
+
+  float m_min_distance
+  { -1.0f };
+
+  Vector3 m_min_difference
+  { -1.0f, 0.0f, 0.0f };
 
 public:
   dungeon_loop()

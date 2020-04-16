@@ -122,7 +122,7 @@ noexcept
 bool display_selector(const Vector3 &position,
                       const Vector3 &cube_position,
                       const Vector3 &forward,
-                      const float cam_angle,
+                      const float cam_field,
                       const float sight,
                       const float multiplier)
 noexcept
@@ -130,9 +130,9 @@ noexcept
   const Vector3 difference
   { Vector3Subtract(cube_position, position) };
 
-  return ((Vector3DotProduct(Vector3Normalize(difference), forward) > cam_angle &&
+  return ((Vector3DotProduct(Vector3Normalize(difference), forward) > cam_field &&
            Vector3DotProduct(difference, difference) <= sight*sight) ||
-          Vector3DotProduct(difference, difference) <= multiplier*multiplier);
+          Vector3DotProduct(difference, difference) <= 4.0f*multiplier*multiplier);
 }
 
 void display_cube(const Vector3 &position,
