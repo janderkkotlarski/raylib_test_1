@@ -123,6 +123,20 @@ bool display_selector(const Vector3 &position,
                       const Vector3 &cube_position,
                       const Vector3 &forward,
                       const float cam_field,
+                      const float multiplier)
+noexcept
+{
+  const Vector3 difference
+  { Vector3Subtract(cube_position, position) };
+
+  return (Vector3DotProduct(Vector3Normalize(difference), forward) > cam_field ||
+          Vector3DotProduct(difference, difference) <= 4.0f*multiplier*multiplier);
+}
+
+bool display_selector(const Vector3 &position,
+                      const Vector3 &cube_position,
+                      const Vector3 &forward,
+                      const float cam_field,
                       const float sight,
                       const float multiplier)
 noexcept

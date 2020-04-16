@@ -80,6 +80,13 @@ noexcept;
 bool display_selector(const Vector3 &position,
                       const Vector3 &cube_position,
                       const Vector3 &forward,
+                      const float cam_field,
+                      const float multiplier)
+noexcept;
+
+bool display_selector(const Vector3 &position,
+                      const Vector3 &cube_position,
+                      const Vector3 &forward,
                       const float cam_angle,
                       const float sight,
                       const float multiplier)

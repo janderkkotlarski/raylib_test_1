@@ -210,27 +210,74 @@ void dungeon_loop::run()
       BeginMode3D(m_camera);
       {
         const int pos_x
-        { static_cast<int>(round(m_position.x)) };
+        { static_cast<int>(round(m_position.x/m_multiplier)) };
 
         const int pos_y
-        { static_cast<int>(round(m_position.y)) };
+        { static_cast<int>(round(m_position.y/m_multiplier)) };
 
         const int pos_z
-        { static_cast<int>(round(m_position.z)) };
+        { static_cast<int>(round(m_position.z/m_multiplier)) };
 
         for (int count_x { -m_horizon }; count_x <= m_horizon; ++count_x)
         {
+          int coord_x
+          { pos_x + count_x };
+
+          if (coord_x < -m_dungeon_radius)
+          { coord_x += m_dungeon_span; }
+          else if (coord_x > m_dungeon_radius)
+          { coord_x -= m_dungeon_span; }
 
           for (int count_y { -m_horizon }; count_y <= m_horizon; ++count_y)
           {
+            int coord_y
+            { pos_y + count_y };
+
+            if (coord_y < -m_dungeon_radius)
+            { coord_y += m_dungeon_span; }
+            else if (coord_y > m_dungeon_radius)
+            { coord_y -= m_dungeon_span; }
+
             for (int count_z { -m_horizon }; count_z <= m_horizon; ++count_z)
             {
+              int coord_z
+              { pos_z + count_z };
+
+              if (coord_z < -m_dungeon_radius)
+              { coord_z += m_dungeon_span; }
+              else if (coord_z > m_dungeon_radius)
+              { coord_z -= m_dungeon_span; }
+
+              const cube_type c_type
+              { m_type_volume[unsigned(coord_x + m_dungeon_radius)]
+                             [unsigned(coord_y + m_dungeon_radius)]
+                             [unsigned(coord_z + m_dungeon_radius)] };
+
+              if (c_type != cube_type::none)
+              {
+                m_fracta_cube.set_pos_type(coord_x,
+                                           coord_y,
+                                           coord_z,
+                                           c_type);
+
+                // const float distance
+                // { Vector3Distance(m_position, Vector3Scale(m_fracta_cube.get_position(), m_multiplier)) };
+
+                if (display_selector(m_position,
+                                     Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
+                                     m_forward, m_cam_field, m_multiplier))
+                {
+                  m_fracta_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
+                                        m_cam_field, m_sight, m_decay, m_multiplier);
+                }
+              }
 
             }
           }
         }
 
 
+        /*
         int count_x
         { 0 };
 
@@ -279,6 +326,8 @@ void dungeon_loop::run()
 
           ++count_x;
         }
+
+        */
       }
       EndMode3D();
 
