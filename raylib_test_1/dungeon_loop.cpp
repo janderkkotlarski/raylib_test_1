@@ -195,18 +195,18 @@ void dungeon_loop::run()
             {
               for(int count_z{ -m_dungeon_radius }; count_z <= m_dungeon_radius; ++count_z)
               {
-                fractacube f_cube(count_x, count_y, count_z, cube_type::concrete);
+                // fractacube f_cube(count_x, count_y, count_z, cube_type::concrete);
 
-                f_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
-                               m_cam_field, m_sight, m_decay, m_multiplier);
+                // f_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
+                //                m_cam_field, m_sight, m_decay, m_multiplier);
               }
             }
           }
 
           for (Vector3 &cube_pos: m_cube_positions)
           {
-            display_cube(m_position, cube_pos, m_cube_dims, m_forward,
-                         m_cube_color, m_edge_color, m_cam_field, m_sight, m_decay, m_multiplier);
+            // display_cube(m_position, cube_pos, m_cube_dims, m_forward,
+            //              m_cube_color, m_edge_color, m_cam_field, m_sight, m_decay, m_multiplier);
           }
         }
         else
@@ -235,10 +235,52 @@ void dungeon_loop::run()
           // display_cube(m_position, m_cube_position, m_cube_dims, m_forward,
           //              m_cube_color, m_edge_color, m_cam_field, m_sight, m_decay, m_multiplier);
 
+          /*
           for (fractacube &f_cube: m_fracta_cubes)
           {
             f_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
                            m_cam_field, m_sight, m_decay, m_multiplier);
+          }
+          */
+
+          int count_x
+          { 0 };
+
+          for (const std::vector <std::vector <cube_type>> &area: m_type_volume)
+          {
+            int count_y
+            { 0 };
+
+            for (const std::vector <cube_type> &line: area)
+            {
+              int count_z
+              { 0 };
+
+              for (cube_type point: line)
+              {
+                if(point != cube_type::none)
+                {
+                  m_fracta_cube.set_pos_type(count_x - m_dungeon_radius,
+                                             count_y - m_dungeon_radius,
+                                             count_z - m_dungeon_radius,
+                                             point);
+
+                  if (display_selector(m_position,
+                                       Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
+                                       m_forward, m_cam_angle, m_sight, m_multiplier))
+                  {
+                    m_fracta_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
+                                          m_cam_field, m_sight, m_decay, m_multiplier);
+                  }
+                }
+
+                ++count_z;
+              }
+
+              ++count_y;
+            }
+
+            ++count_x;
           }
         }
       }

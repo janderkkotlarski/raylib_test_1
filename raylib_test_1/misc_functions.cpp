@@ -119,25 +119,34 @@ noexcept
   return color;
 }
 
+bool display_selector(const Vector3 &position,
+                      const Vector3 &cube_position,
+                      const Vector3 &forward,
+                      const float cam_angle,
+                      const float sight,
+                      const float multiplier)
+noexcept
+{
+  const Vector3 difference
+  { Vector3Subtract(cube_position, position) };
+
+  return ((Vector3DotProduct(Vector3Normalize(difference), forward) > cam_angle &&
+           Vector3DotProduct(difference, difference) <= sight*sight) ||
+          Vector3DotProduct(difference, difference) <= multiplier*multiplier);
+}
+
 void display_cube(const Vector3 &position,
                   Vector3 &cube_position,
                   const Vector3 &cube_dims,
-                  const Vector3 &forward,
                   Color &cube_color,
                   Color &edge_color,
-                  const float cam_angle,
-                  const float sight,
                   const float decay,
                   const float multiplier)
 noexcept
 {
-  Vector3 difference
+  const Vector3 difference
   { Vector3Subtract(cube_position, position) };
 
-  if ((Vector3DotProduct(Vector3Normalize(difference), forward) > cam_angle &&
-      Vector3DotProduct(difference, difference) <= sight*sight) ||
-      Vector3DotProduct(difference, difference) <= multiplier*multiplier)
-  {
     const Color dim_color
     { dimmer(difference, cube_color, decay, multiplier) };
 
@@ -146,5 +155,4 @@ noexcept
 
     DrawCube(cube_position, cube_dims.x, cube_dims.y, cube_dims.z, dim_color);
     DrawCubeWires(cube_position, cube_dims.x, cube_dims.y, cube_dims.z, dedge_color);
-  }
 }

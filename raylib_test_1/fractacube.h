@@ -9,7 +9,8 @@
 class fractacube
 {
 private:
-  const vec_3_int m_pos_int;
+  vec_3_int m_pos_int
+  { 0, 0, 0};
 
   const std::vector <std::vector <std::vector <bool>>> m_pattern
   // -3: 29
@@ -82,9 +83,19 @@ private:
   { cube_type::none };
 
 public:
+  fractacube()
+  noexcept;
+
   fractacube(const int x, const int y, const int z,
                          const cube_type c_type)
   noexcept;
+
+  void set_pos_type(const int x, const int y, const int z,
+                      const cube_type c_type)
+  noexcept;
+
+  Vector3 get_position()
+  { return m_pos_int.get_Vector3(); }
 
   void display(Vector3 &position,
                const Vector3 &forward,
@@ -94,9 +105,6 @@ public:
                const float sight,
                const float decay,
                const float multiplier)
-  noexcept;
-
-  void display()
   noexcept;
 };
 

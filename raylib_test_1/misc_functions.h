@@ -75,14 +75,19 @@ Color dimmer(const Vector3 &difference,
                      const float multiplier)
 noexcept;
 
+bool display_selector(const Vector3 &position,
+                      const Vector3 &cube_position,
+                      const Vector3 &forward,
+                      const float cam_angle,
+                      const float sight,
+                      const float multiplier)
+noexcept;
+
 void display_cube(const Vector3 &position,
                   Vector3 &cube_position,
                   const Vector3 &cube_dims,
-                  const Vector3 &forward,
                   Color &cube_color,
                   Color &edge_color,
-                  const float cam_angle,
-                  const float sight,
                   const float decay,
                   const float multiplier)
 noexcept;

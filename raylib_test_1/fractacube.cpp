@@ -4,11 +4,23 @@
 
 #include "misc_functions.h"
 
+fractacube::fractacube()
+noexcept
+{}
+
 fractacube::fractacube(const int x, const int y, const int z,
                        const cube_type c_type)
 noexcept
   : m_pos_int(x, y, z), m_type(c_type)
 {}
+
+void fractacube::set_pos_type(const int x, const int y, const int z,
+                              const cube_type c_type)
+noexcept
+{
+  m_pos_int = vec_3_int{x, y, z};
+  m_type = c_type;
+}
 
 void fractacube::display(Vector3 &position,
                          const Vector3 &forward,
@@ -80,16 +92,14 @@ noexcept
           Vector3 cube_dims
           { side, side, side };
 
-          display_cube(position, cube_pos, cube_dims, forward, cube_color, edge_color,
-                       cam_angle, sight, decay, multiplier);
+          display_cube(position, cube_pos, cube_dims,
+                       cube_color, edge_color,
+                       decay, multiplier);
         }
 
       }
     }
   }
-
-
-
 }
 
 float repos(const int pos, const int extra)

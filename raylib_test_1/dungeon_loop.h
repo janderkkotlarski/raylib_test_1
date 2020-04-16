@@ -62,7 +62,7 @@ private:
   { 0.5f };
 
   const float m_sight
-  { m_multiplier*4.0f };
+  { 4.0f*m_multiplier };
 
   Color m_cube_color
   { 127, 127, 127, 255};
@@ -74,12 +74,14 @@ private:
   { m_side, m_side, m_side };
 
   const float m_dist_min
-  { m_multiplier*3.0f };
+  { 3.0f*m_multiplier };
 
   const float m_dist_max
-  { m_multiplier*20.0f };
+  { 20.0f*m_multiplier };
 
   std::vector <std::vector <std::vector <cube_type>>> m_type_volume;
+
+  fractacube m_fracta_cube;
 
   const bool m_randomode
   { false };
