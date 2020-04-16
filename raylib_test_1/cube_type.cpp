@@ -14,6 +14,9 @@ noexcept
     case cube_type::concrete:
       color = Color{ 127, 127, 127, 255 };
       break;
+    case cube_type::next:
+      color = Color{ 31, 0, 63, 255 };
+      break;
   }
 
   return color;

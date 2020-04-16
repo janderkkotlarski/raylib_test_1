@@ -6,6 +6,8 @@
 
 #include <raylib.h>
 
+#include "cube_type.h"
+
 Vector3 add_vector3(const Vector3 &vec_1,
                     const Vector3 &vec_2)
 noexcept;
@@ -86,8 +88,7 @@ noexcept;
 void display_cube(const Vector3 &position,
                   Vector3 &cube_position,
                   const Vector3 &cube_dims,
-                  Color &cube_color,
-                  Color &edge_color,
+                  const cube_type c_type,
                   const float decay,
                   const float multiplier)
 noexcept;

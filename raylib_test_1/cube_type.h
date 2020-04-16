@@ -84,7 +84,7 @@ enum class cube_type
   // blue
 };
 
-Color type_color()
+Color type_color(const cube_type ct)
 noexcept;
 
 #endif // CUBE_TYPE_H

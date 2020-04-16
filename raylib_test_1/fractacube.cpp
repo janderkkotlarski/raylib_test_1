@@ -93,10 +93,8 @@ noexcept
           { side, side, side };
 
           display_cube(position, cube_pos, cube_dims,
-                       cube_color, edge_color,
-                       decay, multiplier);
+                       m_type, decay, multiplier);
         }
-
       }
     }
   }

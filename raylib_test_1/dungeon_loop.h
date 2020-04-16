@@ -55,14 +55,20 @@ private:
   const int m_dungeon_radius
   { 5 };
 
+  const int m_dungeon_span
+  { 2*m_dungeon_radius + 1};
+
   const float m_wrap
   { m_multiplier*(m_dungeon_radius + 0.5f) };
 
   const float m_decay
   { 0.45f };
 
+  const int m_horizon
+  { 4 };
+
   const float m_sight
-  { 4.0f*m_multiplier };
+  { float(m_horizon)*m_multiplier };
 
   Color m_cube_color
   { 127, 127, 127, 255};

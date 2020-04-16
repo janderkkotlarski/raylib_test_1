@@ -138,12 +138,17 @@ noexcept
 void display_cube(const Vector3 &position,
                   Vector3 &cube_position,
                   const Vector3 &cube_dims,
-                  Color &cube_color,
-                  Color &edge_color,
+                  const cube_type c_type,
                   const float decay,
                   const float multiplier)
 noexcept
 {
+  Color cube_color
+  { type_color(c_type) };
+
+  Color edge_color
+  { WHITE };
+
   const Vector3 difference
   { Vector3Subtract(cube_position, position) };
 
