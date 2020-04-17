@@ -344,7 +344,7 @@ void dungeon_loop::run()
                     indez >= 0 && indez < m_dungeon_span)
                 { m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, c_type); }
                 else
-                { m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, cube_type::next); }
+                { m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, cube_type::concrete); }
 
                 // const float distance
                 // { Vector3Distance(m_position, Vector3Scale(m_fracta_cube.get_position(), m_multiplier)) };

@@ -53,7 +53,7 @@ private:
   { m_multiplier*1.0f };
 
   const int m_dungeon_radius
-  { 15 };
+  { 5 };
 
   const int m_dungeon_span
   { 2*m_dungeon_radius + 1};
