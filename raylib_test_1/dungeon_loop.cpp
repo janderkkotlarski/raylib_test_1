@@ -295,47 +295,59 @@ void dungeon_loop::run()
       {
         for (int count_x { -m_horizon }; count_x <= m_horizon; ++count_x)
         {
-          int coord_x
+          const int coord_x
           { pos_x + count_x };
 
+          int index
+          { coord_x };
+
           if (coord_x < -m_dungeon_radius)
-          { coord_x += m_dungeon_span; }
+          { index += m_dungeon_span; }
           else if (coord_x > m_dungeon_radius)
-          { coord_x -= m_dungeon_span; }
+          { index -= m_dungeon_span; }
 
           for (int count_y { -m_horizon }; count_y <= m_horizon; ++count_y)
           {
             int coord_y
             { pos_y + count_y };
 
+            int indey
+            { coord_y };
+
             if (coord_y < -m_dungeon_radius)
-            { coord_y += m_dungeon_span; }
+            { indey += m_dungeon_span; }
             else if (coord_y > m_dungeon_radius)
-            { coord_y -= m_dungeon_span; }
+            { indey -= m_dungeon_span; }
 
             for (int count_z { -m_horizon }; count_z <= m_horizon; ++count_z)
             {
               int coord_z
               { pos_z + count_z };
 
+              int indez
+              { coord_z };
+
               if (coord_z < -m_dungeon_radius)
-              { coord_z += m_dungeon_span; }
+              { indez += m_dungeon_span; }
               else if (coord_z > m_dungeon_radius)
-              { coord_z -= m_dungeon_span; }
+              { indez -= m_dungeon_span; }
 
-              const int index
-              { coord_x + m_dungeon_radius };
+              const int mult
+              { 0 };
 
-              const int indey
-              { coord_y + m_dungeon_radius };
+              const int dungeon_x
+              { index + mult*m_dungeon_radius };
 
-              const int indez
-              { coord_z + m_dungeon_radius };
+              const int dungeon_y
+              { indey + mult*m_dungeon_radius };
+
+              const int dungeon_z
+              { indez + mult*m_dungeon_radius };
 
               const cube_type c_type
-              { m_type_volume[unsigned(index)]
-                             [unsigned(indey)]
-                             [unsigned(indez)] };
+              { m_type_volume[unsigned(dungeon_x)]
+                             [unsigned(dungeon_y)]
+                             [unsigned(dungeon_z)] };
 
               if (c_type != cube_type::none)
               {
@@ -361,59 +373,6 @@ void dungeon_loop::run()
             }
           }
         }
-
-
-        /*
-        int count_x
-        { 0 };
-
-        for (const std::vector <std::vector <cube_type>> &area: m_type_volume)
-        {
-          int count_y
-          { 0 };
-
-          for (const std::vector <cube_type> &line: area)
-          {
-            int count_z
-            { 0 };
-
-            for (cube_type point: line)
-            {
-              if(point != cube_type::none)
-              {
-                m_fracta_cube.set_pos_type(count_x - m_dungeon_radius,
-                                           count_y - m_dungeon_radius,
-                                           count_z - m_dungeon_radius,
-                                           point);
-
-                const float distance
-                { Vector3Distance(m_position, Vector3Scale(m_fracta_cube.get_position(), m_multiplier)) };
-
-                if (display_selector(m_position,
-                                     Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
-                                     m_forward, m_cam_field, m_sight, m_multiplier))
-                {
-                  m_fracta_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
-                                        m_cam_field, m_sight, m_decay, m_multiplier);
-
-                  if (distance < m_min_distance)
-                  {
-                    m_min_distance = distance;
-                    m_min_difference = Vector3Subtract(Vector3Scale(m_fracta_cube.get_position(), m_multiplier), m_position);
-                  }
-                }
-              }
-
-              ++count_z;
-            }
-
-            ++count_y;
-          }
-
-          ++count_x;
-        }
-
-        */
       }
       EndMode3D();
 

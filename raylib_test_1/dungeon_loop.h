@@ -62,10 +62,10 @@ private:
   { m_multiplier*(m_dungeon_radius + 0.5f) };
 
   const float m_decay
-  { 0.2f };
+  { 0.35f };
 
   const int m_horizon
-  { 2 };
+  { 3 };
 
   const float m_sight
   { float(m_horizon)*m_multiplier };
