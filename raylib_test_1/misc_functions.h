@@ -23,11 +23,10 @@ noexcept;
 std::vector <std::string> vector3_to_strings(const Vector3 &vec)
 noexcept;
 
-Vector3 unit_vectorize(const Vector3 &vec)
-noexcept;
-
-float inproduct(const Vector3 &vec_1,
-                const Vector3 &vec_2)
+void display_vector3(const Vector3 &vec,
+                     const int x,
+                     const int y,
+                     const int size)
 noexcept;
 
 void rotate_first_second(Vector3 &first,

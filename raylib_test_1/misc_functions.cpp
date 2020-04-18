@@ -16,6 +16,23 @@ noexcept
   return strings;
 }
 
+void display_vector3(const Vector3 &vec,
+                     const int x,
+                     const int y,
+                     const int size)
+noexcept
+{
+  const std::vector <std::string> vector_strings
+  { vector3_to_strings(vec) };
+  const std::string info_string
+  { "m_camera position:\n{" + vector_strings[0] + ","  + vector_strings[1] + "," + vector_strings[2] };
+  const char *info_array
+  { info_string.c_str() };
+  DrawText(info_array, x, y, size, GREEN);
+
+
+}
+
 void rotate_first_second(Vector3 &first,
                          Vector3 &second,
                          const float theta)
