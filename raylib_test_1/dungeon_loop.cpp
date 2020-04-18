@@ -234,14 +234,23 @@ noexcept
 void dungeon_loop::infos()
 noexcept
 {
-  const std::string delta_string
-  { std::to_string(m_delta_time) };
-  const std::string delta_time_string
-  { "m_camera position:\n{" +delta_string };
-  const char *array_delta_time
-  { delta_time_string.c_str() };
-  DrawText(array_delta_time, 10, 40, 20, GREEN);
+  const int x
+  { 20 };
 
+  int y
+  { 20 };
+
+  const int step
+  { 60 };
+
+  const int size
+  { 20 };
+
+  for (const Vector3 &direction: m_directions)
+  {
+    display_vector3(direction, x, y, size);
+    y += step;
+  }
 }
 
 void dungeon_loop::display_pos(const int pos_x,
