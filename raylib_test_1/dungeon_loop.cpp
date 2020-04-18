@@ -70,6 +70,7 @@ noexcept
     case action::down:
       m_position = Vector3Subtract(m_position, Vector3Scale(m_directions[2], m_velocity));
       break;
+
     case action::rotate_right:
       rotate_first_second(m_directions[0], m_directions[1], m_theta);
       break;
@@ -78,24 +79,18 @@ noexcept
       break;
     case action::rotate_up:
       rotate_first_second(m_directions[0], m_directions[2], m_theta);
-      m_camera.up = m_directions[2];
       break;
     case action::rotate_down:
       rotate_first_second(m_directions[2], m_directions[0], m_theta);
-      m_camera.up = m_directions[2];
       break;
     case action::roll_right:
       rotate_first_second(m_directions[2], m_directions[1], m_theta);
-      m_camera.up = m_directions[2];
       break;
     case action::roll_left:
       rotate_first_second(m_directions[1], m_directions[2], m_theta);
-      m_camera.up = m_directions[2];
       break;
   }
 }
-
-
 
 void dungeon_loop::play_actions()
 noexcept
@@ -103,16 +98,13 @@ noexcept
   if (m_act == action::none)
   {
     m_act = key_bind_actions();
-
     m_time = 0.0f;
   }
 
   if (m_act != action::none)
   {
     m_delta_time = GetFrameTime();
-    m_time += m_delta_time;    
-
-    // m_position = Vector3Add(m_position, Vector3Scale(Vector3Scale(m_forward, m_velocity), m_delta_time));
+    m_time += m_delta_time;
 
     if (m_time >= m_period)
     {
@@ -138,9 +130,11 @@ noexcept
 
   wrapping(m_position, m_wrap);
 
-  m_camera.target = Vector3Add(m_position, m_directions[0]);
-
   m_camera.position = m_position;
+
+  m_camera.target = Vector3Add(m_position, m_directions[0]);
+  m_camera.up = m_directions[2];
+
 
   if (IsKeyDown(KEY_BACKSPACE))
   { m_loop = false; }
@@ -236,13 +230,11 @@ noexcept
 {
   const int x
   { 20 };
-
   int y
   { 20 };
 
   const int step
   { 60 };
-
   const int size
   { 20 };
 
@@ -352,15 +344,12 @@ void dungeon_loop::run()
     BeginDrawing();
     {
       ClearBackground(Color{ BLACK });
-
       m_min_distance = 1000000.0f;
 
       const int pos_x
       { static_cast<int>(round(m_position.x/m_multiplier)) };
-
       const int pos_y
       { static_cast<int>(round(m_position.y/m_multiplier)) };
-
       const int pos_z
       { static_cast<int>(round(m_position.z/m_multiplier)) };
 
@@ -371,7 +360,6 @@ void dungeon_loop::run()
         {
           const int coord_x
           { pos_x + count_x };
-
           int index
           { dungeon_index(coord_x) };
 
@@ -379,7 +367,6 @@ void dungeon_loop::run()
           {
             int coord_y
             { pos_y + count_y };
-
             int indey
             { dungeon_index(coord_y) };
 
@@ -387,16 +374,13 @@ void dungeon_loop::run()
             {
               int coord_z
               { pos_z + count_z };
-
               int indez
               { dungeon_index(coord_z) };
 
               const int dungeon_x
               { index + m_dungeon_radius };
-
               const int dungeon_y
               { indey + m_dungeon_radius };
-
               const int dungeon_z
               { indez + m_dungeon_radius };
 
@@ -424,10 +408,6 @@ void dungeon_loop::run()
       }
       EndMode3D();
       EndVrDrawing();
-
-      // this->info_display();
-
-      // this->display_pos(pos_x, pos_y, pos_z);
 
       this->infos();
     }
