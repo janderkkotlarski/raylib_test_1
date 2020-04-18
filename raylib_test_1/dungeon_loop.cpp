@@ -333,7 +333,7 @@ void dungeon_loop::run()
               { indez -= m_dungeon_span; }
 
               const int mult
-              { 0 };
+              { 1 };
 
               const int dungeon_x
               { index + mult*m_dungeon_radius };
@@ -353,10 +353,13 @@ void dungeon_loop::run()
               {
                 if (index >= 0 && index < m_dungeon_span &&
                     indey >= 0 && indey < m_dungeon_span &&
-                    indez >= 0 && indez < m_dungeon_span)
+                    indez >= 0 && indez < m_dungeon_span &&
+                    false)
                 { m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, c_type); }
                 else
                 { m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, cube_type::concrete); }
+
+                m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, c_type);
 
                 // const float distance
                 // { Vector3Distance(m_position, Vector3Scale(m_fracta_cube.get_position(), m_multiplier)) };
