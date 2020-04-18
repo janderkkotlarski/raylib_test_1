@@ -39,8 +39,8 @@ noexcept
   }
 
   m_camera.position = m_position; // Camera position
-  m_camera.target = Vector3Add(m_position, m_forward); // Vector3Add(camera.position, forward);      // Camera looking at point
-  m_camera.up = m_upward;          // Camera up vector (rotation towards target)
+  m_camera.target = Vector3Add(m_position, m_directions[0]); // Vector3Add(camera.position, forward);      // Camera looking at point
+  m_camera.up = m_directions[2];          // Camera up vector (rotation towards target)
   m_camera.fovy = m_cam_angle;                                // Camera field-of-view Y
   m_camera.type = CAMERA_PERSPECTIVE; // Camera mode type
 
@@ -92,12 +92,47 @@ noexcept
   }
 }
 
+int dungeon_loop::coordinator(const float pos)
+noexcept
+{ return int(round(pos/m_multiplier)) + m_dungeon_radius; }
+
+bool dungeon_loop::collide()
+noexcept
+{
+  bool collision
+  { false };
+
+  std::vector <int> coords
+  { coordinator(m_position.x),
+    coordinator(m_position.y),
+    coordinator(m_position.z) };
+
+  int index
+  { coords[0] + 1};
+
+  if (index >= m_dungeon_span)
+  { index -= m_dungeon_span; }
+
+  if (m_type_volume[unsigned(index)][unsigned(coords[1])][unsigned(coords[2])] == cube_type::concrete &&
+      m_act == action::forward)
+  { collision = true; }
+
+  return collision;
+}
+
 void dungeon_loop::play_actions()
 noexcept
 {
   if (m_act == action::none)
   {
     m_act = key_bind_actions();
+
+    if (m_act != action::none)
+    {
+      if (this->collide())
+      { m_act = action::none; }
+    }
+
     m_time = 0.0f;
   }
 
@@ -158,15 +193,6 @@ noexcept
   const std::vector <std::string> pos_strings
   { vector3_to_strings(m_camera.position) };
 
-  const std::vector <std::string> front_strings
-  { vector3_to_strings(m_forward) };
-
-  const std::vector <std::string> right_strings
-  { vector3_to_strings(m_rightward) };
-
-  const std::vector <std::string> up_strings
-  { vector3_to_strings(m_upward) };
-
   const std::string distance_string
   { std::to_string(m_min_distance) };
 
@@ -175,15 +201,6 @@ noexcept
 
   const std::string camera_pos
   { "m_camera position:\n{" + pos_strings[0] + ","  + pos_strings[1] + "," + pos_strings[2] };
-
-  const std::string camera_front
-  { "m_camera front:\n{" + front_strings[0] + ","  + front_strings[1] + "," + front_strings[2] };
-
-  const std::string camera_right
-  { "m_camera right:\n{" + right_strings[0] + ","  + right_strings[1] + "," + right_strings[2] };
-
-  const std::string camera_up
-  { "m_camera up:\n{" + up_strings[0] + ","  + up_strings[1] + "," + up_strings[2] };
 
   const std::string min_dist
   { "Minimum distance:\n{" + distance_string };
@@ -194,15 +211,6 @@ noexcept
   const char *array_pos
   { camera_pos.c_str() };
 
-  const char *array_front
-  { camera_front.c_str() };
-
-  const char *array_right
-  { camera_right.c_str() };
-
-  const char *array_up
-  { camera_up.c_str() };
-
   const char *array_dist
   { min_dist.c_str() };
 
@@ -210,9 +218,6 @@ noexcept
   { diff.c_str() };
 
   DrawText(array_pos, 10, 40, 20, GREEN);
-  DrawText(array_front, 10, 100, 20, GREEN);
-  DrawText(array_right, 10, 160, 20, GREEN);
-  DrawText(array_up, 10, 220, 20, GREEN);
   DrawText(array_dist, 10, 280, 20, RED);
   DrawText(array_diff, 10, 340, 20, RED);
 
@@ -232,21 +237,29 @@ noexcept
 void dungeon_loop::infos()
 noexcept
 {
-  const int x
-  { 20 };
-  int y
-  { 20 };
+  DrawFPS(20, 20);
 
-  const int step
-  { 60 };
-  const int size
-  { 20 };
 
-  for (const Vector3 &direction: m_directions)
+  if (m_display_info)
   {
-    display_vector3(direction, x, y, size);
-    y += step;
+    const int x
+    { 20 };
+    int y
+    { 40 };
+
+    const int step
+    { 60 };
+    const int size
+    { 20 };
+
+    for (const Vector3 &direction: m_directions)
+    {
+      display_vector3(direction, x, y, size);
+      y += step;
+    }
   }
+  else
+  { DrawFPS(650, 20); }
 }
 
 void dungeon_loop::display_pos(const int pos_x,
@@ -397,9 +410,9 @@ void dungeon_loop::run()
 
                 if (display_selector(m_position,
                                      Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
-                                     m_forward, m_cam_field, m_multiplier))
+                                     m_directions[0], m_cam_field, m_multiplier))
                 {
-                  m_fracta_cube.display(m_position, m_forward, m_cube_color, m_edge_color,
+                  m_fracta_cube.display(m_position, m_directions[0], m_cube_color, m_edge_color,
                                         m_cam_field, m_sight, m_decay, m_multiplier);
                 }
               }
@@ -411,7 +424,7 @@ void dungeon_loop::run()
       EndMode3D();
       EndVrDrawing();
 
-      if (m_display_info)
+      if (m_test)
       { this->infos(); }
     }
 

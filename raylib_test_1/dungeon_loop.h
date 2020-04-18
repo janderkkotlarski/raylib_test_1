@@ -14,23 +14,8 @@ const int fps
 class dungeon_loop
 {
 private:
-  Vector3 m_forward
-  { 1.0f, 0.0f, 0.0f };
-
-  Vector3 m_backward
-  { -1.0f, 0.0f, 0.0f };
-
-  Vector3 m_rightward
-  { 0.0f, -1.0f, 0.0f };
-
-  Vector3 m_leftward
-  { 0.0f, 1.0f, 0.0f };
-
-  Vector3 m_upward
-  { 0.0f, 0.0f, 1.0f };
-
-  Vector3 m_downward
-  { 0.0f, 0.0f, -1.0f };
+  bool m_test
+  { true };
 
   Vector3 m_position
   { 0.0f, 0.0f, 0.0f };
@@ -83,7 +68,7 @@ private:
   { m_multiplier*(m_dungeon_radius + 0.5f) };
 
   const float m_decay
-  { 0.25f };
+  { 0.2f };
 
   const int m_horizon
   { 3 };
@@ -149,6 +134,12 @@ public:
   noexcept;
 
   void movetate()
+  noexcept;
+
+  int coordinator(const float pos)
+  noexcept;
+
+  bool collide()
   noexcept;
 
   void play_actions()
