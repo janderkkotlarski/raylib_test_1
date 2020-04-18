@@ -160,8 +160,8 @@ noexcept
   Color cube_color
   { type_color(c_type) };
 
-  Color edge_color
-  { WHITE };
+  // Color edge_color
+  // { WHITE };
 
   const Vector3 difference
   { Vector3Subtract(cube_position, position) };
@@ -169,9 +169,9 @@ noexcept
     const Color dim_color
     { dimmer(difference, cube_color, decay, multiplier) };
 
-    const Color dedge_color
-    { dimmer(difference, edge_color, decay, multiplier) };
+    // const Color dedge_color
+    // { dimmer(difference, edge_color, decay, multiplier) };
 
     DrawCube(cube_position, cube_dims.x, cube_dims.y, cube_dims.z, dim_color);
-    DrawCubeWires(cube_position, cube_dims.x, cube_dims.y, cube_dims.z, dedge_color);
+    // DrawCubeWires(cube_position, cube_dims.x, cube_dims.y, cube_dims.z, dedge_color);
 }

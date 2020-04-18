@@ -135,6 +135,9 @@ public:
                    const int pos_z)
   noexcept;
 
+  int dungeon_index(const int coord)
+  noexcept;
+
   void run();
 
 };

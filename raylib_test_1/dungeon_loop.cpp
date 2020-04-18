@@ -262,6 +262,19 @@ noexcept
   DrawText(array_pos_max, 10, 460, 20, YELLOW);
 }
 
+int dungeon_loop::dungeon_index(const int coord)
+noexcept
+{
+  int index = coord;
+
+  if (coord < -m_dungeon_radius)
+  { index += m_dungeon_span; }
+  else if (coord > m_dungeon_radius)
+  { index -= m_dungeon_span; }
+
+  return index;
+}
+
 void dungeon_loop::run()
 {
   while (m_loop)
@@ -299,12 +312,7 @@ void dungeon_loop::run()
           { pos_x + count_x };
 
           int index
-          { coord_x };
-
-          if (coord_x < -m_dungeon_radius)
-          { index += m_dungeon_span; }
-          else if (coord_x > m_dungeon_radius)
-          { index -= m_dungeon_span; }
+          { dungeon_index(coord_x) };
 
           for (int count_y { -m_horizon }; count_y <= m_horizon; ++count_y)
           {
@@ -312,12 +320,7 @@ void dungeon_loop::run()
             { pos_y + count_y };
 
             int indey
-            { coord_y };
-
-            if (coord_y < -m_dungeon_radius)
-            { indey += m_dungeon_span; }
-            else if (coord_y > m_dungeon_radius)
-            { indey -= m_dungeon_span; }
+            { dungeon_index(coord_y) };
 
             for (int count_z { -m_horizon }; count_z <= m_horizon; ++count_z)
             {
@@ -325,24 +328,16 @@ void dungeon_loop::run()
               { pos_z + count_z };
 
               int indez
-              { coord_z };
-
-              if (coord_z < -m_dungeon_radius)
-              { indez += m_dungeon_span; }
-              else if (coord_z > m_dungeon_radius)
-              { indez -= m_dungeon_span; }
-
-              const int mult
-              { 1 };
+              { dungeon_index(coord_z) };
 
               const int dungeon_x
-              { index + mult*m_dungeon_radius };
+              { index + m_dungeon_radius };
 
               const int dungeon_y
-              { indey + mult*m_dungeon_radius };
+              { indey + m_dungeon_radius };
 
               const int dungeon_z
-              { indez + mult*m_dungeon_radius };
+              { indez + m_dungeon_radius };
 
               const cube_type c_type
               { m_type_volume[unsigned(dungeon_x)]
@@ -351,18 +346,7 @@ void dungeon_loop::run()
 
               if (c_type != cube_type::none)
               {
-                if (index >= 0 && index < m_dungeon_span &&
-                    indey >= 0 && indey < m_dungeon_span &&
-                    indez >= 0 && indez < m_dungeon_span &&
-                    false)
-                { m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, c_type); }
-                else
-                { m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, cube_type::concrete); }
-
                 m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, c_type);
-
-                // const float distance
-                // { Vector3Distance(m_position, Vector3Scale(m_fracta_cube.get_position(), m_multiplier)) };
 
                 if (display_selector(m_position,
                                      Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
@@ -387,4 +371,3 @@ void dungeon_loop::run()
     EndDrawing();
   }
 }
-
