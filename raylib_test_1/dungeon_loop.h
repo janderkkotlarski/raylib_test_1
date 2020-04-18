@@ -139,6 +139,9 @@ public:
   int coordinator(const float pos)
   noexcept;
 
+  std::vector <std::vector <int>> director()
+  noexcept;
+
   bool collide()
   noexcept;
 

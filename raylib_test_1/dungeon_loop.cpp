@@ -96,6 +96,26 @@ int dungeon_loop::coordinator(const float pos)
 noexcept
 { return int(round(pos/m_multiplier)) + m_dungeon_radius; }
 
+std::vector <std::vector <int>> dungeon_loop::director()
+noexcept
+{
+  std::vector <std::vector <int>> directs;
+
+  for (const Vector3 &direction: m_directions)
+  {
+    std::vector <int> direct;
+
+    direct.push_back(int(round(direction.x)));
+    direct.push_back(int(round(direction.y)));
+    direct.push_back(int(round(direction.z)));
+
+    directs.push_back(direct);
+  }
+
+  return directs;
+}
+
+
 bool dungeon_loop::collide()
 noexcept
 {
@@ -107,8 +127,11 @@ noexcept
     coordinator(m_position.y),
     coordinator(m_position.z) };
 
-  int index
-  { coords[0] + 1};
+  std::vector <std::vector <int>> directs
+  { director() };
+
+
+
 
   if (index >= m_dungeon_span)
   { index -= m_dungeon_span; }
