@@ -6,6 +6,7 @@
 #include <raylib.h>
 
 #include "fractacube.h"
+#include "action.h"
 
 const int fps
 { 60 };
@@ -37,6 +38,9 @@ private:
   bool m_move
   { false };
 
+  action m_act
+  { action::none };
+
   const float m_period
   { 0.5f };
 
@@ -50,16 +54,16 @@ private:
   { 100.0f };
 
   const float m_speed
-  { 1.0f };
+  { 1.0f*m_multiplier/m_period };
 
-  const float m_velocity
-  { m_multiplier*m_speed/m_period };
+  float m_velocity
+  { m_speed*GetFrameTime() };
 
   const float m_angle
-  { PI/2.0f };
+  { PI/(2.0f*m_period) };
 
-  const float m_theta
-  { m_angle/m_period };
+  float m_theta
+  { m_angle*GetFrameTime() };
 
   const float m_side
   { m_multiplier*1.0f };
@@ -67,7 +71,7 @@ private:
   std::vector <Vector3> m_directions
   { {1.0f, 0.0f, 0.0f},
     {0.0f, -1.0f, 0.0f},
-    {1.0f, 0.0f, 1.0f} };
+    {0.0f, 0.0f, 1.0f} };
 
   const int m_dungeon_radius
   { 5 };
@@ -143,7 +147,10 @@ public:
   dungeon_loop()
   noexcept;
 
-  void play_key_bindings()
+  void movetate()
+  noexcept;
+
+  void play_actions()
   noexcept;
 
   void info_display()

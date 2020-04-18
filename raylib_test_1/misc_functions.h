@@ -32,8 +32,6 @@ noexcept;
 
 void rotate_first_second(Vector3 &first,
                          Vector3 &second,
-                         Vector3 &inv_first,
-                         Vector3 &inv_second,
                          const float theta)
 noexcept;
 

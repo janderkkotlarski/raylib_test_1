@@ -18,8 +18,6 @@ noexcept
 
 void rotate_first_second(Vector3 &first,
                          Vector3 &second,
-                         Vector3 &inv_first,
-                         Vector3 &inv_second,
                          const float theta)
 noexcept
 {
@@ -34,9 +32,6 @@ noexcept
 
   first = new_first;
   second = new_second;
-
-  inv_first = Vector3Negate(first);
-  inv_second = Vector3Negate(second);
 }
 
 void wrapper(float &dim,

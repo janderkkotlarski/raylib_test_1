@@ -3,6 +3,7 @@
 #include <raymath.h>
 
 #include "misc_functions.h"
+#include "keybindings.h"
 
 dungeon_loop::dungeon_loop()
 noexcept
@@ -46,85 +47,100 @@ noexcept
   SetCameraMode(m_camera, CAMERA_FREE);
 }
 
-void dungeon_loop::play_key_bindings()
+void dungeon_loop::movetate()
 noexcept
-{if ((IsKeyDown('W') || IsKeyDown('S') || IsKeyDown('D') || IsKeyDown('A') ||
-     IsKeyDown('E') || IsKeyDown('Q') || IsKeyDown('L') || IsKeyDown('J') ||
-     IsKeyDown('I') || IsKeyDown('K') || IsKeyDown('O') || IsKeyDown('U')) &&
-     m_move == false)
+{
+  switch (m_act)
   {
-    m_move = true;
+    case action::forward:
+      m_position = Vector3Add(m_position, Vector3Scale(m_directions[0], m_velocity));
+      break;
+    case action::backward:
+      m_position = Vector3Subtract(m_position, Vector3Scale(m_directions[0], m_velocity));
+      break;
+    case action::right:
+      m_position = Vector3Add(m_position, Vector3Scale(m_directions[1], m_velocity));
+      break;
+    case action::left:
+      m_position = Vector3Subtract(m_position, Vector3Scale(m_directions[1], m_velocity));
+      break;
+    case action::up:
+      m_position = Vector3Add(m_position, Vector3Scale(m_directions[2], m_velocity));
+      break;
+    case action::down:
+      m_position = Vector3Subtract(m_position, Vector3Scale(m_directions[2], m_velocity));
+      break;
+    case action::rotate_right:
+      rotate_first_second(m_directions[0], m_directions[1], m_theta);
+      break;
+    case action::rotate_left:
+      rotate_first_second(m_directions[1], m_directions[0], m_theta);
+      break;
+    case action::rotate_up:
+      rotate_first_second(m_directions[0], m_directions[2], m_theta);
+      m_camera.up = m_directions[2];
+      break;
+    case action::rotate_down:
+      rotate_first_second(m_directions[2], m_directions[0], m_theta);
+      m_camera.up = m_directions[2];
+      break;
+    case action::roll_right:
+      rotate_first_second(m_directions[2], m_directions[1], m_theta);
+      m_camera.up = m_directions[2];
+      break;
+    case action::roll_left:
+      rotate_first_second(m_directions[1], m_directions[2], m_theta);
+      m_camera.up = m_directions[2];
+      break;
+  }
+}
+
+
+
+void dungeon_loop::play_actions()
+noexcept
+{
+  if (m_act == action::none)
+  {
+    m_act = key_bind_actions();
 
     m_time = 0.0f;
   }
 
-  if (m_move)
+  if (m_act != action::none)
   {
     m_delta_time = GetFrameTime();
-    m_time += m_delta_time;
+    m_time += m_delta_time;    
 
-    m_position = Vector3Add(m_position, Vector3Scale(Vector3Scale(m_forward, m_velocity), m_delta_time));
+    // m_position = Vector3Add(m_position, Vector3Scale(Vector3Scale(m_forward, m_velocity), m_delta_time));
 
     if (m_time >= m_period)
     {
-      m_move = false;
+      m_act = action::none;
 
       m_position.x = m_multiplier*round(m_position.x/m_multiplier);
       m_position.y = m_multiplier*round(m_position.y/m_multiplier);
       m_position.z = m_multiplier*round(m_position.z/m_multiplier);
+
+      for (Vector3 &direction: m_directions)
+      {
+        direction.x = round(direction.x);
+        direction.y = round(direction.y);
+        direction.z = round(direction.z);
+      }
     }
   }
 
-  if (false)
-  {
-    if (IsKeyDown('W'))
-    { m_position = Vector3Add(m_position, Vector3Scale(m_forward, m_velocity)); }
+  m_velocity = m_delta_time*m_speed;
+  m_theta = m_delta_time*m_angle;
 
-    if (IsKeyDown('S'))
-    { m_position = Vector3Add(m_position, Vector3Scale(m_backward, m_velocity)); }
+  this->movetate();
 
-    if (IsKeyDown('D'))
-    { m_position = Vector3Add(m_position, Vector3Scale(m_rightward, m_velocity)); }
+  wrapping(m_position, m_wrap);
 
-    if (IsKeyDown('A'))
-    { m_position = Vector3Add(m_position, Vector3Scale(m_leftward, m_velocity)); }
+  m_camera.target = Vector3Add(m_position, m_directions[0]);
 
-    if (IsKeyDown('E'))
-    { m_position = Vector3Add(m_position, Vector3Scale(m_upward, m_velocity)); }
-
-    if (IsKeyDown('Q'))
-    { m_position = Vector3Add(m_position, Vector3Scale(m_downward, m_velocity)); }
-
-    if (IsKeyDown('L'))
-    { rotate_first_second(m_forward, m_rightward, m_backward, m_leftward, m_theta); }
-
-    if (IsKeyDown('J'))
-    { rotate_first_second(m_forward, m_leftward, m_backward, m_rightward, m_theta); }
-
-    if (IsKeyDown('I'))
-    {
-     rotate_first_second(m_forward, m_upward, m_backward, m_downward, m_theta);
-     m_camera.up = m_upward;
-    }
-
-    if (IsKeyDown('K'))
-    {
-     rotate_first_second(m_forward, m_downward, m_backward, m_upward, m_theta);
-     m_camera.up = m_upward;
-    }
-
-    if (IsKeyDown('O'))
-    {
-     rotate_first_second(m_upward, m_rightward, m_downward, m_leftward, m_theta);
-     m_camera.up = m_upward;
-    }
-
-    if (IsKeyDown('U'))
-    {
-     rotate_first_second(m_upward, m_leftward, m_downward, m_rightward, m_theta);
-     m_camera.up = m_upward;
-    }
-  }
+  m_camera.position = m_position;
 
   if (IsKeyDown(KEY_BACKSPACE))
   { m_loop = false; }
@@ -320,13 +336,7 @@ void dungeon_loop::run()
 {
   while (m_loop)
   {
-    this->play_key_bindings();
-
-    wrapping(m_position, m_wrap);
-
-    m_camera.target = Vector3Add(m_position, m_forward);
-
-    m_camera.position = m_position;
+    this->play_actions();
 
     // if (IsKeyDown('Z')) m_camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
 
