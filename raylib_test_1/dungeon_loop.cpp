@@ -143,7 +143,11 @@ noexcept
   { m_loop = false; }
 
   if (IsKeyPressed(KEY_SPACE))
-  { ToggleVrMode(); }   // Toggle VR mode
+  {
+    ToggleVrMode();
+
+    m_display_info = !m_display_info;
+  }   // Toggle VR mode
 }
 
 void dungeon_loop::info_display()
@@ -339,8 +343,6 @@ void dungeon_loop::run()
   {
     this->play_actions();
 
-    // if (IsKeyDown('Z')) m_camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
-
     BeginDrawing();
     {
       ClearBackground(Color{ BLACK });
@@ -409,7 +411,8 @@ void dungeon_loop::run()
       EndMode3D();
       EndVrDrawing();
 
-      this->infos();
+      if (m_display_info)
+      { this->infos(); }
     }
 
     EndDrawing();

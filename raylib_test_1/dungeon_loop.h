@@ -83,7 +83,7 @@ private:
   { m_multiplier*(m_dungeon_radius + 0.5f) };
 
   const float m_decay
-  { 0.35f };
+  { 0.25f };
 
   const int m_horizon
   { 3 };
@@ -130,7 +130,7 @@ private:
   { 100.0f };
 
   const float m_cam_field
-  { 0.3f };
+  { -0.001f };
 
   bool m_loop
   { true };
@@ -141,7 +141,8 @@ private:
   Vector3 m_min_difference
   { -1.0f, 0.0f, 0.0f };
 
-
+  bool m_display_info
+  { true };
 
 public:
   dungeon_loop()
