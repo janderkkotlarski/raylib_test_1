@@ -34,6 +34,18 @@ private:
   Vector3 m_position
   { 0.0f, 0.0f, 0.0f };
 
+  bool m_move
+  { false };
+
+  const float m_period
+  { 0.5f };
+
+  float m_time
+  { 0.0f };
+
+  float m_delta_time
+  { 1.0f };
+
   const float m_multiplier
   { 100.0f };
 
@@ -41,16 +53,21 @@ private:
   { 1.0f };
 
   const float m_velocity
-  { m_multiplier*m_speed/fps };
+  { m_multiplier*m_speed/m_period };
 
   const float m_angle
-  { 2.0f };
+  { PI/2.0f };
 
   const float m_theta
-  { m_angle/fps };
+  { m_angle/m_period };
 
   const float m_side
   { m_multiplier*1.0f };
+
+  std::vector <Vector3> m_directions
+  { {1.0f, 0.0f, 0.0f},
+    {0.0f, -1.0f, 0.0f},
+    {1.0f, 0.0f, 1.0f} };
 
   const int m_dungeon_radius
   { 5 };
@@ -120,6 +137,8 @@ private:
   Vector3 m_min_difference
   { -1.0f, 0.0f, 0.0f };
 
+
+
 public:
   dungeon_loop()
   noexcept;
@@ -128,6 +147,9 @@ public:
   noexcept;
 
   void info_display()
+  noexcept;
+
+  void infos()
   noexcept;
 
   void display_pos(const int pos_x,
