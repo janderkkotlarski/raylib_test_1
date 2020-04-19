@@ -36,36 +36,7 @@ noexcept
   { m_division / 2 };
 
   const int extra
-  { m_division - 1 % 2 };
-
-  /*
-  for (int count_x { extra - edge}; count_x <= edge; ++count_x)
-  {
-    for (int count_y { extra - edge}; count_y <= edge; ++count_y)
-    {
-      for (int count_z { extra - edge}; count_z <= edge; ++count_z)
-      {
-        Vector3 sub_pos
-        { float(count_x) - float(extra)*0.5f,
-          float(count_y) - float(extra)*0.5f,
-          float(count_z) - float(extra)*0.5f };
-
-        Vector3 cube_pos
-        { Vector3Add(sub_pos, m_pos_int.get_Vector3()) };
-
-        const float side
-        { multiplier*m_scale/float(m_division) };
-
-        Vector3 cube_dims
-        { side, side, side };
-
-        display_cube(position, cube_pos, cube_dims, forward, cube_color, edge_color,
-                     cam_angle, sight, decay, multiplier);
-
-      }
-    }
-  }
-  */
+  { m_division - 1 % 2 };  
 
   for (int count_x { 0 }; count_x < m_division; ++count_x)
   {

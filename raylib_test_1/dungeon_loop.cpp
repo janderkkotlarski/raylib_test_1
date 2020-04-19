@@ -26,10 +26,22 @@ noexcept
 
       for(int count_z{ -m_dungeon_radius }; count_z <= m_dungeon_radius; ++count_z)
       {
-        if (rand() < rand.max()/3)
-        { line.push_back(cube_type::concrete); }
+        if(m_simple)
+        {
+          if (count_x == 1 &&
+          count_y == 0 &&
+          count_z == 0)
+          { line.push_back(cube_type::alabaster); }
+          else
+          { line.push_back(cube_type::none); }
+        }
         else
-        { line.push_back(cube_type::none); }
+        {
+          if (rand() < rand.max()/3)
+          { line.push_back(cube_type::concrete); }
+          else
+          { line.push_back(cube_type::none); }
+        }
       }
 
       area.push_back(line);
@@ -163,7 +175,7 @@ noexcept
       for (int &part: posit)
       { part = dungeon_warp(part); }
 
-      if (m_type_volume[posit[0]][posit[1]][posit[2]] == cube_type::concrete &&
+      if (type_collision(m_type_volume[posit[0]][posit[1]][posit[2]]) &&
           m_act == direct2action(directs, direct))
       { m_act = action::none; }
     }
@@ -396,6 +408,8 @@ void dungeon_loop::run()
     {
       ClearBackground(Color{ BLACK });
       m_min_distance = 1000000.0f;
+
+
 
       const int pos_x
       { static_cast<int>(round(m_position.x/m_multiplier)) };

@@ -84,6 +84,9 @@ enum class cube_type
   // blue
 };
 
+bool type_collision(const cube_type ct)
+noexcept;
+
 Color type_color(const cube_type ct)
 noexcept;
 

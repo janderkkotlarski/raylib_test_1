@@ -59,7 +59,7 @@ private:
     {0.0f, 0.0f, 1.0f} };
 
   const int m_dungeon_radius
-  { 5 };
+  { 1 };
 
   const int m_dungeon_span
   { 2*m_dungeon_radius + 1};
@@ -68,7 +68,7 @@ private:
   { m_multiplier*(m_dungeon_radius + 0.5f) };
 
   const float m_decay
-  { 0.2f };
+  { 0.9f };
 
   const int m_horizon
   { 3 };
@@ -101,6 +101,9 @@ private:
   const int m_cube_amount
   { 1000 };
 
+  Vector3 m_cube_pos
+  { 1.0f, 0.0f, 1.0f };
+
   std::vector <Vector3> m_cube_positions;
 
   std::vector <fractacube> m_fracta_cubes;
@@ -127,6 +130,9 @@ private:
   { -1.0f, 0.0f, 0.0f };
 
   bool m_display_info
+  { true };
+
+  const bool m_simple
   { true };
 
 public:
