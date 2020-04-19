@@ -8,6 +8,17 @@
 
 #include "cube_type.h"
 
+std::vector <int> negate_int_vector(const std::vector <int> &vec)
+noexcept;
+
+std::vector <int> add_int_vector(const std::vector <int> &vec_1,
+                                 const std::vector <int> &vec_2)
+noexcept;
+
+std::vector <int> sub_int_vector(const std::vector <int> &vec_1,
+                                 const std::vector <int> &vec_2)
+noexcept;
+
 Vector3 add_vector3(const Vector3 &vec_1,
                     const Vector3 &vec_2)
 noexcept;

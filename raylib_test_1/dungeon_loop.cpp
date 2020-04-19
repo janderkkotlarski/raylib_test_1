@@ -92,6 +92,32 @@ noexcept
   }
 }
 
+int dungeon_loop::dungeon_wrap(const int coord)
+noexcept
+{
+  int index = coord;
+
+  if (coord < -m_dungeon_radius)
+  { index += m_dungeon_span; }
+  else if (coord > m_dungeon_radius)
+  { index -= m_dungeon_span; }
+
+  return index;
+}
+
+int dungeon_loop::dungeon_warp(const int coord)
+noexcept
+{
+  int index = coord;
+
+  if (coord < 0)
+  { index += m_dungeon_span; }
+  else if (coord >= m_dungeon_span)
+  { index -= m_dungeon_span; }
+
+  return index;
+}
+
 int dungeon_loop::coordinator(const float pos)
 noexcept
 { return int(round(pos/m_multiplier)) + m_dungeon_radius; }
@@ -116,12 +142,9 @@ noexcept
 }
 
 
-bool dungeon_loop::collide()
+void dungeon_loop::collide()
 noexcept
 {
-  bool collision
-  { false };
-
   std::vector <int> coords
   { coordinator(m_position.x),
     coordinator(m_position.y),
@@ -130,17 +153,21 @@ noexcept
   std::vector <std::vector <int>> directs
   { director() };
 
+  for (const std::vector <int> &direct: directs)
+  {
+    for (int sign{ -1 }; sign <= 1; sign +=2)
+    {
+      std::vector <int> posit
+      { sign == -1 ? sub_int_vector(coords, direct) : add_int_vector(coords, direct) };
 
+      for (int &part: posit)
+      { part = dungeon_warp(part); }
 
-
-  if (index >= m_dungeon_span)
-  { index -= m_dungeon_span; }
-
-  if (m_type_volume[unsigned(index)][unsigned(coords[1])][unsigned(coords[2])] == cube_type::concrete &&
-      m_act == action::forward)
-  { collision = true; }
-
-  return collision;
+      if (m_type_volume[posit[0]][posit[1]][posit[2]] == cube_type::concrete &&
+          m_act == direct2action(directs, direct))
+      { m_act = action::none; }
+    }
+  }
 }
 
 void dungeon_loop::play_actions()
@@ -151,10 +178,7 @@ noexcept
     m_act = key_bind_actions();
 
     if (m_act != action::none)
-    {
-      if (this->collide())
-      { m_act = action::none; }
-    }
+    { this->collide(); }
 
     m_time = 0.0f;
   }
@@ -360,18 +384,7 @@ noexcept
   DrawText(array_pos_max, 10, 460, 20, YELLOW);
 }
 
-int dungeon_loop::dungeon_index(const int coord)
-noexcept
-{
-  int index = coord;
 
-  if (coord < -m_dungeon_radius)
-  { index += m_dungeon_span; }
-  else if (coord > m_dungeon_radius)
-  { index -= m_dungeon_span; }
-
-  return index;
-}
 
 void dungeon_loop::run()
 {
@@ -399,21 +412,21 @@ void dungeon_loop::run()
           const int coord_x
           { pos_x + count_x };
           int index
-          { dungeon_index(coord_x) };
+          { dungeon_wrap(coord_x) };
 
           for (int count_y { -m_horizon }; count_y <= m_horizon; ++count_y)
           {
             int coord_y
             { pos_y + count_y };
             int indey
-            { dungeon_index(coord_y) };
+            { dungeon_wrap(coord_y) };
 
             for (int count_z { -m_horizon }; count_z <= m_horizon; ++count_z)
             {
               int coord_z
               { pos_z + count_z };
               int indez
-              { dungeon_index(coord_z) };
+              { dungeon_wrap(coord_z) };
 
               const int dungeon_x
               { index + m_dungeon_radius };

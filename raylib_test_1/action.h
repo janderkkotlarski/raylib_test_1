@@ -1,6 +1,7 @@
 #ifndef ACTION_H
 #define ACTION_H
 
+#include <vector>
 
 enum class action
 {
@@ -18,5 +19,9 @@ enum class action
   roll_right,
   roll_left
 };
+
+action direct2action(const std::vector <std::vector <int>> &directs,
+                     const std::vector <int> &direct)
+noexcept;
 
 #endif // ACTION_H

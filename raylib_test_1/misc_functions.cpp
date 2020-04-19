@@ -4,6 +4,48 @@
 
 #include <raymath.h>
 
+std::vector <int> negate_int_vector(const std::vector <int> &vec)
+noexcept
+{
+  std::vector <int> invec;
+
+  for (const int number: vec)
+  { invec.push_back(-number); }
+
+  return invec;
+}
+
+std::vector <int> add_int_vector(const std::vector <int> &vec_1,
+                                 const std::vector <int> &vec_2)
+noexcept
+{
+  std::vector <int> addvec;
+
+  unsigned count
+  { 0 };
+
+  for (const int number: vec_1)
+  { addvec.push_back(number + vec_2[count]); }
+
+  return addvec;
+}
+
+std::vector <int> sub_int_vector(const std::vector <int> &vec_1,
+                                 const std::vector <int> &vec_2)
+noexcept
+{
+  std::vector <int> addvec;
+
+  unsigned count
+  { 0 };
+
+  for (const int number: vec_1)
+  { addvec.push_back(number - vec_2[count]); }
+
+  return addvec;
+}
+
+
 std::vector <std::string> vector3_to_strings(const Vector3 &vec)
 noexcept
 {

@@ -131,6 +131,12 @@ private:
 
 public:
   dungeon_loop()
+  noexcept;  
+
+  int dungeon_wrap(const int coord)
+  noexcept;
+
+  int dungeon_warp(const int coord)
   noexcept;
 
   void movetate()
@@ -142,7 +148,7 @@ public:
   std::vector <std::vector <int>> director()
   noexcept;
 
-  bool collide()
+  void collide()
   noexcept;
 
   void play_actions()
@@ -157,9 +163,6 @@ public:
   void display_pos(const int pos_x,
                    const int pos_y,
                    const int pos_z)
-  noexcept;
-
-  int dungeon_index(const int coord)
   noexcept;
 
   void run();
