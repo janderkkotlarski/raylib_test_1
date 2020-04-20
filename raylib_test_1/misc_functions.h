@@ -12,12 +12,10 @@ std::vector <int> negate_int_vector(const std::vector <int> &vec)
 noexcept;
 
 std::vector <int> add_int_vector(const std::vector <int> &vec_1,
-                                 const std::vector <int> &vec_2)
-noexcept;
+                                 const std::vector <int> &vec_2);
 
 std::vector <int> sub_int_vector(const std::vector <int> &vec_1,
-                                 const std::vector <int> &vec_2)
-noexcept;
+                                 const std::vector <int> &vec_2);
 
 Vector3 add_vector3(const Vector3 &vec_1,
                     const Vector3 &vec_2)
@@ -35,6 +33,13 @@ std::vector <std::string> vector3_to_strings(const Vector3 &vec)
 noexcept;
 
 void display_vector3(const Vector3 &vec,
+                     const int x,
+                     const int y,
+                     const int size)
+noexcept;
+
+void display_vector3(const Vector3 &vec,
+                     const std::string &message,
                      const int x,
                      const int y,
                      const int size)

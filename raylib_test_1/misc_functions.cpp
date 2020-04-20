@@ -1,6 +1,8 @@
 #include "misc_functions.h"
 
 #include <cmath>
+#include <cassert>
+#include <iostream>
 
 #include <raymath.h>
 
@@ -9,40 +11,82 @@ noexcept
 {
   std::vector <int> invec;
 
+  unsigned count
+  { 0 };
+
   for (const int number: vec)
-  { invec.push_back(-number); }
+  {
+    invec.push_back(-number);
+
+    assert(invec[count] == -vec[count]);
+  }
+
+  assert(invec.size() == vec.size());
 
   return invec;
 }
 
 std::vector <int> add_int_vector(const std::vector <int> &vec_1,
                                  const std::vector <int> &vec_2)
-noexcept
 {
+  if (vec_1.size() != vec_2.size())
+  {
+    std::cerr << "The vectors have different sizes" << std::endl;
+    throw -1;
+  }
+
+  if (vec_1.size() == 0)
+  {
+    std::cerr << "The vectors have size 0" << std::endl;
+    throw -2;
+  }
+
   std::vector <int> addvec;
 
   unsigned count
   { 0 };
 
   for (const int number: vec_1)
-  { addvec.push_back(number + vec_2[count]); }
+  {
+    addvec.push_back(number + vec_2[count]);
+    assert(addvec[count] == vec_1[count] + vec_2[count]);
+  }
+
+  assert(addvec.size() == vec_1.size());
 
   return addvec;
 }
 
 std::vector <int> sub_int_vector(const std::vector <int> &vec_1,
                                  const std::vector <int> &vec_2)
-noexcept
 {
-  std::vector <int> addvec;
+
+  if (vec_1.size() != vec_2.size())
+  {
+    std::cerr << "The vectors have different sizes" << std::endl;
+    throw -1;
+  }
+
+  if (vec_1.size() == 0)
+  {
+    std::cerr << "The vectors have size 0" << std::endl;
+    throw -2;
+  }
+
+  std::vector <int> subvec;
 
   unsigned count
   { 0 };
 
   for (const int number: vec_1)
-  { addvec.push_back(number - vec_2[count]); }
+  {
+    subvec.push_back(number - vec_2[count]);
+    assert(subvec[count] == vec_1[count] - vec_2[count]);
+  }
 
-  return addvec;
+  assert(subvec.size() == vec_1.size());
+
+  return subvec;
 }
 
 
@@ -54,6 +98,8 @@ noexcept
   strings.push_back(std::to_string(vec.x));
   strings.push_back(std::to_string(vec.y));
   strings.push_back(std::to_string(vec.z));
+
+  assert(strings.size() == 3);
 
   return strings;
 }
@@ -71,9 +117,24 @@ noexcept
   const char *info_array
   { info_string.c_str() };
   DrawText(info_array, x, y, size, GREEN);
-
-
 }
+
+void display_vector3(const Vector3 &vec,
+                     const std::string &message,
+                     const int x,
+                     const int y,
+                     const int size)
+noexcept
+{
+  const std::vector <std::string> vector_strings
+  { vector3_to_strings(vec) };
+  const std::string info_string
+  { message + vector_strings[0] + ","  + vector_strings[1] + "," + vector_strings[2] };
+  const char *info_array
+  { info_string.c_str() };
+  DrawText(info_array, x, y, size, GREEN);
+}
+
 
 void rotate_first_second(Vector3 &first,
                          Vector3 &second,

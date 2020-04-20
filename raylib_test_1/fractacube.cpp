@@ -1,12 +1,17 @@
 #include "fractacube.h"
 
+#include <cassert>
+
 #include <raymath.h>
 
 #include "misc_functions.h"
 
 fractacube::fractacube()
 noexcept
-{}
+{
+  assert(m_scale >= 0.49f &&
+         m_scale <= 0.91f);
+}
 
 fractacube::fractacube(const int x, const int y, const int z,
                        const cube_type c_type)
@@ -23,11 +28,6 @@ noexcept
 }
 
 void fractacube::display(Vector3 &position,
-                         const Vector3 &forward,
-                         Color &cube_color,
-                         Color &edge_color,
-                         const float cam_angle,
-                         const float sight,
                          const float decay,
                          const float multiplier)
 noexcept

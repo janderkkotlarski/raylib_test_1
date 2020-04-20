@@ -132,11 +132,6 @@ public:
   { return m_pos_int.get_Vector3(); }
 
   void display(Vector3 &position,
-               const Vector3 &forward,
-               Color &cube_color,
-               Color &edge_color,
-               const float cam_angle,
-               const float sight,
                const float decay,
                const float multiplier)
   noexcept;

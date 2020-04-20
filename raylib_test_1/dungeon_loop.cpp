@@ -462,8 +462,7 @@ void dungeon_loop::run()
                                      Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
                                      m_directions[0], m_cam_field, m_multiplier))
                 {
-                  m_fracta_cube.display(m_position, m_directions[0], m_cube_color, m_edge_color,
-                                        m_cam_field, m_sight, m_decay, m_multiplier);
+                  m_fracta_cube.display(m_position, m_decay, m_multiplier);
                 }
               }
 
