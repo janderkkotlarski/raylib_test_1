@@ -11,10 +11,73 @@ noexcept
 {
   ToggleVrMode();
 
-  std::random_device rand;
+  // stereoscope_init();
 
-  // for(int count{ 0 }; count < m_cube_amount; ++count)
-  // { m_cube_positions.push_back(ranpos(rand, m_dist_min, m_dist_max)); }
+  camera_init();
+
+  dungeon_init();  
+}
+
+void dungeon_loop::stereoscope_init()
+noexcept
+{
+  #if defined(PLATFORM_DESKTOP)
+    #define GLSL_VERSION            330
+  #else   // PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
+    #define GLSL_VERSION            100
+  #endif
+
+  SetConfigFlags(FLAG_MSAA_4X_HINT);// VR device parameters (head-mounted-device)
+
+  InitVrSimulator();
+
+  VrDeviceInfo hmd = { 0 };
+
+  // Oculus Rift CV1 parameters for simulator
+  hmd.hResolution = 2000;                 // HMD horizontal resolution in pixels
+  hmd.vResolution = 1200;  // 1200               // HMD vertical resolution in pixels
+  hmd.hScreenSize = 0.133793f;  // 0.133793f;            // HMD horizontal size in meters
+  hmd.vScreenSize = 0.0669f;              // HMD vertical size in meters
+  hmd.vScreenCenter = 0.04678f;           // HMD screen center in meters
+  hmd.eyeToScreenDistance = 0.041f;       // HMD distance between eye and display in meters
+  hmd.lensSeparationDistance = 0.07f;     // HMD lens separation distance in meters
+  hmd.interpupillaryDistance = 0.07f;     // HMD IPD (distance between pupils) in meters
+
+  // NOTE: CV1 uses a Fresnel-hybrid-asymmetric lenses with specific distortion compute shaders.
+  // Following parameters are an approximation to distortion stereo rendering but results differ from actual device.
+  hmd.lensDistortionValues[0] = 1.0f;     // HMD lens distortion constant parameter 0
+  hmd.lensDistortionValues[1] = 0.22f;    // HMD lens distortion constant parameter 1
+  hmd.lensDistortionValues[2] = 0.24f;    // HMD lens distortion constant parameter 2
+  hmd.lensDistortionValues[3] = 0.0f;     // HMD lens distortion constant parameter 3
+  hmd.chromaAbCorrection[0] = 0.996f;     // HMD chromatic aberration correction parameter 0
+  hmd.chromaAbCorrection[1] = -0.004f;    // HMD chromatic aberration correction parameter 1
+  hmd.chromaAbCorrection[2] = 1.014f;     // HMD chromatic aberration correction parameter 2
+  hmd.chromaAbCorrection[3] = 0.0f;       // HMD chromatic aberration correction parameter 3
+
+  // Distortion shader (uses device lens distortion and chroma)
+  Shader distortion = LoadShader(0, FormatText("resources/distortion%i.fs", GLSL_VERSION));
+
+  SetVrConfiguration(hmd, distortion);    // Set Vr device parameters for stereo rendering
+
+  SetTargetFPS(fps);  // Set our game to run at fps frames-per-second
+}
+
+void dungeon_loop::camera_init()
+noexcept
+{
+  m_camera.position = m_position; // Camera position
+  m_camera.target = Vector3Add(m_position, m_directions[0]); // Vector3Add(camera.position, forward);      // Camera looking at point
+  m_camera.up = m_directions[2];          // Camera up vector (rotation towards target)
+  m_camera.fovy = m_cam_angle;                                // Camera field-of-view Y
+  m_camera.type = CAMERA_PERSPECTIVE; // Camera mode type
+
+  SetCameraMode(m_camera, CAMERA_FREE);
+}
+
+void dungeon_loop::dungeon_init()
+noexcept
+{
+  std::random_device rand;
 
   for(int count_x{ -m_dungeon_radius }; count_x <= m_dungeon_radius; ++count_x)
   {
@@ -49,14 +112,6 @@ noexcept
 
     m_type_volume.push_back(area);
   }
-
-  m_camera.position = m_position; // Camera position
-  m_camera.target = Vector3Add(m_position, m_directions[0]); // Vector3Add(camera.position, forward);      // Camera looking at point
-  m_camera.up = m_directions[2];          // Camera up vector (rotation towards target)
-  m_camera.fovy = m_cam_angle;                                // Camera field-of-view Y
-  m_camera.type = CAMERA_PERSPECTIVE; // Camera mode type
-
-  SetCameraMode(m_camera, CAMERA_FREE);
 }
 
 void dungeon_loop::movetate()
@@ -479,4 +534,6 @@ void dungeon_loop::run()
 
     EndDrawing();
   }
+
+  UnloadShader(distortion);
 }

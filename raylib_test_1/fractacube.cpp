@@ -17,7 +17,10 @@ fractacube::fractacube(const int x, const int y, const int z,
                        const cube_type c_type)
 noexcept
   : m_pos_int(x, y, z), m_type(c_type)
-{}
+{
+  assert(m_scale >= 0.49f &&
+         m_scale <= 0.91f);
+}
 
 void fractacube::set_pos_type(const int x, const int y, const int z,
                               const cube_type c_type)
@@ -32,9 +35,6 @@ void fractacube::display(Vector3 &position,
                          const float multiplier)
 noexcept
 {
-  const int edge
-  { m_division / 2 };
-
   const int extra
   { m_division - 1 % 2 };  
 

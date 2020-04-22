@@ -135,6 +135,15 @@ private:
   const bool m_simple
   { true };
 
+  void stereoscope_init()
+  noexcept;
+
+  void camera_init()
+  noexcept;
+
+  void dungeon_init()
+  noexcept;
+
 public:
   dungeon_loop()
   noexcept;  

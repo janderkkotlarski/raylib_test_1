@@ -111,7 +111,7 @@ private:
   { m_division - 1 };
 
   const float m_scale
-  { 0.9f };
+  { 0.8f };
 
   cube_type m_type
   { cube_type::none };
