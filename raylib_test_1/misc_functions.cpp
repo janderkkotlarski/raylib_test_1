@@ -89,6 +89,60 @@ std::vector <int> sub_int_vector(const std::vector <int> &vec_1,
   return subvec;
 }
 
+void display_string_vector(const std::vector <std::string> vector_strings,
+                           const std::string &message,
+                           const int x,
+                           const int y,
+                           const int size)
+noexcept
+{
+  std::string info_string
+  { message };
+
+  unsigned count
+  { 0 };
+
+  for (const std::string &v_string: vector_strings)
+  {
+    info_string += v_string;
+
+    if (count < vector_strings.size() - 1)
+    { info_string += ","; }
+  }
+
+  const char *info_array
+  { info_string.c_str() };
+  DrawText(info_array, x, y, size, SKYBLUE);
+}
+
+std::vector <std::string> int_vector_to_strings(const std::vector <int> &vec)
+noexcept
+{
+
+
+
+
+  std::vector <std::string> strings;
+
+  assert(1 == 0);
+
+  for (const int number: vec)
+  {
+    assert(1 == 0);
+
+    // strings.push_back(std::to_string(float(number)));
+  }
+
+  assert(1 == 0);
+
+  assert(strings.size() == vec.size());
+
+
+
+  assert(1 == 0);
+
+  return strings;
+}
 
 std::vector <std::string> vector3_to_strings(const Vector3 &vec)
 noexcept
@@ -103,38 +157,6 @@ noexcept
 
   return strings;
 }
-
-void display_vector3(const Vector3 &vec,
-                     const int x,
-                     const int y,
-                     const int size)
-noexcept
-{
-  const std::vector <std::string> vector_strings
-  { vector3_to_strings(vec) };
-  const std::string info_string
-  { "m_camera position:\n{" + vector_strings[0] + ","  + vector_strings[1] + "," + vector_strings[2] };
-  const char *info_array
-  { info_string.c_str() };
-  DrawText(info_array, x, y, size, GREEN);
-}
-
-void display_vector3(const Vector3 &vec,
-                     const std::string &message,
-                     const int x,
-                     const int y,
-                     const int size)
-noexcept
-{
-  const std::vector <std::string> vector_strings
-  { vector3_to_strings(vec) };
-  const std::string info_string
-  { message + vector_strings[0] + ","  + vector_strings[1] + "," + vector_strings[2] };
-  const char *info_array
-  { info_string.c_str() };
-  DrawText(info_array, x, y, size, GREEN);
-}
-
 
 void rotate_first_second(Vector3 &first,
                          Vector3 &second,

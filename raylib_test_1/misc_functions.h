@@ -17,6 +17,19 @@ std::vector <int> add_int_vector(const std::vector <int> &vec_1,
 std::vector <int> sub_int_vector(const std::vector <int> &vec_1,
                                  const std::vector <int> &vec_2);
 
+void display_string_vector(const std::vector <std::string> vector_strings,
+                           const std::string &message,
+                           const int x,
+                           const int y,
+                           const int size)
+noexcept;
+
+std::vector <std::string> int_vector_to_strings(const std::vector <int> &vec)
+noexcept;
+
+std::vector <std::string> vector3_to_strings(const Vector3 &vec)
+noexcept;
+
 Vector3 add_vector3(const Vector3 &vec_1,
                     const Vector3 &vec_2)
 noexcept;
@@ -30,19 +43,6 @@ Vector3 multiply_vector3(const Vector3 &vec_1,
 noexcept;
 
 std::vector <std::string> vector3_to_strings(const Vector3 &vec)
-noexcept;
-
-void display_vector3(const Vector3 &vec,
-                     const int x,
-                     const int y,
-                     const int size)
-noexcept;
-
-void display_vector3(const Vector3 &vec,
-                     const std::string &message,
-                     const int x,
-                     const int y,
-                     const int size)
 noexcept;
 
 void rotate_first_second(Vector3 &first,

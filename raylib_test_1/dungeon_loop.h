@@ -8,6 +8,12 @@
 #include "fractacube.h"
 #include "action.h"
 
+#if defined(PLATFORM_DESKTOP)
+  #define GLSL_VERSION            330
+#else   // PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
+  #define GLSL_VERSION            100
+#endif
+
 const int fps
 { 60 };
 
@@ -68,10 +74,10 @@ private:
   { m_multiplier*(m_dungeon_radius + 0.5f) };
 
   const float m_decay
-  { 0.9f };
+  { 0.75f };
 
   const int m_horizon
-  { 3 };
+  { 5 };
 
   const float m_sight
   { float(m_horizon)*m_multiplier };
@@ -135,6 +141,13 @@ private:
   const bool m_simple
   { true };
 
+  Shader m_distortion
+  { LoadShader(0, FormatText("resources/distortion%i.fs", GLSL_VERSION)) };
+
+  std::vector <std::vector <int>> m_int_vectors;
+
+  /// functions
+
   void stereoscope_init()
   noexcept;
 
@@ -143,10 +156,6 @@ private:
 
   void dungeon_init()
   noexcept;
-
-public:
-  dungeon_loop()
-  noexcept;  
 
   int dungeon_wrap(const int coord)
   noexcept;
@@ -180,8 +189,14 @@ public:
                    const int pos_z)
   noexcept;
 
-  void run();
+  void pos_direct_display()
+  noexcept;
 
+public:
+  dungeon_loop()
+  noexcept;
+
+  void run();
 };
 
 

@@ -1,5 +1,7 @@
 #include "dungeon_loop.h"
 
+#include <cassert>
+
 #include <raymath.h>
 
 #include "misc_functions.h"
@@ -7,26 +9,18 @@
 
 dungeon_loop::dungeon_loop()
 noexcept
-  : m_cube_positions(), m_fracta_cubes(), m_camera()
+  : m_cube_positions(), m_fracta_cubes(), m_camera(), m_int_vectors()
 {
-  ToggleVrMode();
-
-  // stereoscope_init();
+  stereoscope_init();
 
   camera_init();
 
-  dungeon_init();  
+  dungeon_init();
 }
 
 void dungeon_loop::stereoscope_init()
 noexcept
 {
-  #if defined(PLATFORM_DESKTOP)
-    #define GLSL_VERSION            330
-  #else   // PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
-    #define GLSL_VERSION            100
-  #endif
-
   SetConfigFlags(FLAG_MSAA_4X_HINT);// VR device parameters (head-mounted-device)
 
   InitVrSimulator();
@@ -54,10 +48,9 @@ noexcept
   hmd.chromaAbCorrection[2] = 1.014f;     // HMD chromatic aberration correction parameter 2
   hmd.chromaAbCorrection[3] = 0.0f;       // HMD chromatic aberration correction parameter 3
 
-  // Distortion shader (uses device lens distortion and chroma)
-  Shader distortion = LoadShader(0, FormatText("resources/distortion%i.fs", GLSL_VERSION));
+  SetVrConfiguration(hmd, m_distortion);    // Set Vr device parameters for stereo rendering
 
-  SetVrConfiguration(hmd, distortion);    // Set Vr device parameters for stereo rendering
+  ToggleVrMode();
 
   SetTargetFPS(fps);  // Set our game to run at fps frames-per-second
 }
@@ -107,11 +100,17 @@ noexcept
         }
       }
 
+      assert(line.size() == unsigned(m_dungeon_span));
+
       area.push_back(line);
     }
 
+    assert(area.size() == unsigned(m_dungeon_span));
+
     m_type_volume.push_back(area);
   }
+
+  assert(m_type_volume.size() == unsigned(m_dungeon_span));
 }
 
 void dungeon_loop::movetate()
@@ -164,9 +163,10 @@ noexcept
 {
   int index = coord;
 
-  if (coord < -m_dungeon_radius)
+  while (index < -m_dungeon_radius)
   { index += m_dungeon_span; }
-  else if (coord > m_dungeon_radius)
+
+  while (index > m_dungeon_radius)
   { index -= m_dungeon_span; }
 
   return index;
@@ -177,9 +177,10 @@ noexcept
 {
   int index = coord;
 
-  if (coord < 0)
+  while (index < 0)
   { index += m_dungeon_span; }
-  else if (coord >= m_dungeon_span)
+
+  while (index >= m_dungeon_span)
   { index -= m_dungeon_span; }
 
   return index;
@@ -205,6 +206,8 @@ noexcept
     directs.push_back(direct);
   }
 
+  assert(directs.size() == m_directions.size());
+
   return directs;
 }
 
@@ -212,16 +215,21 @@ noexcept
 void dungeon_loop::collide()
 noexcept
 {
-  std::vector <int> coords
+  const std::vector <int> coords
   { coordinator(m_position.x),
     coordinator(m_position.y),
     coordinator(m_position.z) };
+
+  m_int_vectors.push_back(coords);
+  assert(m_int_vectors.size() == 1);
 
   std::vector <std::vector <int>> directs
   { director() };
 
   for (const std::vector <int> &direct: directs)
   {
+    m_int_vectors.push_back(direct);
+
     for (int sign{ -1 }; sign <= 1; sign +=2)
     {
       std::vector <int> posit
@@ -235,6 +243,8 @@ noexcept
       { m_act = action::none; }
     }
   }
+
+  assert(m_int_vectors.size() == 3);
 }
 
 void dungeon_loop::play_actions()
@@ -366,10 +376,15 @@ noexcept
     const int size
     { 20 };
 
+    int count
+    { 0 };
+
     for (const Vector3 &direction: m_directions)
     {
-      display_vector3(direction, x, y, size);
+      display_string_vector(vector3_to_strings(direction),
+                            "Direction" + std::to_string(count), x, y, size);
       y += step;
+      ++count;
     }
   }
   else
@@ -451,7 +466,20 @@ noexcept
   DrawText(array_pos_max, 10, 460, 20, YELLOW);
 }
 
+void dungeon_loop::pos_direct_display()
+noexcept
+{
 
+
+  display_string_vector(int_vector_to_strings(m_int_vectors[0]),
+                        "int pos: ", 20, 60, 20);
+  display_string_vector(int_vector_to_strings(m_int_vectors[1]),
+                        "forward: ", 20, 120, 20);
+  display_string_vector(int_vector_to_strings(m_int_vectors[2]),
+                        "right: ", 20, 180, 20);
+  display_string_vector(int_vector_to_strings(m_int_vectors[3]),
+                        "up: ", 20, 240, 20);
+}
 
 void dungeon_loop::run()
 {
@@ -459,12 +487,12 @@ void dungeon_loop::run()
   {
     this->play_actions();
 
+
+
     BeginDrawing();
     {
       ClearBackground(Color{ BLACK });
       m_min_distance = 1000000.0f;
-
-
 
       const int pos_x
       { static_cast<int>(round(m_position.x/m_multiplier)) };
@@ -530,10 +558,16 @@ void dungeon_loop::run()
 
       if (m_test)
       { this->infos(); }
-    }
 
+      pos_direct_display();
+
+      while(m_int_vectors.size() > 0)
+      { m_int_vectors.pop_back(); }
+    }
     EndDrawing();
   }
 
-  UnloadShader(distortion);
+  UnloadShader(m_distortion);
+
+  CloseVrSimulator();         // Close VR simulator
 }
