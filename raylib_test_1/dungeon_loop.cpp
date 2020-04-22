@@ -1,6 +1,7 @@
 #include "dungeon_loop.h"
 
 #include <cassert>
+#include <iostream>
 
 #include <raymath.h>
 
@@ -11,6 +12,8 @@ dungeon_loop::dungeon_loop()
 noexcept
   : m_cube_positions(), m_fracta_cubes(), m_camera(), m_int_vectors()
 {
+
+  std::cout << m_int_vectors.size() << std::endl;
   stereoscope_init();
 
   camera_init();
@@ -215,6 +218,9 @@ noexcept
 void dungeon_loop::collide()
 noexcept
 {
+  while(m_int_vectors.size() > 0)
+  { m_int_vectors.pop_back(); }
+
   const std::vector <int> coords
   { coordinator(m_position.x),
     coordinator(m_position.y),
@@ -244,7 +250,7 @@ noexcept
     }
   }
 
-  assert(m_int_vectors.size() == 3);
+  assert(m_int_vectors.size() == 4);
 }
 
 void dungeon_loop::play_actions()
@@ -469,16 +475,17 @@ noexcept
 void dungeon_loop::pos_direct_display()
 noexcept
 {
-
-
-  display_string_vector(int_vector_to_strings(m_int_vectors[0]),
-                        "int pos: ", 20, 60, 20);
-  display_string_vector(int_vector_to_strings(m_int_vectors[1]),
-                        "forward: ", 20, 120, 20);
-  display_string_vector(int_vector_to_strings(m_int_vectors[2]),
-                        "right: ", 20, 180, 20);
-  display_string_vector(int_vector_to_strings(m_int_vectors[3]),
-                        "up: ", 20, 240, 20);
+  if (m_int_vectors.size() > 0)
+  {
+    display_string_vector(int_vector_to_strings(m_int_vectors[0]),
+                          "int pos: ", 20, 60, 20);
+    display_string_vector(int_vector_to_strings(m_int_vectors[1]),
+                          "forward: ", 20, 120, 20);
+    display_string_vector(int_vector_to_strings(m_int_vectors[2]),
+                          "right: ", 20, 180, 20);
+    display_string_vector(int_vector_to_strings(m_int_vectors[3]),
+                          "up: ", 20, 240, 20);
+  }
 }
 
 void dungeon_loop::run()
@@ -556,13 +563,12 @@ void dungeon_loop::run()
       EndMode3D();
       EndVrDrawing();
 
-      if (m_test)
-      { this->infos(); }
+      // if (m_test)
+      // { this->infos(); }
 
       pos_direct_display();
 
-      while(m_int_vectors.size() > 0)
-      { m_int_vectors.pop_back(); }
+
     }
     EndDrawing();
   }

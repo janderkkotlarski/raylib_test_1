@@ -96,50 +96,40 @@ void display_string_vector(const std::vector <std::string> vector_strings,
                            const int size)
 noexcept
 {
-  std::string info_string
-  { message };
-
-  unsigned count
-  { 0 };
-
-  for (const std::string &v_string: vector_strings)
+  if (vector_strings.size() > 0)
   {
-    info_string += v_string;
+    std::string info_string
+    { message };
 
-    if (count < vector_strings.size() - 1)
-    { info_string += ","; }
+    unsigned count
+    { 0 };
+
+    for (const std::string &v_string: vector_strings)
+    {
+      info_string += v_string;
+
+      if (count < vector_strings.size() - 1)
+      { info_string += ","; }
+    }
+
+    const char *info_array
+    { info_string.c_str() };
+    DrawText(info_array, x, y, size, SKYBLUE);
   }
-
-  const char *info_array
-  { info_string.c_str() };
-  DrawText(info_array, x, y, size, SKYBLUE);
 }
 
 std::vector <std::string> int_vector_to_strings(const std::vector <int> &vec)
 noexcept
 {
-
-
-
-
   std::vector <std::string> strings;
 
-  assert(1 == 0);
-
-  for (const int number: vec)
+  if (vec.size() > 0)
   {
-    assert(1 == 0);
-
-    // strings.push_back(std::to_string(float(number)));
+    for (const int number: vec)
+    { strings.push_back(std::to_string(number)); }
   }
 
-  assert(1 == 0);
-
   assert(strings.size() == vec.size());
-
-
-
-  assert(1 == 0);
 
   return strings;
 }
