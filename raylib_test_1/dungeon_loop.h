@@ -108,7 +108,7 @@ private:
   { 1000 };
 
   Vector3 m_cube_pos
-  { 1.0f, 0.0f, 1.0f };
+  { 1.0f, 0.0f, 0.0f };
 
   std::vector <Vector3> m_cube_positions;
 

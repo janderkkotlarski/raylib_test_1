@@ -19,6 +19,8 @@ noexcept
   camera_init();
 
   dungeon_init();
+
+  collide();
 }
 
 void dungeon_loop::stereoscope_init()
