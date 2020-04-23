@@ -4,24 +4,14 @@
 #include <iostream>
 #include <time.h>
 
-#include <raymath.h>
-
 #include "misc_functions.h"
 #include "keybindings.h"
 
 dungeon_loop::dungeon_loop()
 noexcept
-  : m_camera(), m_int_vectors()
+  :  m_type_volume(), m_fracta_cube(), m_int_vectors()
 {
-
-  std::cout << m_int_vectors.size() << std::endl;
-  stereoscope_init();
-
-  camera_init();
-
   dungeon_init();
-
-  collide();
 }
 
 std::vector <int> dungeon_loop::pos_intifier()
@@ -32,7 +22,7 @@ noexcept
            int(round(m_position.z/m_multiplier)) } ;
 }
 
-void dungeon_loop::stereoscope_init()
+void dungeon_loop::stereoscope_init(Shader &distortion)
 noexcept
 {
   SetConfigFlags(FLAG_MSAA_4X_HINT);// VR device parameters (head-mounted-device)
@@ -62,23 +52,23 @@ noexcept
   hmd.chromaAbCorrection[2] = 1.014f;     // HMD chromatic aberration correction parameter 2
   hmd.chromaAbCorrection[3] = 0.0f;       // HMD chromatic aberration correction parameter 3
 
-  SetVrConfiguration(hmd, m_distortion);    // Set Vr device parameters for stereo rendering
+  SetVrConfiguration(hmd, distortion);    // Set Vr device parameters for stereo rendering
 
   ToggleVrMode();
 
   SetTargetFPS(fps);  // Set our game to run at fps frames-per-second
 }
 
-void dungeon_loop::camera_init()
+void dungeon_loop::camera_init(Camera &camera)
 noexcept
 {
-  m_camera.position = m_position; // Camera position
-  m_camera.target = Vector3Add(m_position, m_directions[0]); // Vector3Add(camera.position, forward);      // Camera looking at point
-  m_camera.up = m_directions[2];          // Camera up vector (rotation towards target)
-  m_camera.fovy = m_cam_angle;                                // Camera field-of-view Y
-  m_camera.type = CAMERA_PERSPECTIVE; // Camera mode type
+  camera.position = m_position; // Camera position
+  camera.target = Vector3Add(m_position, m_directions[0]); // Vector3Add(camera.position, forward);      // Camera looking at point
+  camera.up = m_directions[2];          // Camera up vector (rotation towards target)
+  camera.fovy = m_cam_angle;                                // Camera field-of-view Y
+  camera.type = CAMERA_PERSPECTIVE; // Camera mode type
 
-  SetCameraMode(m_camera, CAMERA_FREE);
+  SetCameraMode(camera, CAMERA_FREE);
 }
 
 void dungeon_loop::dungeon_init()
@@ -94,38 +84,10 @@ noexcept
 
     for(int count_y{ -m_dungeon_radius }; count_y <= m_dungeon_radius; ++count_y)
     {
-     std::vector <cube_type> line;
+      std::vector <cube_type> line;
 
       for(int count_z{ -m_dungeon_radius }; count_z <= m_dungeon_radius; ++count_z)
-      {
-        if(m_simple)
-        {
-          if (count_x == m_cube_pos[0] &&
-              count_y == m_cube_pos[1] &&
-              count_z == m_cube_pos[2])
-          { line.push_back(cube_type::alabaster); }
-          else
-          { line.push_back(cube_type::none); }
-        }
-        else
-        {
-          if (rand() % 3 == 0 &&
-              !(count_x == 0 &&
-                count_y == 0 &&
-                count_z == 0))
-          {
-            if (abs(count_x) == m_dungeon_radius ||
-                abs(count_y) == m_dungeon_radius ||
-                abs(count_z) == m_dungeon_radius)
-
-            { line.push_back(cube_type::concrete); }
-            else
-            { line.push_back(cube_type::concrete); }
-          }
-          else
-          { line.push_back(cube_type::none); }
-        }
-      }
+      { line.push_back(cube_type::none); }
 
       assert(line.size() == unsigned(m_dungeon_span));
 
@@ -139,20 +101,95 @@ noexcept
 
   assert(m_type_volume.size() == unsigned(m_dungeon_span));
 
-  std::vector <int> coords
-  { 0, 0, 0 };
+}
 
-  while (abs(coords[0]) <= m_horizon ||
-         abs(coords[1]) <= m_horizon ||
-         abs(coords[2]) <= m_horizon)
+void dungeon_loop::dungeon_fill()
+noexcept
+{
+  m_directions = m_start_directs;
+
+  m_position = Vector3Scale(m_start_posit, m_multiplier);
+
+  for(int count_x{ -m_dungeon_radius }; count_x <= m_dungeon_radius; ++count_x)
+  {
+    std::vector <std::vector <cube_type>> area;
+
+    for(int count_y{ -m_dungeon_radius }; count_y <= m_dungeon_radius; ++count_y)
+    {
+     std::vector <cube_type> line;
+
+      for(int count_z{ -m_dungeon_radius }; count_z <= m_dungeon_radius; ++count_z)
+      {
+        {
+          cube_type c_type
+          { cube_type::none };
+
+          if (m_simple)
+          {
+            if (count_x == m_cube_pos[0] &&
+                count_y == m_cube_pos[1] &&
+                count_z == m_cube_pos[2])
+            { c_type = cube_type::alabaster; }
+          }
+          else
+          {
+            if ((abs(count_x) % 2 == 1 &&
+                 abs(count_y) % 2 == 1) ||
+                (abs(count_x) % 2 == 1 &&
+                 abs(count_z) % 2 == 1) ||
+                (abs(count_z) % 2 == 1 &&
+                 abs(count_y) % 2 == 1))
+            { c_type = cube_type::concrete; }
+            else if((abs(count_x) > m_free ||
+                     abs(count_y) > m_free ||
+                     abs(count_z) > m_free) &&
+                    (abs(count_x) % 2 == 1 ||
+                     abs(count_y) % 2 == 1 ||
+                     abs(count_z) % 2 == 1) &&
+                     rand() % 100 < m_wall_perc)
+            { c_type = cube_type::concrete; }
+
+            if (count_x == 0)
+            { c_type = cube_type::concrete; }
+          }
+
+          m_type_volume[count_x + m_dungeon_radius]
+                       [count_y + m_dungeon_radius]
+                       [count_z + m_dungeon_radius] = c_type;
+        }
+
+      }      
+    }
+  }
+
+  std::vector <int> coords
+  { 1, 1, 1 };
+
+  while ((abs(coords[0]) <= m_horizon ||
+          abs(coords[1]) <= m_horizon ||
+          abs(coords[2]) <= m_horizon) &&
+         (abs(coords[0]) % 2 != 0 ||
+          abs(coords[1]) % 2 != 0 ||
+          abs(coords[2]) % 2 != 0))
   {
     for (int &coord: coords)
-    { coord = rand() % (2*m_dungeon_radius) - m_dungeon_radius; }
+    { coord = (rand() % (2*m_dungeon_radius)) - m_dungeon_radius; }
   }
 
   m_type_volume[unsigned(coords[0]) + m_dungeon_radius]
                [unsigned(coords[1]) + m_dungeon_radius]
-               [unsigned(coords[2]) + m_dungeon_radius] = cube_type::special;
+               [unsigned(coords[2]) + m_dungeon_radius] = cube_type::none;
+
+  m_type_volume[-1 + m_dungeon_radius]
+               [0 + m_dungeon_radius]
+               [0 + m_dungeon_radius] = cube_type::special;
+
+  if(m_test)
+  {
+    m_type_volume[0 + m_dungeon_radius]
+                 [2 + m_dungeon_radius]
+                 [2 + m_dungeon_radius] = cube_type::none;
+  }
 }
 
 void dungeon_loop::movetate()
@@ -279,7 +316,7 @@ noexcept
   }
 }
 
-void dungeon_loop::play_actions()
+void dungeon_loop::play_actions(Camera &camera)
 noexcept
 {
   m_cube_dungeon_pos = { coordinator(m_position.x),
@@ -291,7 +328,7 @@ noexcept
     m_act = key_bind_actions();
 
     if (m_act != action::none)
-    { this->collide(); }
+    { collide(); }
 
     m_time = 0.0f;
   }
@@ -321,21 +358,24 @@ noexcept
   m_velocity = m_delta_time*m_speed;
   m_theta = m_delta_time*m_angle;
 
-  this->movetate();
+  movetate();
 
   wrapping(m_position, m_wrap);
 
-  m_camera.position = m_position;
+  camera.position = m_position;
 
-  m_camera.target = Vector3Add(m_position, m_directions[0]);
-  m_camera.up = m_directions[2];
+  camera.target = Vector3Add(m_position, m_directions[0]);
+  camera.up = m_directions[2];
 
 
   if (IsKeyDown(KEY_BACKSPACE))
   { m_loop = false; }
 
   if (WindowShouldClose())
-  { m_loop = false; }
+  {
+    m_loop = false;
+    m_game = false;
+  }
 
   if (m_act == action::none &&
       m_type_volume[m_cube_dungeon_pos[0]]
@@ -349,27 +389,6 @@ noexcept
 
     m_display_info = !m_display_info;
   }   // Toggle VR mode
-}
-
-void dungeon_loop::info_display()
-noexcept
-{
-  DrawFPS(10, 10);
-
-  const std::vector <std::string> pos_strings
-  { vector3_to_strings(m_camera.position) };
-
-  const std::string camera_pos
-  { "m_camera position:\n{" + pos_strings[0] + ","  + pos_strings[1] + "," + pos_strings[2] };
-
-  const char *array_pos
-  { camera_pos.c_str() };
-
-  DrawText(array_pos, 10, 40, 20, GREEN);
-
-  // DrawRectangle( 10, 10, 320, 133, Fade(SKYBLUE, 0.5f));
-  // DrawRectangleLines( 10, 10, 320, 133, BLUE);
-
 }
 
 void dungeon_loop::infos()
@@ -403,81 +422,6 @@ noexcept
   }
   else
   { DrawFPS(650, 20); }
-}
-
-void dungeon_loop::display_pos(const int pos_x,
-                               const int pos_y,
-                               const int pos_z)
-noexcept
-{
-  int x_min
-  { pos_x - m_horizon };
-
-  if (x_min < -m_dungeon_radius)
-  { x_min += m_dungeon_span; }
-
-  int x_max
-  { pos_x + m_horizon };
-
-  if (x_max > m_dungeon_radius)
-  { x_max -= m_dungeon_span; }
-
-  int y_min
-  { pos_y - m_horizon };
-
-  if (y_min < -m_dungeon_radius)
-  { y_min += m_dungeon_span; }
-
-  int y_max
-  { pos_y + m_horizon };
-
-  if (y_max > m_dungeon_radius)
-  { y_max -= m_dungeon_span; }
-
-  int z_min
-  { pos_z - m_horizon };
-
-  if (z_min < -m_dungeon_radius)
-  { z_min += m_dungeon_span; }
-
-  int z_max
-  { pos_z + m_horizon };
-
-  if (z_max > m_dungeon_radius)
-  { z_max -= m_dungeon_span; }
-
-  const std::string x_min_string
-  { std::to_string(x_min) };
-
-  const std::string y_min_string
-  { std::to_string(y_min) };
-
-  const std::string z_min_string
-  { std::to_string(z_min) };
-
-  const std::string x_max_string
-  { std::to_string(x_max) };
-
-  const std::string y_max_string
-  { std::to_string(y_max) };
-
-  const std::string z_max_string
-  { std::to_string(z_max) };
-
-  const std::string pos_min_string
-  { "minimum position:\n{" + x_min_string + "," + y_min_string + "," + z_min_string };
-
-  const std::string pos_max_string
-  { "maximum position:\n{" + x_max_string + "," + y_max_string + "," + z_max_string };
-
-  const char *array_pos_min
-  { pos_min_string.c_str() };
-
-  const char *array_pos_max
-  { pos_max_string.c_str() };
-
-  DrawText(array_pos_min, 10, 400, 20, YELLOW);
-  DrawText(array_pos_max, 10, 460, 20, YELLOW);
 }
 
 void dungeon_loop::pos_direct_display()
@@ -558,32 +502,53 @@ noexcept
 
 void dungeon_loop::run()
 {
-  while (m_loop)
+  InitWindow(m_screen_width, m_screen_height, "Cube Dungeon");
+
+  Shader distortion
+  { LoadShader(0, FormatText("resources/distortion%i.fs", GLSL_VERSION)) };
+
+  stereoscope_init(distortion);
+
+  Camera3D camera;
+
+  camera_init(camera);
+
+  while (m_game)
   {
-    this->play_actions();
+    m_loop = true;
 
-    BeginDrawing();
+    dungeon_fill();
+    collide();
+
+    while (m_loop)
     {
-      ClearBackground(Color{ BLACK });
+      play_actions(camera);
 
-      BeginVrDrawing();
-      BeginMode3D(m_camera);
+      BeginDrawing();
+      {
+        ClearBackground(Color{ BLACK });
 
-      { this->cube_drawing(); }
+        BeginVrDrawing();
+        BeginMode3D(camera);
 
-      EndMode3D();
-      EndVrDrawing();
+        { cube_drawing(); }
 
-      // if (m_test)
-      // { this->infos(); }
+        EndMode3D();
+        EndVrDrawing();
 
-      pos_direct_display();
+        // if (m_test)
+        // { infos(); }
 
+        pos_direct_display();
+
+      }
+      EndDrawing();
     }
-    EndDrawing();
   }
 
-  UnloadShader(m_distortion);
+  UnloadShader(distortion);
 
   CloseVrSimulator();         // Close VR simulator
+
+  CloseWindow();
 }

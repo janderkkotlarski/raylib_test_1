@@ -5,6 +5,7 @@
 #include <cmath>
 
 #include <raylib.h>
+#include <raymath.h>
 
 #include "fractacube.h"
 #include "action.h"
@@ -23,6 +24,12 @@ class dungeon_loop
 private:
 
   /// parameters
+
+  const int m_screen_width
+  { 1200 };
+
+  const int m_screen_height
+  { 600 };
 
   action m_act
   { action::none };
@@ -51,13 +58,19 @@ private:
   float m_theta
   { m_angle*GetFrameTime() };
 
-  std::vector <Vector3> m_directions
+  const std::vector <Vector3> m_start_directs
   { {1.0f, 0.0f, 0.0f},
     {0.0f, -1.0f, 0.0f},
     {0.0f, 0.0f, 1.0f} };
 
+  std::vector <Vector3> m_directions
+  { m_start_directs };
+
+  const Vector3 m_start_posit
+  { 1.0f, 0.0f, 0.0f };
+
   Vector3 m_position
-  { 0.0f, 0.0f, 0.0f };
+  { Vector3Scale(m_start_posit, m_multiplier) };
 
   std::vector <int> m_pos_int
   { pos_intifier() };
@@ -69,7 +82,10 @@ private:
   { 0, 0, 0 };
 
   const int m_dungeon_radius
-  { 5 };
+  { 10 };
+
+  const int m_free
+  { 2 };
 
   std::vector <unsigned> m_dungeon_index
   { 0, 0, 0 };
@@ -110,12 +126,10 @@ private:
 
   std::vector <std::vector <std::vector <cube_type>>> m_type_volume;
 
+  const int m_wall_perc
+  { 60 };
+
   fractacube m_fracta_cube;
-
-  Shader m_distortion
-  { LoadShader(0, FormatText("resources/distortion%i.fs", GLSL_VERSION)) };
-
-  Camera m_camera;
 
   const float m_cam_angle
   { 100.0f };
@@ -123,11 +137,14 @@ private:
   const float m_cam_field
   { -0.001f };
 
+  bool m_game
+  { true };
+
   bool m_loop
   { true };
 
   bool m_test
-  { true };
+  { false };
 
   bool m_display_info
   { true };
@@ -146,13 +163,16 @@ private:
   std::vector <int> pos_intifier()
   noexcept;
 
-  void stereoscope_init()
+  void stereoscope_init(Shader &distortion)
   noexcept;
 
-  void camera_init()
+  void camera_init(Camera &camera)
   noexcept;
 
   void dungeon_init()
+  noexcept;
+
+  void dungeon_fill()
   noexcept;
 
   int dungeon_wrap(const int coord)
@@ -173,18 +193,10 @@ private:
   void collide()
   noexcept;
 
-  void play_actions()
-  noexcept;
-
-  void info_display()
+  void play_actions(Camera &camera)
   noexcept;
 
   void infos()
-  noexcept;
-
-  void display_pos(const int pos_x,
-                   const int pos_y,
-                   const int pos_z)
   noexcept;
 
   void pos_direct_display()
