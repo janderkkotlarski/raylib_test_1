@@ -28,8 +28,8 @@ std::vector <int> dungeon_loop::pos_intifier()
 noexcept
 {
   return { int(round(m_position.x/m_multiplier)),
-      int(round(m_position.y/m_multiplier)),
-      int(round(m_position.z/m_multiplier)) } ;
+           int(round(m_position.y/m_multiplier)),
+           int(round(m_position.z/m_multiplier)) } ;
 }
 
 void dungeon_loop::stereoscope_init()
@@ -256,11 +256,6 @@ noexcept
 void dungeon_loop::collide()
 noexcept
 {
-  const std::vector <int> coords
-  { coordinator(m_position.x),
-    coordinator(m_position.y),
-    coordinator(m_position.z) };
-
   std::vector <std::vector <int>> directs
   { director() };
 
@@ -272,7 +267,7 @@ noexcept
       { scale_int_vector(direct, sign) };
 
       std::vector <int> posit
-      { add_int_vector(coords, dir) };
+      { add_int_vector(m_cube_dungeon_pos, dir) };
 
       for (int &part: posit)
       { part = dungeon_warp(part); }
@@ -287,6 +282,10 @@ noexcept
 void dungeon_loop::play_actions()
 noexcept
 {
+  m_cube_dungeon_pos = { coordinator(m_position.x),
+                         coordinator(m_position.y),
+                         coordinator(m_position.z) };
+
   if (m_act == action::none)
   {
     m_act = key_bind_actions();
@@ -336,6 +335,12 @@ noexcept
   { m_loop = false; }
 
   if (WindowShouldClose())
+  { m_loop = false; }
+
+  if (m_act == action::none &&
+      m_type_volume[m_cube_dungeon_pos[0]]
+                   [m_cube_dungeon_pos[1]]
+                   [m_cube_dungeon_pos[2]] == cube_type::special)
   { m_loop = false; }
 
   if (IsKeyPressed(KEY_SPACE))

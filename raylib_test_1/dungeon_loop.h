@@ -82,7 +82,7 @@ private:
     m_pos_int, m_pos_int,
     m_pos_int, m_pos_int };
 
-  const std::vector <int> m_cube_dungeon_pos
+  std::vector <int> m_cube_dungeon_pos
   { m_cube_pos[0] + m_dungeon_radius,
     m_cube_pos[1] + m_dungeon_radius,
     m_cube_pos[2] + m_dungeon_radius };
