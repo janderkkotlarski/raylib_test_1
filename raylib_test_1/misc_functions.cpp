@@ -71,6 +71,7 @@ std::vector <int> add_int_vector(const std::vector <int> &vec_1,
   {
     addvec.push_back(number + vec_2[count]);
     assert(addvec[count] == vec_1[count] + vec_2[count]);
+    ++count;
   }
 
   assert(addvec.size() == vec_1.size());
@@ -103,6 +104,7 @@ std::vector <int> sub_int_vector(const std::vector <int> &vec_1,
   {
     subvec.push_back(number - vec_2[count]);
     assert(subvec[count] == vec_1[count] - vec_2[count]);
+    ++count;
   }
 
   assert(subvec.size() == vec_1.size());

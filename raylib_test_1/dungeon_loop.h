@@ -69,7 +69,7 @@ private:
   { 0, 0, 0 };
 
   const int m_dungeon_radius
-  { 2 };
+  { 5 };
 
   std::vector <unsigned> m_dungeon_index
   { 0, 0, 0 };
@@ -94,10 +94,10 @@ private:
   { m_multiplier*(m_dungeon_radius + 0.5f) };
 
   const float m_decay
-  { 0.75f };
+  { 0.5f };
 
   const int m_horizon
-  { 5 };
+  { 4 };
 
   const float m_sight
   { float(m_horizon)*m_multiplier };
@@ -133,7 +133,7 @@ private:
   { true };
 
   const bool m_simple
-  { true };  
+  { false };
 
   std::vector <std::vector <int>> m_int_vectors;
 

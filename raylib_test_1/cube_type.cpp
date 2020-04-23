@@ -30,6 +30,12 @@ noexcept
     case cube_type::next:
       color = Color{ 31, 0, 63, 255 };
       break;
+    case cube_type::special:
+      color = Color{ 127, 255, 255, 255 };
+      break;
+    case cube_type::trigger:
+      color = Color{ 255, 191, 127, 255 };
+      break;
 
   }
 

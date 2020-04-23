@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <time.h>
 
 #include <raymath.h>
 
@@ -85,7 +86,7 @@ noexcept
 {
   assert(m_directions.size() == 3);
 
-  std::random_device rand;
+  srand (time(NULL));
 
   for(int count_x{ -m_dungeon_radius }; count_x <= m_dungeon_radius; ++count_x)
   {
@@ -108,8 +109,19 @@ noexcept
         }
         else
         {
-          if (rand() < rand.max()/3)
-          { line.push_back(cube_type::concrete); }
+          if (rand() % 3 == 0 &&
+              !(count_x == 0 &&
+                count_y == 0 &&
+                count_z == 0))
+          {
+            if (abs(count_x) == m_dungeon_radius ||
+                abs(count_y) == m_dungeon_radius ||
+                abs(count_z) == m_dungeon_radius)
+
+            { line.push_back(cube_type::concrete); }
+            else
+            { line.push_back(cube_type::concrete); }
+          }
           else
           { line.push_back(cube_type::none); }
         }
@@ -126,6 +138,21 @@ noexcept
   }
 
   assert(m_type_volume.size() == unsigned(m_dungeon_span));
+
+  std::vector <int> coords
+  { 0, 0, 0 };
+
+  while (abs(coords[0]) <= m_horizon ||
+         abs(coords[1]) <= m_horizon ||
+         abs(coords[2]) <= m_horizon)
+  {
+    for (int &coord: coords)
+    { coord = rand() % (2*m_dungeon_radius) - m_dungeon_radius; }
+  }
+
+  m_type_volume[unsigned(coords[0]) + m_dungeon_radius]
+               [unsigned(coords[1]) + m_dungeon_radius]
+               [unsigned(coords[2]) + m_dungeon_radius] = cube_type::special;
 }
 
 void dungeon_loop::movetate()
@@ -229,36 +256,16 @@ noexcept
 void dungeon_loop::collide()
 noexcept
 {
-  while(m_int_vectors.size() > 0)
-  { m_int_vectors.pop_back(); }
-
   const std::vector <int> coords
   { coordinator(m_position.x),
     coordinator(m_position.y),
     coordinator(m_position.z) };
 
-  unsigned count
-  { 0 };
-
-  m_int_vectors.push_back(coords);
-  ++count;
-  assert(m_int_vectors.size() == count);
-
   std::vector <std::vector <int>> directs
   { director() };
 
-  int mult
-  { 1 };
-
-  unsigned count_2
-  { 0 };
-
   for (const std::vector <int> &direct: directs)
-  {
-    m_int_vectors.push_back(direct);
-    ++count;
-    assert(m_int_vectors.size() == count);
-
+  {   
     for (int sign{ 1 }; sign >= -1; sign -=2)
     {
       const std::vector dir
@@ -267,9 +274,6 @@ noexcept
       std::vector <int> posit
       { add_int_vector(coords, dir) };
 
-      m_collides_pos[count_2] = posit;
-      ++count_2;
-
       for (int &part: posit)
       { part = dungeon_warp(part); }
 
@@ -277,8 +281,6 @@ noexcept
           m_act == direct2action(directs, dir))
       { m_act = action::none; }
     }
-
-     mult *= 1;
   }
 }
 
@@ -479,35 +481,6 @@ noexcept
   if (m_int_vectors.size() > 0)
   {
 
-    display_string_vector(int_vector_to_strings(m_int_vectors[1]),
-                          "forward:      ", 20, 20, 20);
-    display_string_vector(int_vector_to_strings(m_int_vectors[2]),
-                          "right:        ", 20, 50, 20);
-    display_string_vector(int_vector_to_strings(m_int_vectors[3]),
-                          "up:           ", 20, 80, 20);
-    display_string_vector(vector3_to_strings(m_position),
-                          "float pos:    ", 20, 110, 20);
-    display_string_vector(int_vector_to_strings(m_pos_int),
-                          "int pos:      ", 20, 140, 20);
-    display_string_vector(int_vector_to_strings(m_int_vectors[0]),
-                          "dungeon pos:  ", 20, 170, 20);
-    display_string_vector(int_vector_to_strings(m_cube_pos),
-                          "cube pos:     ", 20, 200, 20);
-    display_string_vector(int_vector_to_strings(m_cube_dungeon_pos),
-                          "cube dungeon: ", 20, 230, 20);
-    // display_string_vector(int_vector_to_strings(m_int_dump),
-    //                       "int dump: ", 20, 260, 20);
-    for (int count{ 0 }; count < 6; ++count)
-    {
-      display_string_vector(int_vector_to_strings(m_collides_pos[count]),
-                            "cube coll" + std::to_string(count + 1) + ": ", 20, 260 + count*30, 20);
-    }
-
-    for (int count{ 0 }; count < 3; ++count)
-    {
-      display_string_vector(int_vector_to_strings(director()[count]),
-                          "direct"  + std::to_string(count) + ": ", 20, 440 + count*30, 20);
-    }
   }
 }
 
