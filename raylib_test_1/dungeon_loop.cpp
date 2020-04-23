@@ -10,7 +10,7 @@
 
 dungeon_loop::dungeon_loop()
 noexcept
-  : m_cube_positions(), m_fracta_cubes(), m_camera(), m_int_vectors()
+  : m_camera(), m_int_vectors()
 {
 
   std::cout << m_int_vectors.size() << std::endl;
@@ -228,8 +228,12 @@ noexcept
     coordinator(m_position.y),
     coordinator(m_position.z) };
 
+  unsigned count
+  { 0 };
+
   m_int_vectors.push_back(coords);
-  assert(m_int_vectors.size() == 1);
+  ++count;
+  assert(m_int_vectors.size() == count);
 
   std::vector <std::vector <int>> directs
   { director() };
@@ -237,6 +241,8 @@ noexcept
   for (const std::vector <int> &direct: directs)
   {
     m_int_vectors.push_back(direct);
+    ++count;
+    assert(m_int_vectors.size() == count);
 
     for (int sign{ -1 }; sign <= 1; sign +=2)
     {
@@ -252,7 +258,7 @@ noexcept
     }
   }
 
-  assert(m_int_vectors.size() == 4);
+
 }
 
 void dungeon_loop::play_actions()
@@ -325,17 +331,11 @@ noexcept
   const std::vector <std::string> pos_strings
   { vector3_to_strings(m_camera.position) };
 
-  const std::string distance_string
-  { std::to_string(m_min_distance) };
-
   const std::vector <std::string> difference_strings
   { vector3_to_strings(m_min_difference) };
 
   const std::string camera_pos
   { "m_camera position:\n{" + pos_strings[0] + ","  + pos_strings[1] + "," + pos_strings[2] };
-
-  const std::string min_dist
-  { "Minimum distance:\n{" + distance_string };
 
   const std::string diff
   { "m_min_difference:\n{" + difference_strings[0] + ","  + difference_strings[1] + "," + difference_strings[2] };
@@ -343,26 +343,14 @@ noexcept
   const char *array_pos
   { camera_pos.c_str() };
 
-  const char *array_dist
-  { min_dist.c_str() };
-
   const char *array_diff
   { diff.c_str() };
 
   DrawText(array_pos, 10, 40, 20, GREEN);
-  DrawText(array_dist, 10, 280, 20, RED);
   DrawText(array_diff, 10, 340, 20, RED);
 
   // DrawRectangle( 10, 10, 320, 133, Fade(SKYBLUE, 0.5f));
   // DrawRectangleLines( 10, 10, 320, 133, BLUE);
-
-
-  // DrawText("Free m_camera default controls:", 20, 20, 10, BLACK);
-  // DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, DARKGRAY);
-  // DrawText("- Mouse Wheel Pressed to Pan", 40, 60, 10, DARKGRAY);
-  // DrawText("- Alt + Mouse Wheel Pressed to Rotate", 40, 80, 10, DARKGRAY);
-  // DrawText("- Alt + Ctrl + Mouse Wheel Pressed for Smooth Zoom", 40, 100, 10, DARKGRAY);
-  // DrawText("- Z to zoom to (0, 0, 0)", 40, 120, 10, DARKGRAY);
 
 }
 
@@ -477,16 +465,88 @@ noexcept
 void dungeon_loop::pos_direct_display()
 noexcept
 {
+  display_string_vector(vector3_to_strings(m_position),
+                        "float pos: ", 20, 60, 20);
+
   if (m_int_vectors.size() > 0)
   {
     display_string_vector(int_vector_to_strings(m_int_vectors[0]),
-                          "int pos: ", 20, 60, 20);
+                          "int pos:  ", 20, 120, 20);
     display_string_vector(int_vector_to_strings(m_int_vectors[1]),
-                          "forward: ", 20, 120, 20);
+                          "forward:  ", 20, 180, 20);
     display_string_vector(int_vector_to_strings(m_int_vectors[2]),
-                          "right: ", 20, 180, 20);
+                          "right:    ", 20, 240, 20);
     display_string_vector(int_vector_to_strings(m_int_vectors[3]),
-                          "up: ", 20, 240, 20);
+                          "up:       ", 20, 300, 20);
+  }
+}
+
+void dungeon_loop::cube_drawing()
+noexcept
+{
+  const std::vector <int> pos_int
+  { int(round(m_position.x/m_multiplier)),
+    int(round(m_position.y/m_multiplier)),
+    int(round(m_position.z/m_multiplier)) };
+
+  const int pos_x
+  { static_cast<int>(round(m_position.x/m_multiplier)) };
+  const int pos_y
+  { static_cast<int>(round(m_position.y/m_multiplier)) };
+  const int pos_z
+  { static_cast<int>(round(m_position.z/m_multiplier)) };
+
+  for (int count_x { -m_horizon }; count_x <= m_horizon; ++count_x)
+  {
+    const int coord_x
+    { pos_x + count_x };
+    int index
+    { dungeon_wrap(coord_x) };
+
+    for (int count_y { -m_horizon }; count_y <= m_horizon; ++count_y)
+    {
+      int coord_y
+      { pos_y + count_y };
+      int indey
+      { dungeon_wrap(coord_y) };
+
+      for (int count_z { -m_horizon }; count_z <= m_horizon; ++count_z)
+      {
+        int coord_z
+        { pos_z + count_z };
+        int indez
+        { dungeon_wrap(coord_z) };
+
+        const std::vector <int> dungeon_pos;
+
+        const int dungeon_x
+        { index + m_dungeon_radius };
+        const int dungeon_y
+        { indey + m_dungeon_radius };
+        const int dungeon_z
+        { indez + m_dungeon_radius };
+
+        const cube_type c_type
+        { m_type_volume[unsigned(dungeon_x)]
+                       [unsigned(dungeon_y)]
+                       [unsigned(dungeon_z)] };
+
+        if (c_type != cube_type::none)
+        {
+          m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, c_type);
+
+          if (display_selector(m_position,
+                               Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
+                               m_directions[0], m_cam_field, m_multiplier))
+          {
+            m_fracta_cube.display(m_position, m_decay, m_multiplier);
+
+
+          }
+        }
+
+      }
+    }
   }
 }
 
@@ -496,72 +556,15 @@ void dungeon_loop::run()
   {
     this->play_actions();
 
-
-
     BeginDrawing();
     {
       ClearBackground(Color{ BLACK });
-      m_min_distance = 1000000.0f;
-
-      const int pos_x
-      { static_cast<int>(round(m_position.x/m_multiplier)) };
-      const int pos_y
-      { static_cast<int>(round(m_position.y/m_multiplier)) };
-      const int pos_z
-      { static_cast<int>(round(m_position.z/m_multiplier)) };
 
       BeginVrDrawing();
       BeginMode3D(m_camera);
-      {
-        for (int count_x { -m_horizon }; count_x <= m_horizon; ++count_x)
-        {
-          const int coord_x
-          { pos_x + count_x };
-          int index
-          { dungeon_wrap(coord_x) };
 
-          for (int count_y { -m_horizon }; count_y <= m_horizon; ++count_y)
-          {
-            int coord_y
-            { pos_y + count_y };
-            int indey
-            { dungeon_wrap(coord_y) };
+      { this->cube_drawing(); }
 
-            for (int count_z { -m_horizon }; count_z <= m_horizon; ++count_z)
-            {
-              int coord_z
-              { pos_z + count_z };
-              int indez
-              { dungeon_wrap(coord_z) };
-
-              const int dungeon_x
-              { index + m_dungeon_radius };
-              const int dungeon_y
-              { indey + m_dungeon_radius };
-              const int dungeon_z
-              { indez + m_dungeon_radius };
-
-              const cube_type c_type
-              { m_type_volume[unsigned(dungeon_x)]
-                             [unsigned(dungeon_y)]
-                             [unsigned(dungeon_z)] };
-
-              if (c_type != cube_type::none)
-              {
-                m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, c_type);
-
-                if (display_selector(m_position,
-                                     Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
-                                     m_directions[0], m_cam_field, m_multiplier))
-                {
-                  m_fracta_cube.display(m_position, m_decay, m_multiplier);
-                }
-              }
-
-            }
-          }
-        }
-      }
       EndMode3D();
       EndVrDrawing();
 
@@ -569,7 +572,6 @@ void dungeon_loop::run()
       // { this->infos(); }
 
       pos_direct_display();
-
 
     }
     EndDrawing();

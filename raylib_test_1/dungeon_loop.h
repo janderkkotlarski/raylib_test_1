@@ -65,7 +65,7 @@ private:
     {0.0f, 0.0f, 1.0f} };
 
   const int m_dungeon_radius
-  { 1 };
+  { 2 };
 
   const int m_dungeon_span
   { 2*m_dungeon_radius + 1};
@@ -110,9 +110,7 @@ private:
   Vector3 m_cube_pos
   { 1.0f, 0.0f, 0.0f };
 
-  std::vector <Vector3> m_cube_positions;
 
-  std::vector <fractacube> m_fracta_cubes;
 
   Vector3 m_cube_position
   { 0.0f, 0.0f, 0.0f };
@@ -128,9 +126,6 @@ private:
 
   bool m_loop
   { true };
-
-  float m_min_distance
-  { -1.0f };
 
   Vector3 m_min_difference
   { -1.0f, 0.0f, 0.0f };
@@ -190,6 +185,9 @@ private:
   noexcept;
 
   void pos_direct_display()
+  noexcept;
+
+  void cube_drawing()
   noexcept;
 
 public:
