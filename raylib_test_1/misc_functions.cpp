@@ -26,6 +26,27 @@ noexcept
   return invec;
 }
 
+std::vector <int> scale_int_vector(const std::vector <int> &vec,
+                                   const int scale)
+noexcept
+{
+  std::vector <int> scavec;
+
+  unsigned count
+  { 0 };
+
+  for (const int number: vec)
+  {
+    scavec.push_back(scale*number);
+
+    assert(scavec[count] == scale*vec[count]);
+  }
+
+  assert(scavec.size() == vec.size());
+
+  return scavec;
+}
+
 std::vector <int> add_int_vector(const std::vector <int> &vec_1,
                                  const std::vector <int> &vec_2)
 {

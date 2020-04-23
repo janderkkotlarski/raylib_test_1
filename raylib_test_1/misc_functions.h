@@ -11,6 +11,10 @@
 std::vector <int> negate_int_vector(const std::vector <int> &vec)
 noexcept;
 
+std::vector <int> scale_int_vector(const std::vector <int> &vec,
+                                   const int scale)
+noexcept;
+
 std::vector <int> add_int_vector(const std::vector <int> &vec_1,
                                  const std::vector <int> &vec_2);
 

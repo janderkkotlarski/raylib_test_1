@@ -226,7 +226,6 @@ noexcept
   return directs;
 }
 
-
 void dungeon_loop::collide()
 noexcept
 {
@@ -248,27 +247,39 @@ noexcept
   std::vector <std::vector <int>> directs
   { director() };
 
+  int mult
+  { 1 };
+
+  unsigned count_2
+  { 0 };
+
   for (const std::vector <int> &direct: directs)
   {
     m_int_vectors.push_back(direct);
     ++count;
     assert(m_int_vectors.size() == count);
 
-    for (int sign{ -1 }; sign <= 1; sign +=2)
+    for (int sign{ 1 }; sign >= -1; sign -=2)
     {
+      const std::vector dir
+      { scale_int_vector(direct, sign) };
+
       std::vector <int> posit
-      { sign == -1 ? sub_int_vector(coords, direct) : add_int_vector(coords, direct) };
+      { add_int_vector(coords, dir) };
+
+      m_collides_pos[count_2] = posit;
+      ++count_2;
 
       for (int &part: posit)
       { part = dungeon_warp(part); }
 
       if (type_collision(m_type_volume[posit[0]][posit[1]][posit[2]]) &&
-          m_act == direct2action(directs, direct))
+          m_act == direct2action(directs, dir))
       { m_act = action::none; }
     }
+
+     mult *= 1;
   }
-
-
 }
 
 void dungeon_loop::play_actions()
@@ -484,8 +495,19 @@ noexcept
                           "cube pos:     ", 20, 200, 20);
     display_string_vector(int_vector_to_strings(m_cube_dungeon_pos),
                           "cube dungeon: ", 20, 230, 20);
-    display_string_vector(int_vector_to_strings(m_int_dump),
-                          "int dump: ", 20, 260, 20);
+    // display_string_vector(int_vector_to_strings(m_int_dump),
+    //                       "int dump: ", 20, 260, 20);
+    for (int count{ 0 }; count < 6; ++count)
+    {
+      display_string_vector(int_vector_to_strings(m_collides_pos[count]),
+                            "cube coll" + std::to_string(count + 1) + ": ", 20, 260 + count*30, 20);
+    }
+
+    for (int count{ 0 }; count < 3; ++count)
+    {
+      display_string_vector(int_vector_to_strings(director()[count]),
+                          "direct"  + std::to_string(count) + ": ", 20, 440 + count*30, 20);
+    }
   }
 }
 
@@ -543,11 +565,8 @@ noexcept
                                m_directions[0], m_cam_field, m_multiplier))
           {
             m_fracta_cube.display(m_position, m_decay, m_multiplier);
-
-
           }
         }
-
       }
 
       counters[index] = -m_horizon;
