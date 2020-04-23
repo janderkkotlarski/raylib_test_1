@@ -2,6 +2,7 @@
 #define DUNGEON_LOOP_H
 
 #include <vector>
+#include <cmath>
 
 #include <raylib.h>
 
@@ -20,14 +21,8 @@ const int fps
 class dungeon_loop
 {
 private:
-  bool m_test
-  { true };
 
-  Vector3 m_position
-  { 0.0f, 0.0f, 0.0f };
-
-  bool m_move
-  { false };
+  /// parameters
 
   action m_act
   { action::none };
@@ -56,16 +51,36 @@ private:
   float m_theta
   { m_angle*GetFrameTime() };
 
-  const float m_side
-  { m_multiplier*1.0f };
-
   std::vector <Vector3> m_directions
   { {1.0f, 0.0f, 0.0f},
     {0.0f, -1.0f, 0.0f},
     {0.0f, 0.0f, 1.0f} };
 
+  Vector3 m_position
+  { 0.0f, 0.0f, 0.0f };
+
+  std::vector <int> m_pos_int
+  { pos_intifier() };
+
+  std::vector <int> m_coord_int
+  { m_pos_int };
+
+  std::vector <int> m_index_int
+  { 0, 0, 0 };
+
   const int m_dungeon_radius
   { 2 };
+
+  std::vector <unsigned> m_dungeon_index
+  { 0, 0, 0 };
+
+  const std::vector <int> m_cube_pos
+  { 1, 0, 0 };
+
+  const std::vector <int> m_cube_dungeon_pos
+  { m_cube_pos[0] + m_dungeon_radius,
+    m_cube_pos[1] + m_dungeon_radius,
+    m_cube_pos[2] + m_dungeon_radius };
 
   const int m_dungeon_span
   { 2*m_dungeon_radius + 1};
@@ -82,15 +97,6 @@ private:
   const float m_sight
   { float(m_horizon)*m_multiplier };
 
-  Color m_cube_color
-  { 127, 127, 127, 255};
-
-  Color m_edge_color
-  { 255, 255, 255, 255};
-
-  const Vector3 m_cube_dims
-  { m_side, m_side, m_side };
-
   const float m_dist_min
   { 3.0f*m_multiplier };
 
@@ -101,20 +107,8 @@ private:
 
   fractacube m_fracta_cube;
 
-  const bool m_randomode
-  { false };
-
-  const int m_cube_amount
-  { 1000 };
-
-  Vector3 m_cube_pos
-  { 1.0f, 0.0f, 0.0f };
-
-
-
-  Vector3 m_cube_position
-  { 0.0f, 0.0f, 0.0f };
-  // { ranpos(rand, dist_min, dist_max) };
+  Shader m_distortion
+  { LoadShader(0, FormatText("resources/distortion%i.fs", GLSL_VERSION)) };
 
   Camera m_camera;
 
@@ -127,21 +121,25 @@ private:
   bool m_loop
   { true };
 
-  Vector3 m_min_difference
-  { -1.0f, 0.0f, 0.0f };
+  bool m_test
+  { true };
 
   bool m_display_info
   { true };
 
   const bool m_simple
-  { true };
-
-  Shader m_distortion
-  { LoadShader(0, FormatText("resources/distortion%i.fs", GLSL_VERSION)) };
+  { true };  
 
   std::vector <std::vector <int>> m_int_vectors;
 
+  std::vector <int> m_int_dump
+  { 0, 0, 0 };
+
   /// functions
+  ///
+
+  std::vector <int> pos_intifier()
+  noexcept;
 
   void stereoscope_init()
   noexcept;
@@ -188,6 +186,10 @@ private:
   noexcept;
 
   void cube_drawing()
+  noexcept;
+
+  void coord_transform(const std::vector<int> &counters,
+                       const int index)
   noexcept;
 
 public:

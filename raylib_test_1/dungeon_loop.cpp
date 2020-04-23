@@ -23,6 +23,14 @@ noexcept
   collide();
 }
 
+std::vector <int> dungeon_loop::pos_intifier()
+noexcept
+{
+  return { int(round(m_position.x/m_multiplier)),
+      int(round(m_position.y/m_multiplier)),
+      int(round(m_position.z/m_multiplier)) } ;
+}
+
 void dungeon_loop::stereoscope_init()
 noexcept
 {
@@ -75,6 +83,8 @@ noexcept
 void dungeon_loop::dungeon_init()
 noexcept
 {
+  assert(m_directions.size() == 3);
+
   std::random_device rand;
 
   for(int count_x{ -m_dungeon_radius }; count_x <= m_dungeon_radius; ++count_x)
@@ -89,9 +99,9 @@ noexcept
       {
         if(m_simple)
         {
-          if (count_x == 1 &&
-          count_y == 0 &&
-          count_z == 0)
+          if (count_x == m_cube_pos[0] &&
+              count_y == m_cube_pos[1] &&
+              count_z == m_cube_pos[2])
           { line.push_back(cube_type::alabaster); }
           else
           { line.push_back(cube_type::none); }
@@ -331,23 +341,13 @@ noexcept
   const std::vector <std::string> pos_strings
   { vector3_to_strings(m_camera.position) };
 
-  const std::vector <std::string> difference_strings
-  { vector3_to_strings(m_min_difference) };
-
   const std::string camera_pos
   { "m_camera position:\n{" + pos_strings[0] + ","  + pos_strings[1] + "," + pos_strings[2] };
-
-  const std::string diff
-  { "m_min_difference:\n{" + difference_strings[0] + ","  + difference_strings[1] + "," + difference_strings[2] };
 
   const char *array_pos
   { camera_pos.c_str() };
 
-  const char *array_diff
-  { diff.c_str() };
-
   DrawText(array_pos, 10, 40, 20, GREEN);
-  DrawText(array_diff, 10, 340, 20, RED);
 
   // DrawRectangle( 10, 10, 320, 133, Fade(SKYBLUE, 0.5f));
   // DrawRectangleLines( 10, 10, 320, 133, BLUE);
@@ -465,75 +465,78 @@ noexcept
 void dungeon_loop::pos_direct_display()
 noexcept
 {
-  display_string_vector(vector3_to_strings(m_position),
-                        "float pos: ", 20, 60, 20);
-
   if (m_int_vectors.size() > 0)
   {
-    display_string_vector(int_vector_to_strings(m_int_vectors[0]),
-                          "int pos:  ", 20, 120, 20);
+
     display_string_vector(int_vector_to_strings(m_int_vectors[1]),
-                          "forward:  ", 20, 180, 20);
+                          "forward:      ", 20, 20, 20);
     display_string_vector(int_vector_to_strings(m_int_vectors[2]),
-                          "right:    ", 20, 240, 20);
+                          "right:        ", 20, 50, 20);
     display_string_vector(int_vector_to_strings(m_int_vectors[3]),
-                          "up:       ", 20, 300, 20);
+                          "up:           ", 20, 80, 20);
+    display_string_vector(vector3_to_strings(m_position),
+                          "float pos:    ", 20, 110, 20);
+    display_string_vector(int_vector_to_strings(m_pos_int),
+                          "int pos:      ", 20, 140, 20);
+    display_string_vector(int_vector_to_strings(m_int_vectors[0]),
+                          "dungeon pos:  ", 20, 170, 20);
+    display_string_vector(int_vector_to_strings(m_cube_pos),
+                          "cube pos:     ", 20, 200, 20);
+    display_string_vector(int_vector_to_strings(m_cube_dungeon_pos),
+                          "cube dungeon: ", 20, 230, 20);
+    display_string_vector(int_vector_to_strings(m_int_dump),
+                          "int dump: ", 20, 260, 20);
   }
+}
+
+void dungeon_loop::coord_transform(const std::vector <int> &counters,
+                                   const int index)
+noexcept
+{
+  m_coord_int[index] = m_pos_int[index] + counters[index];
+  m_index_int[index] = dungeon_wrap(m_coord_int[index]);
 }
 
 void dungeon_loop::cube_drawing()
 noexcept
 {
-  const std::vector <int> pos_int
-  { int(round(m_position.x/m_multiplier)),
-    int(round(m_position.y/m_multiplier)),
-    int(round(m_position.z/m_multiplier)) };
+  m_pos_int = pos_intifier();
 
-  const int pos_x
-  { static_cast<int>(round(m_position.x/m_multiplier)) };
-  const int pos_y
-  { static_cast<int>(round(m_position.y/m_multiplier)) };
-  const int pos_z
-  { static_cast<int>(round(m_position.z/m_multiplier)) };
+  unsigned index
+  { 0 };
 
-  for (int count_x { -m_horizon }; count_x <= m_horizon; ++count_x)
+  std::vector <int> counters
+  { -m_horizon,  -m_horizon,  -m_horizon};
+
+  for (; counters[index] <= m_horizon; ++counters[index])
   {
-    const int coord_x
-    { pos_x + count_x };
-    int index
-    { dungeon_wrap(coord_x) };
+    coord_transform(counters, index);
 
-    for (int count_y { -m_horizon }; count_y <= m_horizon; ++count_y)
+    ++index;
+
+    for (; counters[index] <= m_horizon; ++counters[index])
     {
-      int coord_y
-      { pos_y + count_y };
-      int indey
-      { dungeon_wrap(coord_y) };
+      coord_transform(counters, index);
 
-      for (int count_z { -m_horizon }; count_z <= m_horizon; ++count_z)
+      ++index;
+
+      for (; counters[index] <= m_horizon; ++counters[index])
       {
-        int coord_z
-        { pos_z + count_z };
-        int indez
-        { dungeon_wrap(coord_z) };
+        coord_transform(counters, index);
 
         const std::vector <int> dungeon_pos;
 
-        const int dungeon_x
-        { index + m_dungeon_radius };
-        const int dungeon_y
-        { indey + m_dungeon_radius };
-        const int dungeon_z
-        { indez + m_dungeon_radius };
+        for (unsigned ind{ 0 }; ind < 3; ++ind)
+        {  m_dungeon_index[ind] = unsigned(m_index_int[ind] + m_dungeon_radius); }
 
         const cube_type c_type
-        { m_type_volume[unsigned(dungeon_x)]
-                       [unsigned(dungeon_y)]
-                       [unsigned(dungeon_z)] };
+        { m_type_volume[m_dungeon_index[0]]
+                       [m_dungeon_index[1]]
+                       [m_dungeon_index[2]] };
 
         if (c_type != cube_type::none)
         {
-          m_fracta_cube.set_pos_type(coord_x, coord_y, coord_z, c_type);
+          m_fracta_cube.set_pos_type(m_coord_int[0], m_coord_int[1], m_coord_int[2], c_type);
 
           if (display_selector(m_position,
                                Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
@@ -546,7 +549,13 @@ noexcept
         }
 
       }
+
+      counters[index] = -m_horizon;
+      --index;
     }
+
+    counters[index] = -m_horizon;
+    --index;
   }
 }
 
