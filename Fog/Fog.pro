@@ -24,6 +24,7 @@ INCLUDEPATH += C:/raylib/raylib
 LIBS += -LC:/raylib/MinGW/bin
 LIBS += -LC:/raylib/src/externa/glfw
 LIBS += -LC:/raylib/raylib
+LIBS += -LC:/raylib/raylib/examples/shaders
 LIBS += -Iexternal -lraylib -lopengl32 -lgdi32 -lwinmm
 #  -lglfw3 -lopenal32
 

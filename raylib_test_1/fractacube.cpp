@@ -10,7 +10,7 @@ fractacube::fractacube()
 noexcept
 {
   assert(m_scale >= 0.49f &&
-         m_scale <= 0.91f);
+         m_scale <= 1.11f);
 }
 
 fractacube::fractacube(const int x, const int y, const int z,
