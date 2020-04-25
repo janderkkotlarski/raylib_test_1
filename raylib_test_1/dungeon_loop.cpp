@@ -149,7 +149,7 @@ noexcept
                      abs(count_y) % 2 == 1 ||
                      abs(count_z) % 2 == 1) &&
                      rand() % 100 < m_wall_perc)
-            { c_type = cube_type::none; }
+            { c_type = cube_type::concrete; }
 
             if (abs(count_x) == m_dungeon_radius ||
                 abs(count_y) == m_dungeon_radius ||
@@ -184,19 +184,38 @@ noexcept
                [unsigned(coords[1]) + m_dungeon_radius]
                [unsigned(coords[2]) + m_dungeon_radius] = cube_type::none;
 
+  for (unsigned sign { 0 }; sign < 2; ++sign)
+  {
+    m_type_volume[2*m_dungeon_radius - 3 + 2*sign]
+                 [0 + m_dungeon_radius]
+                 [0 + m_dungeon_radius] = cube_type::none;
+
+    m_type_volume[2*m_dungeon_radius - 2]
+                 [-1 + m_dungeon_radius + 2*sign]
+                 [0 + m_dungeon_radius] = cube_type::none;
+
+    m_type_volume[2*m_dungeon_radius - 2]
+                 [0 + m_dungeon_radius]
+                 [-1 + m_dungeon_radius + 2*sign] = cube_type::none;
+  }
+
   m_type_volume[2*m_dungeon_radius - 1]
                [0 + m_dungeon_radius]
                [0 + m_dungeon_radius] = cube_type::special;
 
-  m_type_volume[1]
-               [0 + m_dungeon_radius]
-               [0 + m_dungeon_radius] = cube_type::none;
-
-  if(m_test)
+  for (unsigned sign { 0 }; sign < 2; ++sign)
   {
-    m_type_volume[0 + m_dungeon_radius]
-                 [2 + m_dungeon_radius]
-                 [2 + m_dungeon_radius] = cube_type::none;
+    m_type_volume[1 + 2*sign]
+                 [0 + m_dungeon_radius]
+                 [0 + m_dungeon_radius] = cube_type::none;
+
+    m_type_volume[2]
+                 [-1 + m_dungeon_radius + 2*sign]
+                 [0 + m_dungeon_radius] = cube_type::none;
+
+    m_type_volume[2]
+                 [0 + m_dungeon_radius]
+                 [-1 + m_dungeon_radius + 2*sign] = cube_type::none;
   }
 }
 
@@ -540,7 +559,7 @@ void dungeon_loop::run()
                                   m_fracta_cube.get_cube_dims().z)) };
 
   const float array4[4]
-  { 10.0f, 10.0f, 10.0f, 1.0f };
+  { 0.0f, 0.0f, 0.0f, 1.0f };
 
   int ambientLoc = GetShaderLocation(shader, "ambient");
   SetShaderValue(shader, float(ambientLoc), array4, UNIFORM_VEC4);
@@ -550,6 +569,9 @@ void dungeon_loop::run()
   SetShaderValue(shader, fogDensityLoc, &fogDensity, UNIFORM_FLOAT);
 
   cube_model.materials[0].shader = shader;
+
+  Light light
+  { CreateLight(LIGHT_POINT, m_position, Vector3Zero(), WHITE, shader) };
 
   // CreateLight(LIGHT_POINT, m_position, Vector3Zero(), WHITE, shader);
 
@@ -567,6 +589,10 @@ void dungeon_loop::run()
       SetShaderValue(shader, shader.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
 
       play_actions(camera);
+
+      light.position = m_position;
+
+      UpdateLightValues(shader, light);
 
       BeginDrawing();
       {

@@ -15,10 +15,9 @@ private:
   { 0, 0, 0};
 
   const std::vector <std::vector <std::vector <bool>>> m_pattern
+  { { {1} } }; // 2
 
-  // { { {1} } }; // 2
-
-  //
+  /*
   { { {1, 0, 1}, // 2
       {0, 1, 0}, // 1
       {1, 0, 1} }, // 1
@@ -30,7 +29,7 @@ private:
     { {1, 0, 1}, // 2
       {0, 1, 0}, // 1
       {1, 0, 1} } }; // 2
-  //
+  */
 
   /*
   // -2: 13
@@ -140,7 +139,7 @@ private:
   const float m_multiplier;
 
   const float m_dims_mult
-  { 1.1f };
+  { 1.0f };
 
   const Vector3 m_cube_dims;
 

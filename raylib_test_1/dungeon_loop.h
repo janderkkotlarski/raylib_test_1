@@ -127,7 +127,7 @@ private:
   std::vector <std::vector <std::vector <cube_type>>> m_type_volume;
 
   const int m_wall_perc
-  { 50 };
+  { 60 };
 
   fractacube m_fracta_cube;
 
@@ -144,10 +144,10 @@ private:
   { true };
 
   bool m_test
-  { true };
+  { false };
 
   bool m_display_info
-  { true };
+  { false };
 
   const bool m_simple
   { false };
