@@ -127,7 +127,7 @@ private:
   std::vector <std::vector <std::vector <cube_type>>> m_type_volume;
 
   const int m_wall_perc
-  { 0 };
+  { 60 };
 
   fractacube m_fracta_cube;
 
