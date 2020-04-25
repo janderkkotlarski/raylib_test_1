@@ -38,7 +38,8 @@ noexcept
   m_type = c_type;
 }
 
-void fractacube::display(Model &cube_model)
+void fractacube::display(Model &cube_model,
+                         const Vector3 &spectral_profile)
 noexcept
 {
   const int extra
@@ -63,7 +64,7 @@ noexcept
           Vector3 cube_pos
           { Vector3Add(sub_pos, Vector3Scale(m_pos_int.get_Vector3(), m_multiplier)) };
 
-          DrawModel(cube_model, cube_pos, m_dims_mult, type_color(m_type));
+          DrawModel(cube_model, cube_pos, m_dims_mult, type_color(m_type, spectral_profile));
         }
       }
     }

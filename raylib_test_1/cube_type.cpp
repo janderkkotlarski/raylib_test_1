@@ -1,5 +1,7 @@
 #include "cube_type.h"
 
+#include "misc_functions.h"
+
 bool type_collision(const cube_type ct)
 noexcept
 {
@@ -10,7 +12,8 @@ noexcept
   return false;
 }
 
-Color type_color(const cube_type ct)
+Color type_color(const cube_type ct,
+                 const Vector3 &spectral_profile)
 noexcept
 {
   Color color
@@ -28,7 +31,7 @@ noexcept
       color = Color{ 127, 127, 127, 255 };
       break;
     case cube_type::next:
-      color = Color{ 31, 0, 63, 255 };
+      color = profile2color(spectral_profile);
       break;
     case cube_type::special:
       color = Color{ 127, 255, 255, 255 };

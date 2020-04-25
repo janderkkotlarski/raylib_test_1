@@ -162,7 +162,8 @@ public:
                       const cube_type c_type)
   noexcept;
 
-  void display(Model &cube_model)
+  void display(Model &cube_model,
+               const Vector3 &spectral_profile)
   noexcept;
 };
 

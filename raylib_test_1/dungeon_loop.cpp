@@ -201,7 +201,7 @@ noexcept
 
   m_type_volume[2*m_dungeon_radius - 1]
                [0 + m_dungeon_radius]
-               [0 + m_dungeon_radius] = cube_type::special;
+               [0 + m_dungeon_radius] = cube_type::next;
 
   for (unsigned sign { 0 }; sign < 2; ++sign)
   {
@@ -392,6 +392,7 @@ noexcept
 
   m_velocity = m_delta_time*m_speed;
   m_theta = m_delta_time*m_angle;
+  spectral_shift(m_spectral_profile, m_delta_time);
 
   movetate();
 
@@ -415,7 +416,7 @@ noexcept
   if (m_act == action::none &&
       m_type_volume[m_cube_dungeon_pos[0]]
                    [m_cube_dungeon_pos[1]]
-                   [m_cube_dungeon_pos[2]] == cube_type::special)
+                   [m_cube_dungeon_pos[2]] == cube_type::next)
   { m_loop = false; }
 
   if (IsKeyPressed(KEY_SPACE))
@@ -521,7 +522,7 @@ noexcept
                                Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
                                m_directions[0], m_cam_field, m_multiplier))
           {
-            m_fracta_cube.display(cube_model);
+            m_fracta_cube.display(cube_model, m_spectral_profile);
           }
         }
       }
@@ -596,7 +597,7 @@ void dungeon_loop::run()
 
       BeginDrawing();
       {
-        ClearBackground(Color{ BLACK });
+        ClearBackground(BLACK);
 
         BeginVrDrawing();
         BeginMode3D(camera);

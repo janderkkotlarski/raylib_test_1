@@ -171,6 +171,75 @@ noexcept
   return strings;
 }
 
+void spectral_shift(Vector3 &spectral_profile,
+                    const float delta_time)
+noexcept
+{
+  const float delta
+  { 1.0f };
+
+
+  if (spectral_profile.x == 1.0f && spectral_profile.y == 0.5f && spectral_profile.z < 1.0f)
+  {
+    spectral_profile.z += delta*delta_time;
+
+    if (spectral_profile.z > 1.0f)
+    { spectral_profile.z = 1.0f; }
+  }
+
+  if (spectral_profile.z == 1.0f && spectral_profile.x == 0.5f && spectral_profile.y < 1.0f)
+  {
+    spectral_profile.y += delta*delta_time;
+
+
+    if (spectral_profile.y > 1.0f)
+    { spectral_profile.y = 1.0f; }
+  }
+
+  if (spectral_profile.y == 1.0f && spectral_profile.z == 0.5f && spectral_profile.x < 1.0f)
+  {
+    spectral_profile.x += delta*delta_time;
+
+
+    if (spectral_profile.x > 1.0f)
+    { spectral_profile.x = 1.0f; }
+  }
+
+  if (spectral_profile.x == 0.5f && spectral_profile.y == 1.0f && spectral_profile.z > 0.5f)
+  {
+    spectral_profile.z -= delta*delta_time;
+
+    if (spectral_profile.z < 0.5f)
+    { spectral_profile.z = 0.5f; }
+  }
+
+  if (spectral_profile.z == 0.5f && spectral_profile.x == 1.0f && spectral_profile.y > 0.5f)
+  {
+    spectral_profile.y -= delta*delta_time;
+
+    if (spectral_profile.y < 0.5f)
+    { spectral_profile.y = 0.5f; }
+  }
+
+  if (spectral_profile.y == 0.5f && spectral_profile.z == 1.0f && spectral_profile.x > 0.5f)
+  {
+    spectral_profile.x -= delta*delta_time;
+
+    if (spectral_profile.x < 0.5f)
+    { spectral_profile.x = 0.5f; }
+  }
+}
+
+Color profile2color(const Vector3 &profile)
+noexcept
+{
+  return Color
+  { (unsigned char)(int)round(255.0f*profile.x),
+    (unsigned char)(int)round(255.0f*profile.y),
+    (unsigned char)(int)round(255.0f*profile.z),
+    255};
+}
+
 void rotate_first_second(Vector3 &first,
                          Vector3 &second,
                          const float theta)
@@ -303,12 +372,13 @@ void display_cube(const Vector3 &position,
                   Vector3 &cube_position,
                   const Vector3 &cube_dims,
                   const cube_type c_type,
+                  const Vector3 &spectral_profile,
                   const float decay,
                   const float multiplier)
 noexcept
 {
   Color cube_color
-  { type_color(c_type) };
+  { type_color(c_type, spectral_profile) };
 
   // Color edge_color
   // { WHITE };

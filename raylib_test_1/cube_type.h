@@ -87,7 +87,8 @@ enum class cube_type
 bool type_collision(const cube_type ct)
 noexcept;
 
-Color type_color(const cube_type ct)
+Color type_color(const cube_type ct,
+                 const Vector3 &spectral_profile)
 noexcept;
 
 #endif // CUBE_TYPE_H

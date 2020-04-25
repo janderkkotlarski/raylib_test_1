@@ -28,6 +28,13 @@ void display_string_vector(const std::vector <std::string> vector_strings,
                            const int size)
 noexcept;
 
+void spectral_shift(Vector3 &spectral_profile,
+                    const float frames)
+noexcept;
+
+Color profile2color(const Vector3 &profile)
+noexcept;
+
 std::vector <std::string> int_vector_to_strings(const std::vector <int> &vec)
 noexcept;
 
@@ -112,7 +119,7 @@ noexcept;
 void display_cube(const Vector3 &position,
                   Vector3 &cube_position,
                   const Vector3 &cube_dims,
-                  const cube_type c_type,
+                  const cube_type c_type, const Vector3 &spectral_profile,
                   const float decay,
                   const float multiplier)
 noexcept;
