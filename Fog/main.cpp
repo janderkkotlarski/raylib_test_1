@@ -26,7 +26,7 @@ int main(void)
         (Vector3){ 0.0f, 0.0f, 0.0f },      // position
         (Vector3){ 1.0f, 0.0f, 0.0f },      // target
         (Vector3){ 0.0f, 1.0f, 0.0f },      // up
-        45.0f, CAMERA_PERSPECTIVE };        // fov, type
+        45.0f, CAMERA_THIRD_PERSON };        // fov, type
 
     // Load models and texture
     Model modelA = LoadModelFromMesh(GenMeshTorus(0.4f, 1.0f, 16, 32));

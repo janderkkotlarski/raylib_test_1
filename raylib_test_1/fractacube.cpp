@@ -6,20 +6,28 @@
 
 #include "misc_functions.h"
 
-fractacube::fractacube()
+fractacube::fractacube(const float multiplier)
 noexcept
+  : m_multiplier(multiplier),
+    m_cube_dims(Vector3Scale((Vector3){ 1.0f, 1.0f, 1.0f }, m_multiplier*m_scale/(float)m_division))
 {
   assert(m_scale >= 0.49f &&
          m_scale <= 1.11f);
+
+  assert(m_multiplier > 0.0f);
 }
 
 fractacube::fractacube(const int x, const int y, const int z,
-                       const cube_type c_type)
+                       const cube_type c_type,
+                       const float multiplier)
 noexcept
-  : m_pos_int(x, y, z), m_type(c_type)
+  : m_pos_int(x, y, z), m_type(c_type), m_multiplier(multiplier),
+    m_cube_dims(Vector3Scale((Vector3){ 1.0f, 1.0f, 1.0f }, m_multiplier*m_scale/(float)m_division))
 {
   assert(m_scale >= 0.49f &&
          m_scale <= 0.91f);
+
+  assert(m_multiplier > 0.0f);
 }
 
 void fractacube::set_pos_type(const int x, const int y, const int z,
@@ -30,9 +38,7 @@ noexcept
   m_type = c_type;
 }
 
-void fractacube::display(Vector3 &position,
-                         const float decay,
-                         const float multiplier)
+void fractacube::display(Model &cube_model)
 noexcept
 {
   const int extra
@@ -47,7 +53,7 @@ noexcept
         if (m_pattern[count_x][count_y][count_z])
         {
           const float factor
-          { multiplier*m_scale/float(m_division) };
+          { m_multiplier*m_scale/float(m_division) };
 
           Vector3 sub_pos
           { factor*repos(count_x, extra),
@@ -55,16 +61,9 @@ noexcept
             factor*repos(count_z, extra) };
 
           Vector3 cube_pos
-          { Vector3Add(sub_pos, Vector3Scale(m_pos_int.get_Vector3(), multiplier)) };
+          { Vector3Add(sub_pos, Vector3Scale(m_pos_int.get_Vector3(), m_multiplier)) };
 
-          const float side
-          { multiplier*m_scale*m_scale/float(m_division) };
-
-          Vector3 cube_dims
-          { side, side, side };
-
-          display_cube(position, cube_pos, cube_dims,
-                       m_type, decay, multiplier);
+          DrawModel(cube_model, cube_pos, m_dims_mult, type_color(m_type));
         }
       }
     }

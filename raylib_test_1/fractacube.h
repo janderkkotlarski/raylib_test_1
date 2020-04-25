@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <raylib.h>
+
 #include "cube_type.h"
 #include "vec_3_int.h"
 
@@ -14,9 +16,9 @@ private:
 
   const std::vector <std::vector <std::vector <bool>>> m_pattern
 
-  { { {1} } }; // 2
+  // { { {1} } }; // 2
 
-  /*
+  //
   { { {1, 0, 1}, // 2
       {0, 1, 0}, // 1
       {1, 0, 1} }, // 1
@@ -28,6 +30,8 @@ private:
     { {1, 0, 1}, // 2
       {0, 1, 0}, // 1
       {1, 0, 1} } }; // 2
+  //
+
   /*
   // -2: 13
   { { {1, 0, 1, 0, 1}, // 3
@@ -119,38 +123,47 @@ private:
       {1, 0, 0, 1, 0, 0, 1}, // 3
       {1, 1, 0, 1, 0, 1, 1} } }; // 5 };
 
-    */
+   */
 
   const int m_division
-  { static_cast<int>(m_pattern.size()) };
+  { (int)(m_pattern.size()) };
 
   const int m_jumps
   { m_division - 1 };
 
   const float m_scale
-  { 0.999f };
+  { 0.9f };
 
   cube_type m_type
   { cube_type::none };
 
+  const float m_multiplier;
+
+  const float m_dims_mult
+  { 1.1f };
+
+  const Vector3 m_cube_dims;
+
 public:
-  fractacube()
+  fractacube(const float multiplier)
   noexcept;
 
   fractacube(const int x, const int y, const int z,
-                         const cube_type c_type)
-  noexcept;
-
-  void set_pos_type(const int x, const int y, const int z,
-                      const cube_type c_type)
+             const cube_type c_type,
+             const float multiplier)
   noexcept;
 
   Vector3 get_position()
   { return m_pos_int.get_Vector3(); }
 
-  void display(Vector3 &position,
-               const float decay,
-               const float multiplier)
+  Vector3 get_cube_dims()
+  { return m_cube_dims; }
+
+  void set_pos_type(const int x, const int y, const int z,
+                      const cube_type c_type)
+  noexcept;
+
+  void display(Model &cube_model)
   noexcept;
 };
 

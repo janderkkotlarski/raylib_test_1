@@ -4,13 +4,18 @@
 #include <iostream>
 #include <time.h>
 
+#define RLIGHTS_IMPLEMENTATION
+#include "rlights.h"
+
 #include "misc_functions.h"
 #include "keybindings.h"
 
 dungeon_loop::dungeon_loop()
 noexcept
-  :  m_type_volume(), m_fracta_cube(), m_int_vectors()
+  :  m_type_volume(), m_fracta_cube(m_multiplier), m_int_vectors()
 {
+  assert(m_multiplier > 0.0f);
+
   dungeon_init();
 }
 
@@ -140,16 +145,15 @@ noexcept
                 (abs(count_z) % 2 == 1 &&
                  abs(count_y) % 2 == 1))
             { c_type = cube_type::concrete; }
-            else if((abs(count_x) > m_free ||
-                     abs(count_y) > m_free ||
-                     abs(count_z) > m_free) &&
-                    (abs(count_x) % 2 == 1 ||
+            else if((abs(count_x) % 2 == 1 ||
                      abs(count_y) % 2 == 1 ||
                      abs(count_z) % 2 == 1) &&
                      rand() % 100 < m_wall_perc)
-            { c_type = cube_type::concrete; }
+            { c_type = cube_type::none; }
 
-            if (count_x == 0)
+            if (abs(count_x) == m_dungeon_radius ||
+                abs(count_y) == m_dungeon_radius ||
+                abs(count_z) == m_dungeon_radius)
             { c_type = cube_type::concrete; }
           }
 
@@ -180,9 +184,13 @@ noexcept
                [unsigned(coords[1]) + m_dungeon_radius]
                [unsigned(coords[2]) + m_dungeon_radius] = cube_type::none;
 
-  m_type_volume[-1 + m_dungeon_radius]
+  m_type_volume[2*m_dungeon_radius - 1]
                [0 + m_dungeon_radius]
                [0 + m_dungeon_radius] = cube_type::special;
+
+  m_type_volume[1]
+               [0 + m_dungeon_radius]
+               [0 + m_dungeon_radius] = cube_type::none;
 
   if(m_test)
   {
@@ -243,10 +251,18 @@ noexcept
   int index = coord;
 
   while (index < -m_dungeon_radius)
-  { index += m_dungeon_span; }
+  {
+    // index += m_dungeon_span;
+
+    index = 0;
+  }
 
   while (index > m_dungeon_radius)
-  { index -= m_dungeon_span; }
+  {
+    // index -= m_dungeon_span;
+
+    index = 0;
+  }
 
   return index;
 }
@@ -441,7 +457,7 @@ noexcept
   m_index_int[index] = dungeon_wrap(m_coord_int[index]);
 }
 
-void dungeon_loop::cube_drawing()
+void dungeon_loop::cube_drawing(Model &cube_model)
 noexcept
 {
   m_pos_int = pos_intifier();
@@ -486,7 +502,7 @@ noexcept
                                Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
                                m_directions[0], m_cam_field, m_multiplier))
           {
-            m_fracta_cube.display(m_position, m_decay, m_multiplier);
+            m_fracta_cube.display(cube_model);
           }
         }
       }
@@ -509,9 +525,33 @@ void dungeon_loop::run()
 
   stereoscope_init(distortion);
 
+  Shader shader = LoadShader(FormatText("C:/raylib/raylib/examples/shaders/resources/shaders/glsl330/base_lighting.vs", GLSL_VERSION),
+                             FormatText("C:/raylib/raylib/examples/shaders/resources/shaders/glsl330/dark_fog.fs", GLSL_VERSION));
+  shader.locs[LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
+  shader.locs[LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
+
   Camera3D camera;
 
   camera_init(camera);
+
+  Model cube_model
+  { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
+                                  m_fracta_cube.get_cube_dims().y,
+                                  m_fracta_cube.get_cube_dims().z)) };
+
+  const float array4[4]
+  { 10.0f, 10.0f, 10.0f, 1.0f };
+
+  int ambientLoc = GetShaderLocation(shader, "ambient");
+  SetShaderValue(shader, float(ambientLoc), array4, UNIFORM_VEC4);
+
+  float fogDensity = 0.005f;
+  int fogDensityLoc = GetShaderLocation(shader, "fogDensity");
+  SetShaderValue(shader, fogDensityLoc, &fogDensity, UNIFORM_FLOAT);
+
+  cube_model.materials[0].shader = shader;
+
+  // CreateLight(LIGHT_POINT, m_position, Vector3Zero(), WHITE, shader);
 
   while (m_game)
   {
@@ -522,6 +562,10 @@ void dungeon_loop::run()
 
     while (m_loop)
     {
+      SetShaderValue(shader, fogDensityLoc, &fogDensity, UNIFORM_FLOAT);
+
+      SetShaderValue(shader, shader.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
+
       play_actions(camera);
 
       BeginDrawing();
@@ -531,13 +575,13 @@ void dungeon_loop::run()
         BeginVrDrawing();
         BeginMode3D(camera);
 
-        { cube_drawing(); }
+        { cube_drawing(cube_model); }
 
         EndMode3D();
         EndVrDrawing();
 
-        // if (m_test)
-        // { infos(); }
+        if (m_test)
+        { infos(); }
 
         pos_direct_display();
 

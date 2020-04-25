@@ -63,11 +63,17 @@ private:
     {0.0f, -1.0f, 0.0f},
     {0.0f, 0.0f, 1.0f} };
 
+  const int m_dungeon_radius
+  { 10 };
+
+  const int m_free
+  { 2 };
+
   std::vector <Vector3> m_directions
   { m_start_directs };
 
   const Vector3 m_start_posit
-  { 1.0f, 0.0f, 0.0f };
+  { 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
 
   Vector3 m_position
   { Vector3Scale(m_start_posit, m_multiplier) };
@@ -79,19 +85,13 @@ private:
   { m_pos_int };
 
   std::vector <int> m_index_int
-  { 0, 0, 0 };
-
-  const int m_dungeon_radius
-  { 10 };
-
-  const int m_free
-  { 2 };
+  { 0, 0, 0 };  
 
   std::vector <unsigned> m_dungeon_index
   { 0, 0, 0 };
 
   const std::vector <int> m_cube_pos
-  { 1, 0, 0 };
+  { 2, 0, 0 };
 
   std::vector <std::vector <int>> m_collides_pos
   { m_pos_int, m_pos_int,
@@ -144,7 +144,7 @@ private:
   { true };
 
   bool m_test
-  { false };
+  { true };
 
   bool m_display_info
   { true };
@@ -202,7 +202,7 @@ private:
   void pos_direct_display()
   noexcept;
 
-  void cube_drawing()
+  void cube_drawing(Model &cube_model)
   noexcept;
 
   void coord_transform(const std::vector<int> &counters,
