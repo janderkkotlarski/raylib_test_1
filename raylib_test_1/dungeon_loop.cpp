@@ -406,10 +406,12 @@ noexcept
   camera.up = m_directions[2];
 
 
-  if (IsKeyDown(KEY_BACKSPACE))
+  if (IsKeyDown(KEY_BACKSPACE) ||
+      IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_MIDDLE_RIGHT))
   { m_loop = false; }
 
-  if (WindowShouldClose())
+  if (WindowShouldClose() ||
+      IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_MIDDLE_LEFT))
   {
     m_loop = false;
     m_game = false;
@@ -421,7 +423,8 @@ noexcept
                    [m_cube_dungeon_pos[2]] == cube_type::next)
   { m_loop = false; }
 
-  if (IsKeyPressed(KEY_SPACE))
+  if (IsKeyPressed(KEY_SPACE) ||
+      IsGamepadButtonReleased(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_LEFT_THUMB))
   {
     ToggleVrMode();
 
