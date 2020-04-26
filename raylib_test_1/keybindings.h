@@ -6,4 +6,7 @@
 action key_bind_actions()
 noexcept;
 
+void gamepad_actions(action &act)
+noexcept;
+
 #endif // KEYBINDINGS_H

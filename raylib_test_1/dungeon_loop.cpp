@@ -351,17 +351,6 @@ noexcept
   }
 }
 
-action dungeon_loop::gamepad_input()
-{
-  if (IsGamepadAvailable(GAMEPAD_PLAYER1))
-  {
-    if (IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_LEFT_FACE_UP))
-    { return action::forward; }
-  }
-
-  return m_act;
-}
-
 void dungeon_loop::play_actions(Camera &camera)
 noexcept
 {
@@ -373,7 +362,7 @@ noexcept
   {
     m_act = key_bind_actions();
 
-    m_act = gamepad_input();
+    gamepad_actions(m_act);
 
     if (m_act != action::none)
     { collide(); }

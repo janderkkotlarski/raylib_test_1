@@ -16,16 +16,6 @@
   #define GLSL_VERSION            100
 #endif
 
-/*
-#if defined(PLATFORM_RPI)
-    #define XBOX360_NAME_ID     "Microsoft X-Box 360 pad"
-    #define PS3_NAME_ID         "PLAYSTATION(R)3 Controller"
-#else
-    #define XBOX360_NAME_ID     "Xbox 360 Controller"
-    #define PS3_NAME_ID         "PLAYSTATION(R)3 Controller"
-#endif
-*/
-
 const int fps
 { 60 };
 
@@ -208,8 +198,6 @@ private:
 
   void collide()
   noexcept;
-
-  action gamepad_input();
 
   void play_actions(Camera &camera)
   noexcept;
