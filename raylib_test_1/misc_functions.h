@@ -29,7 +29,11 @@ void display_string_vector(const std::vector <std::string> vector_strings,
 noexcept;
 
 void spectral_shift(Vector3 &spectral_profile,
-                    const float frames)
+                    const float delta_profile)
+noexcept;
+
+void dark_shift(Vector3 &dark_profile,
+                const float delta_time)
 noexcept;
 
 Color profile2color(const Vector3 &profile)

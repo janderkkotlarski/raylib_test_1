@@ -396,6 +396,8 @@ noexcept
   m_theta = m_delta_time*m_angle;
   spectral_shift(m_spectral_profile, m_delta_time);
 
+  dark_shift(m_dark_profile, m_delta_time);
+
   movetate();
 
   wrapping(m_position, m_wrap);
@@ -564,7 +566,7 @@ void dungeon_loop::run()
                                   m_fracta_cube.get_cube_dims().y,
                                   m_fracta_cube.get_cube_dims().z)) };
 
-  const float array4[4]
+  float array4[4]
   { 0.0f, 0.0f, 0.0f, 1.0f };
 
   int ambientLoc = GetShaderLocation(shader, "ambient");
@@ -578,8 +580,6 @@ void dungeon_loop::run()
 
   Light light
   { CreateLight(LIGHT_POINT, m_position, Vector3Zero(), WHITE, shader) };
-
-  // CreateLight(LIGHT_POINT, m_position, Vector3Zero(), WHITE, shader);
 
   while (m_game)
   {

@@ -127,7 +127,7 @@ private:
   std::vector <std::vector <std::vector <cube_type>>> m_type_volume;
 
   const int m_wall_perc
-  { 60 };
+  { 0*60 };
 
   fractacube m_fracta_cube;
 
@@ -136,6 +136,9 @@ private:
 
   Vector3 m_chromal_profile
   { 1.0f, 0.75f, 0.5f };
+
+  Vector3 m_dark_profile
+  { 0.1f, 0.02f, 0.2f};
 
   const float m_cam_angle
   { 100.0f };

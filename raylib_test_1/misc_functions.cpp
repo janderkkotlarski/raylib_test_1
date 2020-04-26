@@ -172,7 +172,7 @@ noexcept
 }
 
 void spectral_shift(Vector3 &spectral_profile,
-                    const float delta_time)
+                    const float delta_profile)
 noexcept
 {
   const float delta
@@ -181,7 +181,7 @@ noexcept
 
   if (spectral_profile.x == 1.0f && spectral_profile.y == 0.5f && spectral_profile.z < 1.0f)
   {
-    spectral_profile.z += delta*delta_time;
+    spectral_profile.z += delta*delta_profile;
 
     if (spectral_profile.z > 1.0f)
     { spectral_profile.z = 1.0f; }
@@ -189,7 +189,7 @@ noexcept
 
   if (spectral_profile.z == 1.0f && spectral_profile.x == 0.5f && spectral_profile.y < 1.0f)
   {
-    spectral_profile.y += delta*delta_time;
+    spectral_profile.y += delta*delta_profile;
 
 
     if (spectral_profile.y > 1.0f)
@@ -198,7 +198,7 @@ noexcept
 
   if (spectral_profile.y == 1.0f && spectral_profile.z == 0.5f && spectral_profile.x < 1.0f)
   {
-    spectral_profile.x += delta*delta_time;
+    spectral_profile.x += delta*delta_profile;
 
 
     if (spectral_profile.x > 1.0f)
@@ -207,7 +207,7 @@ noexcept
 
   if (spectral_profile.x == 0.5f && spectral_profile.y == 1.0f && spectral_profile.z > 0.5f)
   {
-    spectral_profile.z -= delta*delta_time;
+    spectral_profile.z -= delta*delta_profile;
 
     if (spectral_profile.z < 0.5f)
     { spectral_profile.z = 0.5f; }
@@ -215,7 +215,7 @@ noexcept
 
   if (spectral_profile.z == 0.5f && spectral_profile.x == 1.0f && spectral_profile.y > 0.5f)
   {
-    spectral_profile.y -= delta*delta_time;
+    spectral_profile.y -= delta*delta_profile;
 
     if (spectral_profile.y < 0.5f)
     { spectral_profile.y = 0.5f; }
@@ -223,10 +223,47 @@ noexcept
 
   if (spectral_profile.y == 0.5f && spectral_profile.z == 1.0f && spectral_profile.x > 0.5f)
   {
-    spectral_profile.x -= delta*delta_time;
+    spectral_profile.x -= delta*delta_profile;
 
     if (spectral_profile.x < 0.5f)
     { spectral_profile.x = 0.5f; }
+  }
+}
+
+void dark_shift(Vector3 &dark_profile,
+                const float delta_time)
+noexcept
+{
+  const float delta
+  { 0.1f };
+
+  const float max
+  { 0.2 };
+
+  if (dark_profile.y > 0.01f)
+  {
+    dark_profile.x += 0.5f*delta*delta_time;
+    dark_profile.z += delta*delta_time;
+  }
+
+  if (dark_profile.y < 0.01f)
+  {
+    dark_profile.x -= 0.5f*delta*delta_time;
+    dark_profile.z -= delta*delta_time;
+  }
+
+  if (dark_profile.z > max)
+  {
+    dark_profile.x = 0.5f*max;
+    dark_profile.y = 0.0f;
+    dark_profile.z = max;
+  }
+
+  if (dark_profile.z < 0.0f)
+  {
+    dark_profile.x = 0.0f;
+    dark_profile.y = 0.02f;
+    dark_profile.z = 0.0f;
   }
 }
 
