@@ -36,6 +36,10 @@ void dark_shift(Vector3 &dark_profile,
                 const float delta_time)
 noexcept;
 
+void change_opacity(Color &color,
+                    const float opacity)
+noexcept;
+
 Color profile2color(const Vector3 &profile)
 noexcept;
 

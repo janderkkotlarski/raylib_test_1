@@ -28,7 +28,7 @@ noexcept
       color = Color{ 255, 255, 255, 255 };
       break;
     case cube_type::concrete:
-      color = Color{ 127, 127, 127, 255 };
+      color = Color{ 63, 63, 63, 255 };
       break;
     case cube_type::next:
       color = profile2color(spectral_profile);

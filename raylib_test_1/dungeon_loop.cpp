@@ -5,7 +5,7 @@
 #include <time.h>
 
 #define RLIGHTS_IMPLEMENTATION
-#include "rlights.h"
+#include <rlights.h>
 
 #include "misc_functions.h"
 #include "keybindings.h"
@@ -30,6 +30,8 @@ noexcept
 void dungeon_loop::stereoscope_init(Shader &distortion)
 noexcept
 {
+  distortion = LoadShader(0, FormatText("distortion.fs", GLSL_VERSION));
+
   SetConfigFlags(FLAG_MSAA_4X_HINT);// VR device parameters (head-mounted-device)
 
   InitVrSimulator();
@@ -62,6 +64,25 @@ noexcept
   ToggleVrMode();
 
   SetTargetFPS(fps);  // Set our game to run at fps frames-per-second
+}
+
+void dungeon_loop::fog_init(Model &cube_model,
+                            Shader &fogger,
+                            const int fog_density_loc)
+noexcept
+{
+
+  const float ambient_loc
+  { (float)GetShaderLocation(fogger, "ambient") };
+
+  fogger.locs[LOC_MATRIX_MODEL] = GetShaderLocation(fogger, "matModel");
+  fogger.locs[LOC_VECTOR_VIEW] = GetShaderLocation(fogger, "viewPos");
+
+
+  SetShaderValue(fogger, ambient_loc, m_fog_color, UNIFORM_VEC4);
+  SetShaderValue(fogger, fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
+
+  cube_model.materials[0].shader = fogger;
 }
 
 void dungeon_loop::camera_init(Camera &camera)
@@ -105,7 +126,6 @@ noexcept
   }
 
   assert(m_type_volume.size() == unsigned(m_dungeon_span));
-
 }
 
 void dungeon_loop::dungeon_fill()
@@ -161,29 +181,15 @@ noexcept
                        [count_y + m_dungeon_radius]
                        [count_z + m_dungeon_radius] = c_type;
         }
-
       }      
     }
   }
+}
 
-  std::vector <int> coords
-  { 1, 1, 1 };
 
-  while ((abs(coords[0]) <= m_horizon ||
-          abs(coords[1]) <= m_horizon ||
-          abs(coords[2]) <= m_horizon) &&
-         (abs(coords[0]) % 2 != 0 ||
-          abs(coords[1]) % 2 != 0 ||
-          abs(coords[2]) % 2 != 0))
-  {
-    for (int &coord: coords)
-    { coord = (rand() % (2*m_dungeon_radius)) - m_dungeon_radius; }
-  }
-
-  m_type_volume[unsigned(coords[0]) + m_dungeon_radius]
-               [unsigned(coords[1]) + m_dungeon_radius]
-               [unsigned(coords[2]) + m_dungeon_radius] = cube_type::none;
-
+void dungeon_loop::begin_end()
+noexcept
+{
   for (unsigned sign { 0 }; sign < 2; ++sign)
   {
     m_type_volume[2*m_dungeon_radius - 3 + 2*sign]
@@ -272,14 +278,12 @@ noexcept
   while (index < -m_dungeon_radius)
   {
     // index += m_dungeon_span;
-
     index = 0;
   }
 
   while (index > m_dungeon_radius)
   {
     // index -= m_dungeon_span;
-
     index = 0;
   }
 
@@ -344,14 +348,18 @@ noexcept
       for (int &part: posit)
       { part = dungeon_warp(part); }
 
-      if (type_collision(m_type_volume[posit[0]][posit[1]][posit[2]]) &&
-          m_act == direct2action(directs, dir))
-      { m_act = action::none; }
+      if (m_act == direct2action(directs, dir))
+      {
+        m_collide_type = m_type_volume[posit[0]][posit[1]][posit[2]];
+
+        if (type_collision(m_collide_type))
+        { m_act = action::none; }
+      }
     }
   }
 }
 
-void dungeon_loop::play_actions(Camera &camera)
+void dungeon_loop::play_actions()
 noexcept
 {
   m_cube_dungeon_pos = { coordinator(m_position.x),
@@ -390,33 +398,25 @@ noexcept
         direction.z = round(direction.z);
       }
     }
-  }
+  }  
+}
 
-  m_velocity = m_delta_time*m_speed;
-  m_theta = m_delta_time*m_angle;
-  spectral_shift(m_spectral_profile, m_delta_time);
-
-  dark_shift(m_dark_profile, m_delta_time);
-
-  movetate();
-
-  wrapping(m_position, m_wrap);
-
-  camera.position = m_position;
-
-  camera.target = Vector3Add(m_position, m_directions[0]);
-  camera.up = m_directions[2];
-
-
+void dungeon_loop::other_actions()
+noexcept
+{
   if (IsKeyDown(KEY_BACKSPACE) ||
       IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_MIDDLE_RIGHT))
-  { m_loop = false; }
+  {
+    m_loop = false;
+    m_act = action::none;
+  }
 
   if (WindowShouldClose() ||
       IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_MIDDLE_LEFT))
   {
     m_loop = false;
     m_game = false;
+    m_act = action::none;
   }
 
   if (m_act == action::none &&
@@ -432,6 +432,28 @@ noexcept
 
     m_display_info = !m_display_info;
   }   // Toggle VR mode
+}
+
+void dungeon_loop::player_move(Camera &camera,
+                               Shader &fogger,
+                               const int fog_density_loc)
+noexcept
+{
+  m_velocity = m_delta_time*m_speed;
+  m_theta = m_delta_time*m_angle;
+
+  spectral_shift(m_spectral_profile, m_delta_time);
+  // dark_shift(m_dark_profile, m_delta_time);
+
+  movetate();
+  wrapping(m_position, m_wrap);
+
+  camera.position = m_position;
+  camera.target = Vector3Add(m_position, m_directions[0]);
+  camera.up = m_directions[2];
+
+  SetShaderValue(fogger, fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
+  SetShaderValue(fogger, fogger.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
 }
 
 void dungeon_loop::infos()
@@ -528,9 +550,7 @@ noexcept
           if (display_selector(m_position,
                                Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
                                m_directions[0], m_cam_field, m_multiplier))
-          {
-            m_fracta_cube.display(cube_model, m_spectral_profile);
-          }
+          { m_fracta_cube.display(cube_model, m_spectral_profile, m_screen_opacity); }
         }
       }
 
@@ -543,62 +563,29 @@ noexcept
   }
 }
 
-void dungeon_loop::run()
+void dungeon_loop::game_loop(Camera &camera,
+                             Model &cube_model,
+                             Shader &fogger,
+                             Light &light,
+                             const int fog_density_loc)
+noexcept
 {
-  InitWindow(m_screen_width, m_screen_height, "Cube Dungeon");
-
-  Shader distortion
-  { LoadShader(0, FormatText("resources/distortion%i.fs", GLSL_VERSION)) };
-
-  stereoscope_init(distortion);
-
-  Shader shader = LoadShader(FormatText("C:/raylib/raylib/examples/shaders/resources/shaders/glsl330/base_lighting.vs", GLSL_VERSION),
-                             FormatText("C:/raylib/raylib/examples/shaders/resources/shaders/glsl330/dark_fog.fs", GLSL_VERSION));
-  shader.locs[LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
-  shader.locs[LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
-
-  Camera3D camera;
-
-  camera_init(camera);
-
-  Model cube_model
-  { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
-                                  m_fracta_cube.get_cube_dims().y,
-                                  m_fracta_cube.get_cube_dims().z)) };
-
-  float array4[4]
-  { 0.0f, 0.0f, 0.0f, 1.0f };
-
-  int ambientLoc = GetShaderLocation(shader, "ambient");
-  SetShaderValue(shader, float(ambientLoc), array4, UNIFORM_VEC4);
-
-  float fogDensity = 0.005f;
-  int fogDensityLoc = GetShaderLocation(shader, "fogDensity");
-  SetShaderValue(shader, fogDensityLoc, &fogDensity, UNIFORM_FLOAT);
-
-  cube_model.materials[0].shader = shader;
-
-  Light light
-  { CreateLight(LIGHT_POINT, m_position, Vector3Zero(), WHITE, shader) };
-
   while (m_game)
   {
     m_loop = true;
 
     dungeon_fill();
+    begin_end();
     collide();
 
     while (m_loop)
     {
-      SetShaderValue(shader, fogDensityLoc, &fogDensity, UNIFORM_FLOAT);
-
-      SetShaderValue(shader, shader.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
-
-      play_actions(camera);
+      player_move(camera, fogger, fog_density_loc);
+      play_actions();
+      other_actions();
 
       light.position = m_position;
-
-      UpdateLightValues(shader, light);
+      UpdateLightValues(fogger, light);
 
       BeginDrawing();
       {
@@ -618,9 +605,53 @@ void dungeon_loop::run()
         pos_direct_display();
 
       }
+
+      m_screen_opacity = 0.0f;
+
+      if (m_collide_type == cube_type::next)
+      {
+        m_screen_opacity = 4.0f*m_time/m_period;
+
+        Color screen_color
+        { type_color(m_collide_type, m_spectral_profile) };
+
+        change_opacity(screen_color, m_screen_opacity);
+
+        DrawRectangle(0, 0, m_screen_width, m_screen_height, screen_color);
+      }
+
       EndDrawing();
     }
   }
+}
+
+void dungeon_loop::run_window()
+{
+  InitWindow(m_screen_width, m_screen_height, "Cube Dungeon");
+
+  Shader distortion;
+  stereoscope_init(distortion);
+
+  Model cube_model
+  { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
+                                  m_fracta_cube.get_cube_dims().y,
+                                  m_fracta_cube.get_cube_dims().z)) };
+
+  Shader fogger
+  { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
+               FormatText("dark_fog.fs", GLSL_VERSION)) };
+
+  const int fog_density_loc
+  { GetShaderLocation(fogger, "fogDensity") };
+  fog_init(cube_model, fogger, fog_density_loc);
+
+  Light light
+  { CreateLight(LIGHT_POINT, m_position, Vector3Zero(), WHITE, fogger) };
+
+  Camera3D camera;
+  camera_init(camera);
+
+  game_loop(camera, cube_model, fogger, light, fog_density_loc);
 
   UnloadShader(distortion);
 

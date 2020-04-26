@@ -163,7 +163,8 @@ public:
   noexcept;
 
   void display(Model &cube_model,
-               const Vector3 &spectral_profile)
+               const Vector3 &spectral_profile,
+               const float screen_opacity)
   noexcept;
 };
 

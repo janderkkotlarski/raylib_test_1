@@ -6,6 +6,7 @@
 
 #include <raylib.h>
 #include <raymath.h>
+#include <rlights.h>
 
 #include "fractacube.h"
 #include "action.h"
@@ -112,6 +113,12 @@ private:
   const float m_decay
   { 0.5f };
 
+  const float m_fog_color[4]
+  { 0.0f, 0.0f, 0.0f, 1.0f };
+
+  const float m_fog_density
+  { 0.005f };
+
   const int m_horizon
   { 4 };
 
@@ -126,8 +133,14 @@ private:
 
   std::vector <std::vector <std::vector <cube_type>>> m_type_volume;
 
+  cube_type m_collide_type
+  { cube_type::none };
+
+  float m_screen_opacity
+  { 0.0f };
+
   const int m_wall_perc
-  { 0*60 };
+  { 1*60 };
 
   fractacube m_fracta_cube;
 
@@ -175,6 +188,11 @@ private:
   void stereoscope_init(Shader &distortion)
   noexcept;
 
+  void fog_init(Model &cube_model,
+                Shader &fogger,
+                const int fog_density_loc)
+  noexcept;
+
   void camera_init(Camera &camera)
   noexcept;
 
@@ -182,6 +200,9 @@ private:
   noexcept;
 
   void dungeon_fill()
+  noexcept;
+
+  void begin_end()
   noexcept;
 
   int dungeon_wrap(const int coord)
@@ -202,7 +223,15 @@ private:
   void collide()
   noexcept;
 
-  void play_actions(Camera &camera)
+  void play_actions()
+  noexcept;
+
+  void other_actions()
+  noexcept;
+
+  void player_move(Camera &camera,
+                   Shader &fogger,
+                   const int fog_density_loc)
   noexcept;
 
   void infos()
@@ -218,11 +247,14 @@ private:
                        const int index)
   noexcept;
 
+  void game_loop(Camera &camera, Model &cube_model, Shader &fogger, Light &light, const int fog_density_loc)
+  noexcept;
+
 public:
   dungeon_loop()
   noexcept;
 
-  void run();
+  void run_window();
 };
 
 

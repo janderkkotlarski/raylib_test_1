@@ -267,6 +267,11 @@ noexcept
   }
 }
 
+void change_opacity(Color &color,
+                    const float opacity)
+noexcept
+{ color.a = (unsigned char)round(abs(255.0f*opacity)); }
+
 Color profile2color(const Vector3 &profile)
 noexcept
 {
