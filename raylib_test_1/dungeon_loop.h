@@ -262,7 +262,12 @@ private:
   void transition()
   noexcept;
 
-  void game_loop(Camera &camera, Model &cube_model, Shader &fogger, Light &light, const int fog_density_loc)
+  void game_loop(Camera &camera,
+                 Model &cube_model,
+                 Texture &texture,
+                 Shader &fogger,
+                 Light &light,
+                 const int fog_density_loc)
   noexcept;
 
 public:

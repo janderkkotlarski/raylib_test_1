@@ -595,6 +595,7 @@ noexcept
 
 void dungeon_loop::game_loop(Camera &camera,
                              Model &cube_model,
+                             Texture &texture,
                              Shader &fogger,
                              Light &light,
                              const int fog_density_loc)
@@ -602,6 +603,8 @@ noexcept
 {
   while (m_game)
   {
+    cube_model.materials[0].maps[MAP_DIFFUSE].texture = texture;
+
     level_init();
     dungeon_fill();
     begin_end();
@@ -631,11 +634,8 @@ noexcept
         { infos(); }
 
         pos_direct_display();
-
-        infos();
-
         transition();
-
+        infos();
       }
 
       EndDrawing();
@@ -655,6 +655,8 @@ void dungeon_loop::run_window()
                                   m_fracta_cube.get_cube_dims().y,
                                   m_fracta_cube.get_cube_dims().z)) };
 
+  Texture texture = LoadTexture("pattern.png");
+
   Shader fogger
   { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
                FormatText("dark_fog.fs", GLSL_VERSION)) };
@@ -669,7 +671,7 @@ void dungeon_loop::run_window()
   Camera3D camera;
   camera_init(camera);
 
-  game_loop(camera, cube_model, fogger, light, fog_density_loc);
+  game_loop(camera, cube_model, texture, fogger, light, fog_density_loc);
 
   // UnloadShader(distortion);
 
