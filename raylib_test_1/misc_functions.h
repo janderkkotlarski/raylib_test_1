@@ -21,6 +21,13 @@ std::vector <int> add_int_vector(const std::vector <int> &vec_1,
 std::vector <int> sub_int_vector(const std::vector <int> &vec_1,
                                  const std::vector <int> &vec_2);
 
+void display_string(const std::string str,
+                    const std::string &message,
+                    const int x,
+                    const int y,
+                    const int size)
+noexcept;
+
 void display_string_vector(const std::vector <std::string> vector_strings,
                            const std::string &message,
                            const int x,
@@ -34,6 +41,10 @@ noexcept;
 
 void dark_shift(Vector3 &dark_profile,
                 const float delta_time)
+noexcept;
+
+void scale_color(Color &color,
+                 const float mult)
 noexcept;
 
 void change_opacity(Color &color,

@@ -104,37 +104,67 @@ noexcept
 
   srand (time(NULL));
 
-  for(int count_x{ -m_dungeon_radius }; count_x <= m_dungeon_radius; ++count_x)
+  for(int count_x{ -m_max_dungeon_radius }; count_x <= m_max_dungeon_radius; ++count_x)
   {
     std::vector <std::vector <cube_type>> area;
 
-    for(int count_y{ -m_dungeon_radius }; count_y <= m_dungeon_radius; ++count_y)
+    for(int count_y{ -m_max_dungeon_radius }; count_y <= m_max_dungeon_radius; ++count_y)
     {
       std::vector <cube_type> line;
 
-      for(int count_z{ -m_dungeon_radius }; count_z <= m_dungeon_radius; ++count_z)
+      for(int count_z{ -m_max_dungeon_radius }; count_z <= m_max_dungeon_radius; ++count_z)
       { line.push_back(cube_type::none); }
 
-      assert(line.size() == unsigned(m_dungeon_span));
+      assert(line.size() == unsigned(2*m_max_dungeon_radius + 1));
 
       area.push_back(line);
     }
 
-    assert(area.size() == unsigned(m_dungeon_span));
+    assert(area.size() == unsigned(2*m_max_dungeon_radius + 1));
 
     m_type_volume.push_back(area);
   }
 
-  assert(m_type_volume.size() == unsigned(m_dungeon_span));
+  assert(m_type_volume.size() == unsigned(2*m_max_dungeon_radius + 1));
+}
+
+void dungeon_loop::level_init()
+noexcept
+{
+  m_loop = true;
+
+  if (!m_reset)
+  {
+    if (m_level > 0)
+    {
+      m_dungeon_radius += 2;
+      ++m_wall_perc;
+    }
+
+    ++m_level;
+  }
+
+  m_dungeon_span = 2*m_dungeon_radius + 1;
+  m_wrap = m_multiplier*(m_dungeon_radius + 0.5f);
+
+  m_start_posit = (Vector3){ 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
+
+  m_reset = false;
+
+  if (m_level > m_end_level)
+  {
+    m_loop = false;
+    m_game = false;
+  }
+
+  m_directions = m_start_directs;
+
+  m_position = Vector3Scale(m_start_posit, m_multiplier);
 }
 
 void dungeon_loop::dungeon_fill()
 noexcept
 {
-  m_directions = m_start_directs;
-
-  m_position = Vector3Scale(m_start_posit, m_multiplier);
-
   for(int count_x{ -m_dungeon_radius }; count_x <= m_dungeon_radius; ++count_x)
   {
     std::vector <std::vector <cube_type>> area;
@@ -408,6 +438,7 @@ noexcept
       IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_MIDDLE_RIGHT))
   {
     m_loop = false;
+    m_reset = true;
     m_act = action::none;
   }
 
@@ -425,8 +456,9 @@ noexcept
                    [m_cube_dungeon_pos[2]] == cube_type::next)
   { m_loop = false; }
 
-  if (IsKeyPressed(KEY_SPACE) ||
-      IsGamepadButtonReleased(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_LEFT_THUMB))
+  if ((IsKeyPressed(KEY_SPACE) ||
+      IsGamepadButtonReleased(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_LEFT_THUMB)) &&
+      false)
   {
     ToggleVrMode();
 
@@ -459,34 +491,14 @@ noexcept
 void dungeon_loop::infos()
 noexcept
 {
-  DrawFPS(20, 20);
+  const int x
+  { 20 };
+  const int y
+  { 20 };
+  const int size
+  { 20 };
 
-
-  if (m_display_info)
-  {
-    const int x
-    { 20 };
-    int y
-    { 40 };
-
-    const int step
-    { 60 };
-    const int size
-    { 20 };
-
-    int count
-    { 0 };
-
-    for (const Vector3 &direction: m_directions)
-    {
-      display_string_vector(vector3_to_strings(direction),
-                            "Direction" + std::to_string(count), x, y, size);
-      y += step;
-      ++count;
-    }
-  }
-  else
-  { DrawFPS(650, 20); }
+  display_string(std::to_string(m_level), "Level ", x, y, size);
 }
 
 void dungeon_loop::pos_direct_display()
@@ -563,6 +575,24 @@ noexcept
   }
 }
 
+void dungeon_loop::transition()
+noexcept
+{
+  m_screen_opacity = 0.0f;
+
+  if (m_collide_type == cube_type::next)
+  {
+    m_screen_opacity = m_time/m_period;
+
+    Color screen_color
+    { type_color(m_collide_type, m_spectral_profile) };
+
+    change_opacity(screen_color, 4.0f*m_screen_opacity);
+
+    DrawRectangle(0, 0, m_screen_width, m_screen_height, screen_color);
+  }
+}
+
 void dungeon_loop::game_loop(Camera &camera,
                              Model &cube_model,
                              Shader &fogger,
@@ -572,8 +602,7 @@ noexcept
 {
   while (m_game)
   {
-    m_loop = true;
-
+    level_init();
     dungeon_fill();
     begin_end();
     collide();
@@ -591,33 +620,22 @@ noexcept
       {
         ClearBackground(BLACK);
 
-        BeginVrDrawing();
+        // BeginVrDrawing();
         BeginMode3D(camera);
-
         { cube_drawing(cube_model); }
 
         EndMode3D();
-        EndVrDrawing();
+        // EndVrDrawing();
 
         if (m_test)
         { infos(); }
 
         pos_direct_display();
 
-      }
+        infos();
 
-      m_screen_opacity = 0.0f;
+        transition();
 
-      if (m_collide_type == cube_type::next)
-      {
-        m_screen_opacity = 4.0f*m_time/m_period;
-
-        Color screen_color
-        { type_color(m_collide_type, m_spectral_profile) };
-
-        change_opacity(screen_color, m_screen_opacity);
-
-        DrawRectangle(0, 0, m_screen_width, m_screen_height, screen_color);
       }
 
       EndDrawing();
@@ -629,8 +647,8 @@ void dungeon_loop::run_window()
 {
   InitWindow(m_screen_width, m_screen_height, "Cube Dungeon");
 
-  Shader distortion;
-  stereoscope_init(distortion);
+  // Shader distortion;
+  // stereoscope_init(distortion);
 
   Model cube_model
   { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
@@ -653,7 +671,7 @@ void dungeon_loop::run_window()
 
   game_loop(camera, cube_model, fogger, light, fog_density_loc);
 
-  UnloadShader(distortion);
+  // UnloadShader(distortion);
 
   CloseVrSimulator();         // Close VR simulator
 

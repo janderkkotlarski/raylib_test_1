@@ -64,16 +64,31 @@ private:
     {0.0f, -1.0f, 0.0f},
     {0.0f, 0.0f, 1.0f} };
 
-  const int m_dungeon_radius
-  { 10 };
+  int m_level
+  { 0 };
 
-  const int m_free
-  { 2 };
+  const int m_end_level
+  { 20 };
+
+  const int m_max_dungeon_radius
+  { 99 };
+
+  int m_dungeon_radius
+  { 6 };
+
+  int m_dungeon_span
+  { 2*m_dungeon_radius + 1};
+
+  float m_wrap
+  { m_multiplier*(m_dungeon_radius + 0.5f) };
+
+  int m_wall_perc
+  { 40 };
 
   std::vector <Vector3> m_directions
   { m_start_directs };
 
-  const Vector3 m_start_posit
+  Vector3 m_start_posit
   { 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
 
   Vector3 m_position
@@ -104,12 +119,6 @@ private:
     m_cube_pos[1] + m_dungeon_radius,
     m_cube_pos[2] + m_dungeon_radius };
 
-  const int m_dungeon_span
-  { 2*m_dungeon_radius + 1};
-
-  const float m_wrap
-  { m_multiplier*(m_dungeon_radius + 0.5f) };
-
   const float m_decay
   { 0.5f };
 
@@ -139,9 +148,6 @@ private:
   float m_screen_opacity
   { 0.0f };
 
-  const int m_wall_perc
-  { 1*60 };
-
   fractacube m_fracta_cube;
 
   Vector3 m_spectral_profile
@@ -164,6 +170,9 @@ private:
 
   bool m_loop
   { true };
+
+  bool m_reset
+  { false };
 
   bool m_test
   { false };
@@ -197,6 +206,9 @@ private:
   noexcept;
 
   void dungeon_init()
+  noexcept;
+
+  void level_init()
   noexcept;
 
   void dungeon_fill()
@@ -245,6 +257,9 @@ private:
 
   void coord_transform(const std::vector<int> &counters,
                        const int index)
+  noexcept;
+
+  void transition()
   noexcept;
 
   void game_loop(Camera &camera, Model &cube_model, Shader &fogger, Light &light, const int fog_density_loc)

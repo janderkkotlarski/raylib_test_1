@@ -1,6 +1,7 @@
 #include "fractacube.h"
 
 #include <cassert>
+#include <iostream>
 
 #include <raymath.h>
 
@@ -68,7 +69,7 @@ noexcept
           Color screen_color
           { type_color(m_type, spectral_profile) };
 
-          change_opacity(screen_color, 1.0f - screen_opacity);
+          scale_color(screen_color, 1.0f - screen_opacity);
 
           DrawModel(cube_model, cube_pos, m_dims_mult, screen_color);
         }

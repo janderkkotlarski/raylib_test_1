@@ -112,6 +112,26 @@ std::vector <int> sub_int_vector(const std::vector <int> &vec_1,
   return subvec;
 }
 
+void display_string(const std::string str,
+                    const std::string &message,
+                    const int x,
+                    const int y,
+                    const int size)
+noexcept
+{
+  if (str.size() > 0)
+  {
+    std::string info_string
+    { message };
+
+    info_string += str;
+
+    const char *info_array
+    { info_string.c_str() };
+    DrawText(info_array, x, y, size, SKYBLUE);
+  }
+}
+
 void display_string_vector(const std::vector <std::string> vector_strings,
                            const std::string &message,
                            const int x,
@@ -267,10 +287,24 @@ noexcept
   }
 }
 
+void scale_color(Color &color,
+                 const float mult)
+noexcept
+{
+  color.r = (unsigned)round((float)color.r*mult);
+  color.g = (unsigned)round((float)color.g*mult);
+  color.b = (unsigned)round((float)color.b*mult);
+}
+
 void change_opacity(Color &color,
                     const float opacity)
 noexcept
-{ color.a = (unsigned char)round(abs(255.0f*opacity)); }
+{
+  const unsigned opac
+  { (unsigned)round(abs(255.0f*opacity)) };
+
+  color.a = opac;
+}
 
 Color profile2color(const Vector3 &profile)
 noexcept
