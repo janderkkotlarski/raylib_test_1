@@ -162,6 +162,15 @@ private:
   Vector3 m_dark_profile
   { 0.1f, 0.02f, 0.2f};
 
+  Color m_dark_color
+  { 31, 0, 63, 0 };
+
+  float m_dark_opacity
+  { 0.0f };
+
+  bool m_dark_up
+  { true };
+
   const float m_cam_angle
   { 100.0f };
 

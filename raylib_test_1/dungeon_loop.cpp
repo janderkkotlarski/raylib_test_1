@@ -408,9 +408,10 @@ noexcept
     m_time = 0.0f;
   }
 
+  m_delta_time = GetFrameTime();
+
   if (m_act != action::none)
   {
-    m_delta_time = GetFrameTime();
     m_time += m_delta_time;
 
     if (m_time >= m_period)
@@ -428,7 +429,9 @@ noexcept
         direction.z = round(direction.z);
       }
     }
-  }  
+  }
+
+
 }
 
 void dungeon_loop::other_actions()
@@ -493,12 +496,24 @@ noexcept
 {
   const int x
   { 20 };
-  const int y
+  int y
   { 20 };
   const int size
   { 20 };
 
   display_string(std::to_string(m_level), "Level ", x, y, size);
+
+  y += 20;
+
+  display_string(std::to_string(m_dark_opacity), "Dark opacity: ", x, y, size);
+
+  y += 20;
+
+  display_string(std::to_string((int)m_dark_color.a), "Dark color.a: ", x, y, size);
+
+  y += 20;
+
+  display_string(std::to_string(m_delta_time), "Delta time: ", x, y, size);
 }
 
 void dungeon_loop::pos_direct_display()
@@ -595,6 +610,10 @@ noexcept
     for (int count{ 0 }; count < 5; ++count)
     { DrawRectangle(0, 0, m_screen_width, m_screen_height, screen_color); }
   }
+
+  dark_shift(m_dark_color, m_delta_time, m_dark_opacity, m_dark_up);
+
+  DrawRectangle(0, 0, m_screen_width, m_screen_height, m_dark_color);
 }
 
 void dungeon_loop::game_loop(Camera &camera,

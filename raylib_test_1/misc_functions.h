@@ -39,8 +39,10 @@ void spectral_shift(Vector3 &spectral_profile,
                     const float delta_profile)
 noexcept;
 
-void dark_shift(Vector3 &dark_profile,
-                const float delta_time)
+void dark_shift(Color &color,
+                const float delta_time,
+                float &opacity,
+                bool &dark_up)
 noexcept;
 
 void scale_color(Color &color,

@@ -250,41 +250,39 @@ noexcept
   }
 }
 
-void dark_shift(Vector3 &dark_profile,
-                const float delta_time)
+void dark_shift(Color &color,
+                const float delta_time,
+                float &opacity,
+                bool &dark_up)
 noexcept
 {
   const float delta
-  { 0.1f };
+  { 0.15f };
 
   const float max
-  { 0.2 };
+  { 0.35f };
 
-  if (dark_profile.y > 0.01f)
+  if (dark_up)
+  { opacity += delta*delta_time; }
+  else
+  { opacity -= delta*delta_time; }
+
+  if (opacity >= max)
   {
-    dark_profile.x += 0.5f*delta*delta_time;
-    dark_profile.z += delta*delta_time;
+    opacity = max;
+    dark_up = false;
   }
 
-  if (dark_profile.y < 0.01f)
+  if (opacity <= 0.0f)
   {
-    dark_profile.x -= 0.5f*delta*delta_time;
-    dark_profile.z -= delta*delta_time;
+    opacity = 0.0f;
+    dark_up = true;
   }
 
-  if (dark_profile.z > max)
-  {
-    dark_profile.x = 0.5f*max;
-    dark_profile.y = 0.0f;
-    dark_profile.z = max;
-  }
+  const float cospacity
+  { max*(1.0f - cos(0.5f*PI*opacity/max)) };
 
-  if (dark_profile.z < 0.0f)
-  {
-    dark_profile.x = 0.0f;
-    dark_profile.y = 0.02f;
-    dark_profile.z = 0.0f;
-  }
+  color.a = (unsigned char)round(abs(255.0f*cospacity));
 }
 
 void scale_color(Color &color,
