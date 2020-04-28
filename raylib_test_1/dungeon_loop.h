@@ -69,7 +69,7 @@ private:
   { 0 };
 
   const int m_end_level
-  { 20 };
+  { 10 };
 
   const int m_max_dungeon_radius
   { 99 };
