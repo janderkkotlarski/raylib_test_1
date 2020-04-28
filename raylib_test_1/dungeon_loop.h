@@ -291,7 +291,7 @@ private:
   noexcept;
 
   void game_loop(Camera &camera, std::vector<Model> &cube_models,
-                 Model &cube_model, std::vector<Texture> &textures,
+                 Model &cube_model, std::vector<Image> &images,
                  Texture &texture,
                  Shader &fogger,
                  Light &light,

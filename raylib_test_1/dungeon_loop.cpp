@@ -638,7 +638,7 @@ noexcept
 }
 
 void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models,
-                             Model &cube_model, std::vector <Texture> &textures,
+                             Model &cube_model, std::vector <Image> &images,
                              Texture &texture,
                              Shader &fogger,
                              Light &light,
@@ -650,7 +650,7 @@ noexcept
     cube_model.materials[0].maps[MAP_DIFFUSE].texture = texture;
 
     for (unsigned count{ 0 }; count < cube_models.size(); ++count)
-    { cube_models[count].materials[0].maps[MAP_DIFFUSE].texture = textures[count]; }
+    { cube_models[count].materials[0].maps[MAP_DIFFUSE].texture = LoadTextureFromImage(images[count]); }
 
     level_init();
     dungeon_fill();
@@ -708,7 +708,7 @@ void dungeon_loop::run_window()
 
   std::vector <Model> cube_models;
 
-  std::vector <Texture> textures;
+  std::vector <Image> images;
 
   for (int count{ 0 }; count < 16; ++count)
   {
@@ -719,8 +719,11 @@ void dungeon_loop::run_window()
     const std::string file_name_type
     { file_name + std::to_string(count) + file_type };
 
-    textures.push_back(LoadTexture(file_name_type.c_str()));
+    images.push_back(LoadImage(file_name_type.c_str()));
   }
+
+  for(Image &img: images)
+  { ImageRotateCW(&img); }
 
 
   Model cube_model
@@ -747,7 +750,7 @@ void dungeon_loop::run_window()
   Camera3D camera;
   camera_init(camera);
 
-  game_loop(camera, cube_models, cube_model, textures, texture, fogger, light, fog_density_loc);
+  game_loop(camera, cube_models, cube_model, images, texture, fogger, light, fog_density_loc);
 
   // UnloadShader(distortion);
 
