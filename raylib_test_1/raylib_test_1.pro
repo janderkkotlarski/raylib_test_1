@@ -34,6 +34,7 @@ LIBS += -static -lpthread
 SOURCES += \
         action.cpp \
         cube_type.cpp \
+        dungeon_functions.cpp \
         dungeon_loop.cpp \
         fractacube.cpp \
         keybindings.cpp \
@@ -44,6 +45,7 @@ SOURCES += \
 HEADERS += \
   action.h \
   cube_type.h \
+  dungeon_functions.h \
   dungeon_loop.h \
   fractacube.h \
   keybindings.h \

@@ -66,12 +66,15 @@ noexcept
           Vector3 cube_pos
           { Vector3Add(sub_pos, Vector3Scale(m_pos_int.get_Vector3(), m_multiplier)) };
 
-          Color screen_color
+          Color cube_color
           { type_color(m_type, spectral_profile) };
 
-          scale_color(screen_color, 1.0f - screen_opacity);
+          scale_color(cube_color, 1.0f - screen_opacity);
 
-          DrawModel(cube_model, cube_pos, m_dims_mult, screen_color);
+          if (m_type == cube_type::setback)
+          { DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color); }
+          else
+          { DrawModel(cube_model, cube_pos, m_dims_mult, cube_color); }
         }
       }
     }

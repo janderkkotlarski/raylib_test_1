@@ -43,8 +43,21 @@ noexcept
     case cube_type::trigger:
       color = Color{ 255, 191, 127, 255 };
       break;
+    case cube_type::setback:
+      color = Color{ 0, 0, 0, 23 };
+      break;
 
   }
 
   return color;
+}
+
+bool transit(const cube_type &transit_type)
+noexcept
+{
+  if (transit_type == cube_type::next ||
+      transit_type == cube_type::setback)
+  { return true; }
+
+  return false;
 }

@@ -1,0 +1,6 @@
+#ifndef DUNGEON_FUNCTIONS_H
+#define DUNGEON_FUNCTIONS_H
+
+
+
+#endif // DUNGEON_FUNCTIONS_H

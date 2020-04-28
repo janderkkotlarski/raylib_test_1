@@ -204,7 +204,7 @@ noexcept
                      abs(count_y) % 2 == 1 ||
                      abs(count_z) % 2 == 1) &&
                      rand() % 100 < m_wall_perc)
-            { c_type = cube_type::alabaster; }
+            { c_type = cube_type::none; }
 
             if (abs(count_x) == m_dungeon_radius ||
                 abs(count_y) == m_dungeon_radius ||
@@ -526,7 +526,23 @@ noexcept
   m_index_int[index] = dungeon_wrap(m_coord_int[index]);
 }
 
-void dungeon_loop::cube_drawing(Model &cube_model)
+void dungeon_loop::frame_update(std::vector <Model> &cube_models)
+noexcept
+{
+  ++m_frame;
+
+  if (m_frame >= m_frames)
+  {
+    m_frame = 0;
+
+    ++m_cube_index;
+
+    if (m_cube_index >= cube_models.size())
+    { m_cube_index = 0; }
+  }
+}
+
+void dungeon_loop::cube_drawing(Model &cube_model, std::vector <Model> &cube_models)
 noexcept
 {
   m_pos_int = pos_intifier();
@@ -571,7 +587,16 @@ noexcept
           if (display_selector(m_position,
                                Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
                                m_directions[0], m_cam_field, m_multiplier))
-          { m_fracta_cube.display(cube_model, m_spectral_profile, m_screen_opacity); }
+          {
+            if (m_moving_sprite)
+            {
+              m_fracta_cube.display(cube_models[m_cube_index], m_spectral_profile, m_screen_opacity);
+
+
+            }
+            else
+            { m_fracta_cube.display(cube_model, m_spectral_profile, m_screen_opacity); }
+          }
         }
       }
 
@@ -589,9 +614,11 @@ noexcept
 {
   m_screen_opacity = 0.0f;
 
-  if (m_collide_type == cube_type::next)
+  if (transit(m_collide_type))
   {
     m_screen_opacity = m_time/m_period;
+
+
 
     Color screen_color
     { type_color(m_collide_type, m_spectral_profile) };
@@ -610,8 +637,8 @@ noexcept
   DrawRectangle(0, 0, m_screen_width, m_screen_height, m_dark_color);
 }
 
-void dungeon_loop::game_loop(Camera &camera,
-                             Model &cube_model,
+void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models,
+                             Model &cube_model, std::vector <Texture> &textures,
                              Texture &texture,
                              Shader &fogger,
                              Light &light,
@@ -621,6 +648,9 @@ noexcept
   while (m_game)
   {
     cube_model.materials[0].maps[MAP_DIFFUSE].texture = texture;
+
+    for (unsigned count{ 0 }; count < cube_models.size(); ++count)
+    { cube_models[count].materials[0].maps[MAP_DIFFUSE].texture = textures[count]; }
 
     level_init();
     dungeon_fill();
@@ -642,7 +672,7 @@ noexcept
 
         // BeginVrDrawing();
         BeginMode3D(camera);
-        { cube_drawing(cube_model); }
+        { cube_drawing(cube_model, cube_models); }
 
         EndMode3D();
         // EndVrDrawing();
@@ -650,9 +680,12 @@ noexcept
         if (m_test)
         { infos(); }
 
-        pos_direct_display();
+        pos_direct_display();        
+        transition();
+
+        frame_update(cube_models);
+
         infos();
-        transition();        
       }
 
       EndDrawing();
@@ -667,12 +700,35 @@ void dungeon_loop::run_window()
   // Shader distortion;
   // stereoscope_init(distortion);
 
+  const std::string file_name
+  { "sprite_" };
+
+  const std::string file_type
+  { ".png" };
+
+  std::vector <Model> cube_models;
+
+  std::vector <Texture> textures;
+
+  for (int count{ 0 }; count < 16; ++count)
+  {
+    cube_models.push_back(LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
+                                                        m_fracta_cube.get_cube_dims().y,
+                                                        m_fracta_cube.get_cube_dims().z)));
+
+    const std::string file_name_type
+    { file_name + std::to_string(count) + file_type };
+
+    textures.push_back(LoadTexture(file_name_type.c_str()));
+  }
+
+
   Model cube_model
   { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
                                   m_fracta_cube.get_cube_dims().y,
                                   m_fracta_cube.get_cube_dims().z)) };
 
-  Texture texture = LoadTexture("map_7_modified.png");
+  Texture texture = LoadTexture("zAG2xTS.gif");
 
   Shader fogger
   { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
@@ -682,13 +738,16 @@ void dungeon_loop::run_window()
   { GetShaderLocation(fogger, "fogDensity") };
   fog_init(cube_model, fogger, fog_density_loc);
 
+  for (Model &c_model: cube_models)
+  { fog_init(c_model, fogger, fog_density_loc); }
+
   Light light
   { CreateLight(LIGHT_POINT, m_position, Vector3Zero(), m_light_color, fogger) };
 
   Camera3D camera;
   camera_init(camera);
 
-  game_loop(camera, cube_model, texture, fogger, light, fog_density_loc);
+  game_loop(camera, cube_models, cube_model, textures, texture, fogger, light, fog_density_loc);
 
   // UnloadShader(distortion);
 

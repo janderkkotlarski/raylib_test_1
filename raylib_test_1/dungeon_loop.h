@@ -10,6 +10,7 @@
 
 #include "fractacube.h"
 #include "action.h"
+#include "dungeon_functions.h"
 
 #if defined(PLATFORM_DESKTOP)
   #define GLSL_VERSION            330
@@ -109,6 +110,18 @@ private:
   const std::vector <int> m_cube_pos
   { 2, 0, 0 };
 
+  bool m_moving_sprite
+  { true };
+
+  const int m_frames
+  { 48 };
+
+  int m_frame
+  { 0 };
+
+  unsigned m_cube_index
+  { 0 };
+
   std::vector <std::vector <int>> m_collides_pos
   { m_pos_int, m_pos_int,
     m_pos_int, m_pos_int,
@@ -193,7 +206,7 @@ private:
   { false };
 
   const bool m_simple
-  { true };
+  { false };
 
   std::vector <std::vector <int>> m_int_vectors;
 
@@ -264,7 +277,10 @@ private:
   void pos_direct_display()
   noexcept;
 
-  void cube_drawing(Model &cube_model)
+  void frame_update(std::vector <Model> &cube_models)
+  noexcept;
+
+  void cube_drawing(Model &cube_model, std::vector<Model> &cube_models)
   noexcept;
 
   void coord_transform(const std::vector<int> &counters,
@@ -274,8 +290,8 @@ private:
   void transition()
   noexcept;
 
-  void game_loop(Camera &camera,
-                 Model &cube_model,
+  void game_loop(Camera &camera, std::vector<Model> &cube_models,
+                 Model &cube_model, std::vector<Texture> &textures,
                  Texture &texture,
                  Shader &fogger,
                  Light &light,

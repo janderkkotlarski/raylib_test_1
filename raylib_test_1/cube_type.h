@@ -91,4 +91,7 @@ Color type_color(const cube_type ct,
                  const Vector3 &spectral_profile)
 noexcept;
 
+bool transit(const cube_type &transit_type)
+noexcept;
+
 #endif // CUBE_TYPE_H
