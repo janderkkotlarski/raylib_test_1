@@ -47,6 +47,10 @@ void scale_color(Color &color,
                  const float mult)
 noexcept;
 
+void scale_color(Color &color,
+                 const unsigned char intensity)
+noexcept;
+
 void change_opacity(Color &color,
                     const float opacity)
 noexcept;

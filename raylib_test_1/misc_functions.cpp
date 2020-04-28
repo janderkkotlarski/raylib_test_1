@@ -296,6 +296,11 @@ noexcept
   color.b = (unsigned)round((float)color.b*mult);
 }
 
+void scale_color(Color &color,
+                 const unsigned char intensity)
+noexcept
+{ scale_color(color, (float)intensity/255.0f); }
+
 void change_opacity(Color &color,
                     const float opacity)
 noexcept

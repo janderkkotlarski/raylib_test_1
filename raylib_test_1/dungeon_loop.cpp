@@ -199,7 +199,7 @@ noexcept
                      abs(count_y) % 2 == 1 ||
                      abs(count_z) % 2 == 1) &&
                      rand() % 100 < m_wall_perc)
-            { c_type = cube_type::concrete; }
+            { c_type = cube_type::alabaster; }
 
             if (abs(count_x) == m_dungeon_radius ||
                 abs(count_y) == m_dungeon_radius ||
@@ -587,9 +587,13 @@ noexcept
     Color screen_color
     { type_color(m_collide_type, m_spectral_profile) };
 
+    scale_color(screen_color, m_light_intensity);
+    scale_color(screen_color, 2.5f);
+
     change_opacity(screen_color, 4.0f*m_screen_opacity);
 
-    DrawRectangle(0, 0, m_screen_width, m_screen_height, screen_color);
+    for (int count{ 0 }; count < 5; ++count)
+    { DrawRectangle(0, 0, m_screen_width, m_screen_height, screen_color); }
   }
 }
 
@@ -655,7 +659,7 @@ void dungeon_loop::run_window()
                                   m_fracta_cube.get_cube_dims().y,
                                   m_fracta_cube.get_cube_dims().z)) };
 
-  Texture texture = LoadTexture("pattern.png");
+  Texture texture = LoadTexture("map_7_modified.png");
 
   Shader fogger
   { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
@@ -666,7 +670,7 @@ void dungeon_loop::run_window()
   fog_init(cube_model, fogger, fog_density_loc);
 
   Light light
-  { CreateLight(LIGHT_POINT, m_position, Vector3Zero(), WHITE, fogger) };
+  { CreateLight(LIGHT_POINT, m_position, Vector3Zero(), m_light_color, fogger) };
 
   Camera3D camera;
   camera_init(camera);

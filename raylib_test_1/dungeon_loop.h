@@ -119,8 +119,11 @@ private:
     m_cube_pos[1] + m_dungeon_radius,
     m_cube_pos[2] + m_dungeon_radius };
 
-  const float m_decay
-  { 0.5f };
+  const unsigned char m_light_intensity
+  { 63 };
+
+  const Color m_light_color
+  { m_light_intensity, m_light_intensity, m_light_intensity, 255 };
 
   const float m_fog_color[4]
   { 0.0f, 0.0f, 0.0f, 1.0f };
