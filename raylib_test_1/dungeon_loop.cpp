@@ -502,18 +502,6 @@ noexcept
   { 20 };
 
   display_string(std::to_string(m_level), "Level ", x, y, size);
-
-  y += 20;
-
-  display_string(std::to_string(m_dark_opacity), "Dark opacity: ", x, y, size);
-
-  y += 20;
-
-  display_string(std::to_string((int)m_dark_color.a), "Dark color.a: ", x, y, size);
-
-  y += 20;
-
-  display_string(std::to_string(m_delta_time), "Delta time: ", x, y, size);
 }
 
 void dungeon_loop::pos_direct_display()
