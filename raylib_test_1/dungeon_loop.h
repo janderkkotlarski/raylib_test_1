@@ -163,7 +163,7 @@ private:
   { 0.1f, 0.02f, 0.2f};
 
   Color m_dark_color
-  { 31, 0, 63, 0 };
+  { 15, 0, 31, 0 };
 
   float m_dark_opacity
   { 0.0f };
@@ -193,7 +193,7 @@ private:
   { false };
 
   const bool m_simple
-  { false };
+  { true };
 
   std::vector <std::vector <int>> m_int_vectors;
 

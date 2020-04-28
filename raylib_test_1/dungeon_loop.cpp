@@ -185,6 +185,11 @@ noexcept
                 count_y == m_cube_pos[1] &&
                 count_z == m_cube_pos[2])
             { c_type = cube_type::alabaster; }
+
+            if (abs(count_x) == m_dungeon_radius ||
+                abs(count_y) == m_dungeon_radius ||
+                abs(count_z) == m_dungeon_radius)
+            { c_type = cube_type::invisible; }
           }
           else
           {
@@ -558,7 +563,8 @@ noexcept
                        [m_dungeon_index[1]]
                        [m_dungeon_index[2]] };
 
-        if (c_type != cube_type::none)
+        if (c_type != cube_type::none &&
+            c_type != cube_type::invisible)
         {
           m_fracta_cube.set_pos_type(m_coord_int[0], m_coord_int[1], m_coord_int[2], c_type);
 
@@ -645,8 +651,8 @@ noexcept
         { infos(); }
 
         pos_direct_display();
-        transition();
         infos();
+        transition();        
       }
 
       EndDrawing();

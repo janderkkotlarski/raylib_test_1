@@ -257,7 +257,7 @@ void dark_shift(Color &color,
 noexcept
 {
   const float delta
-  { 0.15f };
+  { 0.2f };
 
   const float max
   { 0.35f };

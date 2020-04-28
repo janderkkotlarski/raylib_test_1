@@ -6,7 +6,8 @@ bool type_collision(const cube_type ct)
 noexcept
 {
   if (ct == cube_type::concrete ||
-      ct == cube_type::alabaster)
+      ct == cube_type::alabaster ||
+      ct == cube_type::invisible)
   { return true; }
 
   return false;
@@ -29,6 +30,9 @@ noexcept
       break;
     case cube_type::concrete:
       color = Color{ 63, 63, 63, 255 };
+      break;
+    case cube_type::invisible:
+      color = Color{ 0, 0, 0, 0 };
       break;
     case cube_type::next:
       color = profile2color(spectral_profile);
