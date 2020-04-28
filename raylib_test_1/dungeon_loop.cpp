@@ -204,7 +204,7 @@ noexcept
                      abs(count_y) % 2 == 1 ||
                      abs(count_z) % 2 == 1) &&
                      rand() % 100 < m_wall_perc)
-            { c_type = cube_type::none; }
+            { c_type = cube_type::concrete; }
 
             if (abs(count_x) == m_dungeon_radius ||
                 abs(count_y) == m_dungeon_radius ||
@@ -589,11 +589,7 @@ noexcept
                                m_directions[0], m_cam_field, m_multiplier))
           {
             if (m_moving_sprite)
-            {
-              m_fracta_cube.display(cube_models[m_cube_index], m_spectral_profile, m_screen_opacity);
-
-
-            }
+            { m_fracta_cube.display(cube_models[m_cube_index], m_spectral_profile, m_screen_opacity); }
             else
             { m_fracta_cube.display(cube_model, m_spectral_profile, m_screen_opacity); }
           }
@@ -618,17 +614,15 @@ noexcept
   {
     m_screen_opacity = m_time/m_period;
 
-
-
     Color screen_color
     { type_color(m_collide_type, m_spectral_profile) };
 
     scale_color(screen_color, m_light_intensity);
-    scale_color(screen_color, 2.5f);
+    scale_color(screen_color, 1.5f);
 
     change_opacity(screen_color, 4.0f*m_screen_opacity);
 
-    for (int count{ 0 }; count < 5; ++count)
+    for (int count{ 0 }; count < 3; ++count)
     { DrawRectangle(0, 0, m_screen_width, m_screen_height, screen_color); }
   }
 
@@ -695,31 +689,35 @@ noexcept
 
 void dungeon_loop::run_window()
 {
-  InitWindow(m_screen_width, m_screen_height, "Cube Dungeon");
-
-  // Shader distortion;
-  // stereoscope_init(distortion);
-
   const std::string file_name
   { "sprite_" };
 
   const std::string file_type
   { ".png" };
 
-  std::vector <Model> cube_models;
-
   std::vector <Image> images;
+
+  for (int count{ 0 }; count < 16; ++count)
+  {
+
+    const std::string file_name_type
+    { file_name + std::to_string(count) + file_type };
+
+    images.push_back(LoadImage(file_name_type.c_str()));
+  }
+
+  InitWindow(m_screen_width, m_screen_height, "Cube Dungeon");
+
+  // Shader distortion;
+  // stereoscope_init(distortion);
+
+  std::vector <Model> cube_models;
 
   for (int count{ 0 }; count < 16; ++count)
   {
     cube_models.push_back(LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
                                                         m_fracta_cube.get_cube_dims().y,
                                                         m_fracta_cube.get_cube_dims().z)));
-
-    const std::string file_name_type
-    { file_name + std::to_string(count) + file_type };
-
-    images.push_back(LoadImage(file_name_type.c_str()));
   }
 
   for(Image &img: images)
@@ -731,7 +729,7 @@ void dungeon_loop::run_window()
                                   m_fracta_cube.get_cube_dims().y,
                                   m_fracta_cube.get_cube_dims().z)) };
 
-  Texture texture = LoadTexture("zAG2xTS.gif");
+  Texture texture = LoadTexture("map_7_modified.png");
 
   Shader fogger
   { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),

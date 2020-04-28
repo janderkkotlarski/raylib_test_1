@@ -111,7 +111,7 @@ private:
   { 2, 0, 0 };
 
   bool m_moving_sprite
-  { true };
+  { false };
 
   const int m_frames
   { 48 };
