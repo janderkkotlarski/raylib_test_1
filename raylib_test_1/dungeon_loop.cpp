@@ -30,40 +30,7 @@ noexcept
 void dungeon_loop::stereoscope_init(Shader &distortion)
 noexcept
 {
-  distortion = LoadShader(0, FormatText("distortion.fs", GLSL_VERSION));
-
-  SetConfigFlags(FLAG_MSAA_4X_HINT);// VR device parameters (head-mounted-device)
-
-  InitVrSimulator();
-
-  VrDeviceInfo hmd = { 0 };
-
-  // Oculus Rift CV1 parameters for simulator
-  hmd.hResolution = 2000;                 // HMD horizontal resolution in pixels
-  hmd.vResolution = 1200;  // 1200               // HMD vertical resolution in pixels
-  hmd.hScreenSize = 0.133793f;  // 0.133793f;            // HMD horizontal size in meters
-  hmd.vScreenSize = 0.0669f;              // HMD vertical size in meters
-  hmd.vScreenCenter = 0.04678f;           // HMD screen center in meters
-  hmd.eyeToScreenDistance = 0.041f;       // HMD distance between eye and display in meters
-  hmd.lensSeparationDistance = 0.07f;     // HMD lens separation distance in meters
-  hmd.interpupillaryDistance = 0.07f;     // HMD IPD (distance between pupils) in meters
-
-  // NOTE: CV1 uses a Fresnel-hybrid-asymmetric lenses with specific distortion compute shaders.
-  // Following parameters are an approximation to distortion stereo rendering but results differ from actual device.
-  hmd.lensDistortionValues[0] = 1.0f;     // HMD lens distortion constant parameter 0
-  hmd.lensDistortionValues[1] = 0.22f;    // HMD lens distortion constant parameter 1
-  hmd.lensDistortionValues[2] = 0.24f;    // HMD lens distortion constant parameter 2
-  hmd.lensDistortionValues[3] = 0.0f;     // HMD lens distortion constant parameter 3
-  hmd.chromaAbCorrection[0] = 0.996f;     // HMD chromatic aberration correction parameter 0
-  hmd.chromaAbCorrection[1] = -0.004f;    // HMD chromatic aberration correction parameter 1
-  hmd.chromaAbCorrection[2] = 1.014f;     // HMD chromatic aberration correction parameter 2
-  hmd.chromaAbCorrection[3] = 0.0f;       // HMD chromatic aberration correction parameter 3
-
-  SetVrConfiguration(hmd, distortion);    // Set Vr device parameters for stereo rendering
-
-  ToggleVrMode();
-
-  SetTargetFPS(fps);  // Set our game to run at fps frames-per-second
+    // Set our game to run at fps frames-per-second
 }
 
 void dungeon_loop::fog_init(Model &cube_model,
@@ -95,6 +62,8 @@ noexcept
   camera.type = CAMERA_PERSPECTIVE; // Camera mode type
 
   SetCameraMode(camera, CAMERA_FREE);
+
+  SetTargetFPS(fps);
 }
 
 void dungeon_loop::dungeon_init()
@@ -404,7 +373,6 @@ noexcept
   if (m_act == action::none)
   {
     m_act = key_bind_actions();
-
     gamepad_actions(m_act);
 
     if (m_act != action::none)
@@ -641,7 +609,7 @@ noexcept
 {
   while (m_game)
   {
-    cube_model.materials[0].maps[MAP_DIFFUSE].texture = texture;
+    // cube_model.materials[0].maps[MAP_DIFFUSE].texture = texture;
 
     for (unsigned count{ 0 }; count < cube_models.size(); ++count)
     { cube_models[count].materials[0].maps[MAP_DIFFUSE].texture = LoadTextureFromImage(images[count]); }
@@ -689,47 +657,59 @@ noexcept
 
 void dungeon_loop::run_window()
 {
+  InitWindow(m_screen_width, m_screen_height, "Cube Dungeon");
+
   const std::string file_name
-  { "sprite_" };
+  { "cube_face_" };
 
   const std::string file_type
   { ".png" };
 
   std::vector <Image> images;
 
-  for (int count{ 0 }; count < 16; ++count)
-  {
+  bool loading
+  { true };
 
+  unsigned count
+  { 0 };
+
+  while(loading)
+  {
     const std::string file_name_type
     { file_name + std::to_string(count) + file_type };
 
-    images.push_back(LoadImage(file_name_type.c_str()));
+    if (FileExists(file_name_type.c_str()))
+    { images.push_back(LoadImage(file_name_type.c_str())); }
+    else
+    { loading = false; }
+
+    ++count;
   }
-
-  InitWindow(m_screen_width, m_screen_height, "Cube Dungeon");
-
-  // Shader distortion;
-  // stereoscope_init(distortion);
 
   std::vector <Model> cube_models;
 
-  for (int count{ 0 }; count < 16; ++count)
+  for(Image &img: images)
   {
     cube_models.push_back(LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
                                                         m_fracta_cube.get_cube_dims().y,
                                                         m_fracta_cube.get_cube_dims().z)));
+
+    ImageRotateCW(&img);
   }
 
-  for(Image &img: images)
-  { ImageRotateCW(&img); }
+  /* { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
+                                  m_fracta_cube.get_cube_dims().y,
+                                  m_fracta_cube.get_cube_dims().z)) }; */
+
+  Texture texture = LoadTexture("cube_face_0.png");
 
 
   Model cube_model
   { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
-                                  m_fracta_cube.get_cube_dims().y,
-                                  m_fracta_cube.get_cube_dims().z)) };
+                                    m_fracta_cube.get_cube_dims().y,
+                                    m_fracta_cube.get_cube_dims().z)) };
 
-  Texture texture = LoadTexture("map_7_modified.png");
+  cube_model.materials[0].maps[MAP_DIFFUSE].texture = texture;
 
   Shader fogger
   { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
