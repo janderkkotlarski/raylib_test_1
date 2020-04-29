@@ -219,9 +219,6 @@ private:
   std::vector <int> pos_intifier()
   noexcept;
 
-  void stereoscope_init(Shader &distortion)
-  noexcept;
-
   void fog_init(Model &cube_model,
                 Shader &fogger,
                 const int fog_density_loc)

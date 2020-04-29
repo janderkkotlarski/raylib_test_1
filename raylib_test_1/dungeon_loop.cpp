@@ -27,12 +27,6 @@ noexcept
            int(round(m_position.z/m_multiplier)) } ;
 }
 
-void dungeon_loop::stereoscope_init(Shader &distortion)
-noexcept
-{
-    // Set our game to run at fps frames-per-second
-}
-
 void dungeon_loop::fog_init(Model &cube_model,
                             Shader &fogger,
                             const int fog_density_loc)
@@ -61,7 +55,9 @@ noexcept
   camera.fovy = m_cam_angle;                                // Camera field-of-view Y
   camera.type = CAMERA_PERSPECTIVE; // Camera mode type
 
-  SetCameraMode(camera, CAMERA_FREE);
+  camera.
+
+  SetCameraMode(camera, CAMERA_FIRST_PERSON);
 
   SetTargetFPS(fps);
 }
@@ -99,7 +95,7 @@ noexcept
 
 void dungeon_loop::level_init()
 noexcept
-{
+{  
   m_loop = true;
 
   if (!m_reset)
@@ -173,7 +169,12 @@ noexcept
                      abs(count_y) % 2 == 1 ||
                      abs(count_z) % 2 == 1) &&
                      rand() % 100 < m_wall_perc)
-            { c_type = cube_type::concrete; }
+            {
+              c_type = cube_type::concrete;
+
+              if (rand() % 100 < 10)
+              { c_type = cube_type::setback; }
+            }
 
             if (abs(count_x) == m_dungeon_radius ||
                 abs(count_y) == m_dungeon_radius ||
@@ -356,7 +357,7 @@ noexcept
       {
         m_collide_type = m_type_volume[posit[0]][posit[1]][posit[2]];
 
-        if (type_collision(m_collide_type))
+        if(type_collision(m_collide_type))
         { m_act = action::none; }
       }
     }
@@ -369,6 +370,13 @@ noexcept
   m_cube_dungeon_pos = { coordinator(m_position.x),
                          coordinator(m_position.y),
                          coordinator(m_position.z) };
+
+  if (m_cube_dungeon_pos ==
+      (std::vector <int>){ coordinator(m_multiplier*m_start_posit.x),
+                           coordinator(m_multiplier*m_start_posit.y),
+                           coordinator(m_multiplier*m_start_posit.z) })
+
+  { m_collide_type = cube_type::none; }
 
   if (m_act == action::none)
   {
