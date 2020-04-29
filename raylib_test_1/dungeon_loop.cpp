@@ -55,8 +55,6 @@ noexcept
   camera.fovy = m_cam_angle;                                // Camera field-of-view Y
   camera.type = CAMERA_PERSPECTIVE; // Camera mode type
 
-  camera.
-
   SetCameraMode(camera, CAMERA_FIRST_PERSON);
 
   SetTargetFPS(fps);
@@ -93,6 +91,16 @@ noexcept
   assert(m_type_volume.size() == unsigned(2*m_max_dungeon_radius + 1));
 }
 
+void dungeon_loop::player_init()
+noexcept
+{
+  m_start_posit = (Vector3){ 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
+
+  m_directions = m_start_directs;
+
+  m_position = Vector3Scale(m_start_posit, m_multiplier);
+}
+
 void dungeon_loop::level_init()
 noexcept
 {  
@@ -109,11 +117,6 @@ noexcept
     ++m_level;
   }
 
-  m_dungeon_span = 2*m_dungeon_radius + 1;
-  m_wrap = m_multiplier*(m_dungeon_radius + 0.5f);
-
-  m_start_posit = (Vector3){ 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
-
   m_reset = false;
 
   if (m_level > m_end_level)
@@ -122,9 +125,10 @@ noexcept
     m_game = false;
   }
 
-  m_directions = m_start_directs;
+  m_dungeon_span = 2*m_dungeon_radius + 1;
+  m_wrap = m_multiplier*(m_dungeon_radius + 0.5f);
 
-  m_position = Vector3Scale(m_start_posit, m_multiplier);
+  player_init();
 }
 
 void dungeon_loop::dungeon_fill()
@@ -172,7 +176,7 @@ noexcept
             {
               c_type = cube_type::concrete;
 
-              if (rand() % 100 < 10)
+              if (rand() % 10 < m_wall_perc)
               { c_type = cube_type::setback; }
             }
 
@@ -439,6 +443,18 @@ noexcept
                    [m_cube_dungeon_pos[1]]
                    [m_cube_dungeon_pos[2]] == cube_type::next)
   { m_loop = false; }
+
+  if (m_act == action::none &&
+      m_type_volume[m_cube_dungeon_pos[0]]
+                   [m_cube_dungeon_pos[1]]
+                   [m_cube_dungeon_pos[2]] == cube_type::setback)
+  {
+    m_type_volume[m_cube_dungeon_pos[0]]
+                 [m_cube_dungeon_pos[1]]
+                 [m_cube_dungeon_pos[2]] = cube_type::none;
+
+    player_init();
+  }
 
   if ((IsKeyPressed(KEY_SPACE) ||
       IsGamepadButtonReleased(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_LEFT_THUMB)) &&

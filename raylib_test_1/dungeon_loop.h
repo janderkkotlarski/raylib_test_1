@@ -230,6 +230,9 @@ private:
   void dungeon_init()
   noexcept;
 
+  void player_init()
+  noexcept;
+
   void level_init()
   noexcept;
 
