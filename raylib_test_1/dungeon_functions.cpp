@@ -25,7 +25,7 @@ noexcept
           cube_type c_type
           { cube_type::none };
 
-          c_type = level_filler(level, dungeon_radius, x, y, z);
+          level_filler(c_type, level, dungeon_radius, x, y, z);
 
           type_volume[x + dungeon_radius]
                      [y + dungeon_radius]
@@ -36,51 +36,67 @@ noexcept
   }
 }
 
-cube_type level_filler(const int level,
-                     const int dungeon_radius,
-                     const int x,
-                     const int y,
-                     const int z)
+void level_filler(cube_type &c_type,
+                  const int level,
+                  const int dungeon_radius,
+                  const int x,
+                  const int y,
+                  const int z)
 noexcept
 {
-  cube_type c_type
-  { cube_type::none };
+  pillars(c_type, cube_type::concrete, x, y, z);
 
   if (level < 20)
-  { c_type = wall_to_wall_dungeon(level, dungeon_radius, x, y, z); }
+  { random_wall(c_type, level, x, y, z); }
 
-  return c_type;
+  outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
 }
 
-cube_type wall_to_wall_dungeon(const int level,
-                               const int dungeon_radius,
-                               const int x,
-                               const int y,
-                               const int z)
+void outer_wall(cube_type &c_type,
+                const cube_type w_type,
+                const int dungeon_radius,
+                const int x,
+                const int y,
+                const int z)
 noexcept
 {
-  cube_type c_type
-  { wall_type(level) };
-
   if ((abs(x) == dungeon_radius ||
-      abs(y) == dungeon_radius ||
-      abs(z) == dungeon_radius))
-  { return cube_type::concrete; }
+       abs(y) == dungeon_radius ||
+       abs(z) == dungeon_radius))
+  { c_type = w_type; }
+}
 
+void pillars(cube_type &c_type,
+             const cube_type w_type,
+             const int x,
+             const int y,
+             const int z)
+noexcept
+{
   if ((abs(x) % 2 == 1 &&
        abs(y) % 2 == 1) ||
       (abs(x) % 2 == 1 &&
        abs(z) % 2 == 1) ||
       (abs(z) % 2 == 1 &&
        abs(y) % 2 == 1))
-  { return cube_type::concrete; }
-  else if ((abs(x) % 2 == 1 ||
-           abs(y) % 2 == 1 ||
-           abs(z) % 2 == 1) &&
-           rand() % 100 < wall_percentage(c_type, level))
-  { return c_type; }
+  { c_type = w_type; }
+}
 
-  return cube_type::none;
+void random_wall(cube_type &c_type,
+                 const int level,
+                 const int x,
+                 const int y,
+                 const int z)
+noexcept
+{
+  const cube_type w_type
+  { wall_type(level) };
+
+  if (((abs(x) % 2 == 1 && abs(y) % 2 == 0 && abs(z) % 2 == 0) ||
+       (abs(y) % 2 == 1 && abs(z) % 2 == 0 && abs(x) % 2 == 0)||
+       (abs(z) % 2 == 1 && abs(x) % 2 == 0 && abs(y) % 2 == 0)) &&
+       rand() % 100 < wall_percentage(w_type, level))
+  { c_type = w_type; }
 }
 
 cube_type wall_type(const int level)

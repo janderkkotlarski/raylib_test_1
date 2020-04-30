@@ -591,7 +591,7 @@ noexcept
     {
       player_move(camera, fogger, fog_density_loc);
       play_actions();
-      other_actions();
+
 
       light.position = m_position;
       UpdateLightValues(fogger, light);
@@ -620,6 +620,7 @@ noexcept
 
       EndDrawing();
 
+      other_actions();
       test_cheats();
     }
   }
