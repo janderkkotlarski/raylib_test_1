@@ -62,6 +62,11 @@ noexcept
   cube_type c_type
   { wall_type(level) };
 
+  if ((abs(x) == dungeon_radius ||
+      abs(y) == dungeon_radius ||
+      abs(z) == dungeon_radius))
+  { return cube_type::concrete; }
+
   if ((abs(x) % 2 == 1 &&
        abs(y) % 2 == 1) ||
       (abs(x) % 2 == 1 &&
@@ -69,18 +74,13 @@ noexcept
       (abs(z) % 2 == 1 &&
        abs(y) % 2 == 1))
   { return cube_type::concrete; }
-  else if((abs(x) % 2 == 1 ||
+  else if ((abs(x) % 2 == 1 ||
            abs(y) % 2 == 1 ||
            abs(z) % 2 == 1) &&
            rand() % 100 < wall_percentage(c_type, level))
   { return c_type; }
 
-  if (abs(x) == dungeon_radius ||
-      abs(y) == dungeon_radius ||
-      abs(z) == dungeon_radius)
-  { return cube_type::concrete; }
-
-  return c_type;
+  return cube_type::none;
 }
 
 cube_type wall_type(const int level)

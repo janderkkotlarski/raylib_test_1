@@ -132,76 +132,6 @@ noexcept
   player_init();
 }
 
-void dungeon_loop::dungeon_fill()
-noexcept
-{
-  dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
-
-  /*
-
-  for(int count_x{ -m_dungeon_radius }; count_x <= m_dungeon_radius; ++count_x)
-  {
-    std::vector <std::vector <cube_type>> area;
-
-    for(int count_y{ -m_dungeon_radius }; count_y <= m_dungeon_radius; ++count_y)
-    {
-     std::vector <cube_type> line;
-
-      for(int count_z{ -m_dungeon_radius }; count_z <= m_dungeon_radius; ++count_z)
-      {
-        {
-          cube_type c_type
-          { cube_type::none };
-
-          if (m_simple)
-          {
-            if (count_x == m_cube_pos[0] &&
-                count_y == m_cube_pos[1] &&
-                count_z == m_cube_pos[2])
-            { c_type = cube_type::alabaster; }
-
-            if (abs(count_x) == m_dungeon_radius ||
-                abs(count_y) == m_dungeon_radius ||
-                abs(count_z) == m_dungeon_radius)
-            { c_type = cube_type::invisible; }
-          }
-          else if (false)
-          {
-            if ((abs(count_x) % 2 == 1 &&
-                 abs(count_y) % 2 == 1) ||
-                (abs(count_x) % 2 == 1 &&
-                 abs(count_z) % 2 == 1) ||
-                (abs(count_z) % 2 == 1 &&
-                 abs(count_y) % 2 == 1))
-            { c_type = cube_type::concrete; }
-            else if((abs(count_x) % 2 == 1 ||
-                     abs(count_y) % 2 == 1 ||
-                     abs(count_z) % 2 == 1) &&
-                     rand() % 100 < m_wall_perc)
-            {
-              c_type = cube_type::concrete;
-
-              if (rand() % 10 < m_wall_perc)
-              { c_type = cube_type::setback; }
-            }
-
-            if (abs(count_x) == m_dungeon_radius ||
-                abs(count_y) == m_dungeon_radius ||
-                abs(count_z) == m_dungeon_radius)
-            { c_type = cube_type::concrete; }
-          }
-
-          m_type_volume[count_x + m_dungeon_radius]
-                       [count_y + m_dungeon_radius]
-                       [count_z + m_dungeon_radius] = c_type;
-        }
-      }      
-    }
-  }
-
-  */
-}
-
 
 void dungeon_loop::begin_end()
 noexcept
@@ -422,15 +352,13 @@ noexcept
       }
     }
   }
-
-
 }
 
 void dungeon_loop::other_actions()
 noexcept
 {
-  if (IsKeyDown(KEY_BACKSPACE) ||
-      IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_MIDDLE_RIGHT))
+  if (IsKeyReleased(KEY_BACKSPACE) ||
+      IsGamepadButtonReleased(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_MIDDLE_RIGHT))
   {
     m_loop = false;
     m_reset = true;
@@ -461,16 +389,24 @@ noexcept
                  [m_cube_dungeon_pos[2]] = cube_type::none;
 
     player_init();
-  }
+  }  
+}
 
-  if ((IsKeyPressed(KEY_SPACE) ||
-      IsGamepadButtonReleased(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_LEFT_THUMB)) &&
-      false)
+void dungeon_loop::test_cheats()
+noexcept
+{
+  if (IsKeyReleased(KEY_RIGHT_BRACKET))
+  { m_loop = false; }
+
+  if (IsKeyReleased(KEY_LEFT_BRACKET))
   {
-    ToggleVrMode();
+    m_loop = false;
 
-    m_display_info = !m_display_info;
-  }   // Toggle VR mode
+    m_level -= 2;
+
+    if (m_level < 0)
+    { m_level = 0; }
+  }
 }
 
 void dungeon_loop::player_move(Camera &camera,
@@ -579,7 +515,8 @@ noexcept
                        [m_dungeon_index[2]] };
 
         if (c_type != cube_type::none &&
-            c_type != cube_type::invisible)
+            c_type != cube_type::invisible &&
+            c_type != cube_type::transparent)
         {
           m_fracta_cube.set_pos_type(m_coord_int[0], m_coord_int[1], m_coord_int[2], c_type);
 
@@ -646,7 +583,7 @@ noexcept
     { cube_models[count].materials[0].maps[MAP_DIFFUSE].texture = LoadTextureFromImage(images[count]); }
 
     level_init();
-    dungeon_fill();
+    dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
     begin_end();
     collide();
 
@@ -682,6 +619,8 @@ noexcept
       }
 
       EndDrawing();
+
+      test_cheats();
     }
   }
 }

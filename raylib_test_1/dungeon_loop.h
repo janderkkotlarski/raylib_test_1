@@ -236,9 +236,6 @@ private:
   void level_init()
   noexcept;
 
-  void dungeon_fill()
-  noexcept;
-
   void begin_end()
   noexcept;
 
@@ -264,6 +261,9 @@ private:
   noexcept;
 
   void other_actions()
+  noexcept;
+
+  void test_cheats()
   noexcept;
 
   void player_move(Camera &camera,
