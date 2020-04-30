@@ -10,7 +10,7 @@
 
 #include "fractacube.h"
 #include "action.h"
-#include "dungeon_functions.h"
+
 
 #if defined(PLATFORM_DESKTOP)
   #define GLSL_VERSION            330

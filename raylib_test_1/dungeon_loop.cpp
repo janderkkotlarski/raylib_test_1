@@ -9,6 +9,7 @@
 
 #include "misc_functions.h"
 #include "keybindings.h"
+#include "dungeon_functions.h"
 
 dungeon_loop::dungeon_loop()
 noexcept
@@ -134,6 +135,10 @@ noexcept
 void dungeon_loop::dungeon_fill()
 noexcept
 {
+  dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
+
+  /*
+
   for(int count_x{ -m_dungeon_radius }; count_x <= m_dungeon_radius; ++count_x)
   {
     std::vector <std::vector <cube_type>> area;
@@ -160,7 +165,7 @@ noexcept
                 abs(count_z) == m_dungeon_radius)
             { c_type = cube_type::invisible; }
           }
-          else
+          else if (false)
           {
             if ((abs(count_x) % 2 == 1 &&
                  abs(count_y) % 2 == 1) ||
@@ -193,6 +198,8 @@ noexcept
       }      
     }
   }
+
+  */
 }
 
 
