@@ -2,12 +2,13 @@
 
 #include "misc_functions.h"
 
-bool type_collision(const cube_type ct)
+bool type_collision(const cube_type c_type)
 noexcept
 {
-  if (ct == cube_type::concrete ||
-      ct == cube_type::alabaster ||
-      ct == cube_type::invisible)
+  if (c_type == cube_type::concrete ||
+      c_type == cube_type::alabaster ||
+      c_type == cube_type::invisible ||
+      c_type == cube_type::transparent)
   { return true; }
 
   return false;

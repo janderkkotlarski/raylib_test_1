@@ -2,6 +2,7 @@
 #define DUNGEON_FUNCTIONS_H
 
 #include <vector>
+#include <random>
 
 #include "cube_type.h"
 
@@ -22,6 +23,13 @@ cube_type wall_to_wall_dungeon(const int level,
                                const int x,
                                const int y,
                                const int z)
+noexcept;
+
+cube_type wall_type(const int level)
+noexcept;
+
+int wall_percentage(const cube_type c_type,
+                    const int level)
 noexcept;
 
 #endif // DUNGEON_FUNCTIONS_H
