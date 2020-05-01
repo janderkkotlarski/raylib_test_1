@@ -1,10 +1,38 @@
-#include "dungeon_functions.h"
+#include "dungeon_maze.h"
 
 #include <cmath>
 #include <time.h>
+#include <cassert>
+
+void dungeon_init(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                  const int max_dungeon_radius)
+noexcept
+{
+  assert(type_volume.size() == 0);
+
+  for(int count_x{ -max_dungeon_radius }; count_x <= max_dungeon_radius; ++count_x)
+  {
+    std::vector <std::vector <cube_type>> area;
+
+    for(int count_y{ -max_dungeon_radius }; count_y <= max_dungeon_radius; ++count_y)
+    {
+      std::vector <cube_type> line;
+
+      for(int count_z{ -max_dungeon_radius }; count_z <= max_dungeon_radius; ++count_z)
+      { line.push_back(cube_type::none); }
+
+      assert(line.size() == unsigned(2*max_dungeon_radius + 1));
+      area.push_back(line);
+    }
+
+    assert(area.size() == unsigned(2*max_dungeon_radius + 1));
+    type_volume.push_back(area);
+  }
+
+  assert(type_volume.size() == unsigned(2*max_dungeon_radius + 1));
+}
 
 void dungeon_filler(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
-
                     const int level,
                     const int dungeon_radius)
 noexcept
@@ -144,4 +172,36 @@ noexcept
   return 0;
 }
 
-// cube_type wall_to_wall_crawler
+void single_placements(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                       const int dungeon_radius)
+noexcept
+{
+  plus_3d(type_volume, cube_type::none,
+          2*dungeon_radius - 2,
+          dungeon_radius,
+          dungeon_radius);
+
+  type_volume[2*dungeon_radius - 1]
+             [dungeon_radius]
+             [dungeon_radius] = cube_type::next;
+
+  plus_3d(type_volume, cube_type::none,
+          2,
+          dungeon_radius,
+          dungeon_radius);
+}
+
+void plus_3d(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const cube_type &c_type,
+             const int x,
+             const int y,
+             const int z)
+noexcept
+{
+  for (unsigned sign { 0 }; sign < 2; ++sign)
+  {
+    type_volume[x - 1 + 2*sign][y][z] = c_type;
+    type_volume[x][y - 1 + 2*sign][z] = c_type;
+    type_volume[x][y][z - 1 + 2*sign] = c_type;
+  }
+}

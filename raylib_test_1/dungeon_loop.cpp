@@ -9,15 +9,16 @@
 
 #include "misc_functions.h"
 #include "keybindings.h"
-#include "dungeon_functions.h"
+#include "dungeon_maze.h"
 
 dungeon_loop::dungeon_loop()
 noexcept
   :  m_type_volume(), m_fracta_cube(m_multiplier), m_int_vectors()
 {
   assert(m_multiplier > 0.0f);
+  assert(m_directions.size() == 3);
 
-  dungeon_init();
+  dungeon_init(m_type_volume, m_max_dungeon_radius);
 }
 
 std::vector <int> dungeon_loop::pos_intifier()
@@ -61,37 +62,6 @@ noexcept
   SetTargetFPS(fps);
 }
 
-void dungeon_loop::dungeon_init()
-noexcept
-{
-  assert(m_directions.size() == 3);
-
-  srand (time(NULL));
-
-  for(int count_x{ -m_max_dungeon_radius }; count_x <= m_max_dungeon_radius; ++count_x)
-  {
-    std::vector <std::vector <cube_type>> area;
-
-    for(int count_y{ -m_max_dungeon_radius }; count_y <= m_max_dungeon_radius; ++count_y)
-    {
-      std::vector <cube_type> line;
-
-      for(int count_z{ -m_max_dungeon_radius }; count_z <= m_max_dungeon_radius; ++count_z)
-      { line.push_back(cube_type::none); }
-
-      assert(line.size() == unsigned(2*m_max_dungeon_radius + 1));
-
-      area.push_back(line);
-    }
-
-    assert(area.size() == unsigned(2*m_max_dungeon_radius + 1));
-
-    m_type_volume.push_back(area);
-  }
-
-  assert(m_type_volume.size() == unsigned(2*m_max_dungeon_radius + 1));
-}
-
 void dungeon_loop::player_init()
 noexcept
 {
@@ -130,45 +100,6 @@ noexcept
   m_wrap = m_multiplier*(m_dungeon_radius + 0.5f);
 
   player_init();
-}
-
-
-void dungeon_loop::begin_end()
-noexcept
-{
-  for (unsigned sign { 0 }; sign < 2; ++sign)
-  {
-    m_type_volume[2*m_dungeon_radius - 3 + 2*sign]
-                 [0 + m_dungeon_radius]
-                 [0 + m_dungeon_radius] = cube_type::none;
-
-    m_type_volume[2*m_dungeon_radius - 2]
-                 [-1 + m_dungeon_radius + 2*sign]
-                 [0 + m_dungeon_radius] = cube_type::none;
-
-    m_type_volume[2*m_dungeon_radius - 2]
-                 [0 + m_dungeon_radius]
-                 [-1 + m_dungeon_radius + 2*sign] = cube_type::none;
-  }
-
-  m_type_volume[2*m_dungeon_radius - 1]
-               [0 + m_dungeon_radius]
-               [0 + m_dungeon_radius] = cube_type::next;
-
-  for (unsigned sign { 0 }; sign < 2; ++sign)
-  {
-    m_type_volume[1 + 2*sign]
-                 [0 + m_dungeon_radius]
-                 [0 + m_dungeon_radius] = cube_type::none;
-
-    m_type_volume[2]
-                 [-1 + m_dungeon_radius + 2*sign]
-                 [0 + m_dungeon_radius] = cube_type::none;
-
-    m_type_volume[2]
-                 [0 + m_dungeon_radius]
-                 [-1 + m_dungeon_radius + 2*sign] = cube_type::none;
-  }
 }
 
 void dungeon_loop::movetate()
@@ -584,7 +515,7 @@ noexcept
 
     level_init();
     dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
-    begin_end();
+    single_placements(m_type_volume, m_dungeon_radius);
     collide();
 
     while (m_loop)

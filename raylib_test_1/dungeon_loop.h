@@ -227,16 +227,10 @@ private:
   void camera_init(Camera &camera)
   noexcept;
 
-  void dungeon_init()
-  noexcept;
-
   void player_init()
   noexcept;
 
   void level_init()
-  noexcept;
-
-  void begin_end()
   noexcept;
 
   int dungeon_wrap(const int coord)
