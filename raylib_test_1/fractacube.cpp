@@ -26,7 +26,7 @@ noexcept
     m_cube_dims(Vector3Scale((Vector3){ 1.0f, 1.0f, 1.0f }, m_multiplier*m_scale/(float)m_division))
 {
   assert(m_scale >= 0.49f &&
-         m_scale <= 0.91f);
+         m_scale <= 1.01f);
 
   assert(m_multiplier > 0.0f);
 }

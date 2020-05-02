@@ -32,7 +32,7 @@ private:
   { 1200 };
 
   const int m_screen_height
-  { 600 };
+  { 800 };
 
   action m_act
   { action::none };
@@ -192,7 +192,7 @@ private:
   { true };
 
   const float m_cam_angle_average
-  { 100.0f };
+  { 75.0f };
 
   const float m_cam_angle_deviation
   { 70.0f };
@@ -228,6 +228,11 @@ private:
 
   /// functions
   ///
+  ///
+
+  void camera_position(Camera &camera)
+  noexcept
+  { camera.position = Vector3Subtract(m_position, Vector3Scale(m_directions[0], 0.25f*m_multiplier)); }
 
   std::vector <int> pos_intifier()
   noexcept;
@@ -306,6 +311,7 @@ private:
   noexcept;
 
 public:
+
   dungeon_loop()
   noexcept;
 

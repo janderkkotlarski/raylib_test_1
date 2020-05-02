@@ -17,7 +17,7 @@ noexcept
   assert(m_multiplier > 0.0f);
   assert(m_directions.size() == 3);
 
-  acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
+  // acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
 
   dungeon_init(m_type_volume, m_max_dungeon_radius);
 }
@@ -52,7 +52,7 @@ noexcept
 void dungeon_loop::camera_init(Camera &camera)
 noexcept
 {
-  camera.position = m_position; // Camera position
+  camera_position(camera); // Camera position
   camera.target = Vector3Add(m_position, m_directions[0]); // Vector3Add(camera.position, forward);      // Camera looking at point
   camera.up = m_directions[2];          // Camera up vector (rotation towards target)
   camera.fovy = m_cam_angle;                                // Camera field-of-view Y
@@ -357,7 +357,7 @@ noexcept
   movetate();
   wrapping(m_position, m_wrap);
 
-  camera.position = m_position;
+  camera_position(camera);
   camera.target = Vector3Add(m_position, m_directions[0]);
   camera.up = m_directions[2];
   camera.fovy = m_cam_angle;
@@ -499,13 +499,13 @@ noexcept
 
   dark_shift(m_dark_color, m_delta_time, m_dark_opacity, m_dark_up);
 
-  acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
+  // acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
 
   DrawRectangle(0, 0, m_screen_width, m_screen_height, m_dark_color);
 
-  m_chroma_color = profile2color(m_chromatic_profile, m_chromacity);
+  // m_chroma_color = profile2color(m_chromatic_profile, m_chromacity);
 
-  DrawRectangle(0, 0, m_screen_width, m_screen_height, m_chroma_color);
+  // DrawRectangle(0, 0, m_screen_width, m_screen_height, m_chroma_color);
 }
 
 void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models,
