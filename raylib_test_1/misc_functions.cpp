@@ -250,6 +250,65 @@ noexcept
   }
 }
 
+void chromatic_shift(Vector3 &spectral_profile,
+                     const float delta_profile)
+noexcept
+{
+  const float delta
+  { 1.0f };
+
+
+  if (spectral_profile.x == 0.5f && spectral_profile.y == 1.0f && spectral_profile.z < 1.0f)
+  {
+    spectral_profile.z += delta*delta_profile;
+
+    if (spectral_profile.z > 1.0f)
+    { spectral_profile.z = 1.0f; }
+  }
+
+  if (spectral_profile.z == 0.5f && spectral_profile.x == 1.0f && spectral_profile.y < 1.0f)
+  {
+    spectral_profile.y += delta*delta_profile;
+
+
+    if (spectral_profile.y > 1.0f)
+    { spectral_profile.y = 1.0f; }
+  }
+
+  if (spectral_profile.y == 0.5f && spectral_profile.z == 1.0f && spectral_profile.x < 1.0f)
+  {
+    spectral_profile.x += delta*delta_profile;
+
+
+    if (spectral_profile.x > 1.0f)
+    { spectral_profile.x = 1.0f; }
+  }
+
+  if (spectral_profile.x == 1.0f && spectral_profile.y == 0.5f && spectral_profile.z > 0.5f)
+  {
+    spectral_profile.z -= delta*delta_profile;
+
+    if (spectral_profile.z < 0.5f)
+    { spectral_profile.z = 0.5f; }
+  }
+
+  if (spectral_profile.z == 1.0f && spectral_profile.x == 0.5f && spectral_profile.y > 0.5f)
+  {
+    spectral_profile.y -= delta*delta_profile;
+
+    if (spectral_profile.y < 0.5f)
+    { spectral_profile.y = 0.5f; }
+  }
+
+  if (spectral_profile.y == 1.0f && spectral_profile.z == 0.5f && spectral_profile.x > 0.5f)
+  {
+    spectral_profile.x -= delta*delta_profile;
+
+    if (spectral_profile.x < 0.5f)
+    { spectral_profile.x = 0.5f; }
+  }
+}
+
 void dark_shift(Color &color,
                 const float delta_time,
                 float &opacity,
@@ -257,7 +316,7 @@ void dark_shift(Color &color,
 noexcept
 {
   const float delta
-  { 0.2f };
+  { 0.1f };
 
   const float max
   { 0.35f };
@@ -280,9 +339,23 @@ noexcept
   }
 
   const float cospacity
-  { max*(1.0f - cos(0.5f*PI*opacity/max)) };
+  { max*(1.0f - cos(1.0f*PI*opacity/max)) };
 
   color.a = (unsigned char)round(abs(255.0f*cospacity));
+
+
+}
+
+void acid_trip(const float cam_angle_average,
+               const float cam_angle_deviation,
+               float &cam_angle,
+               float &opacity)
+noexcept
+{
+  const float max
+  { 0.35f };
+
+  cam_angle = cam_angle_average - cos(1.0f*PI*opacity/max)*cam_angle_deviation;
 }
 
 void scale_color(Color &color,
@@ -317,6 +390,17 @@ noexcept
     (unsigned char)(int)round(255.0f*profile.y),
     (unsigned char)(int)round(255.0f*profile.z),
     255};
+}
+
+Color profile2color(const Vector3 &profile,
+                    const float opacity)
+noexcept
+{
+  return Color
+  { (unsigned char)(int)round(255.0f*profile.x),
+    (unsigned char)(int)round(255.0f*profile.y),
+    (unsigned char)(int)round(255.0f*profile.z),
+    (unsigned char)(int)round(255.0f*opacity)};
 }
 
 void rotate_first_second(Vector3 &first,

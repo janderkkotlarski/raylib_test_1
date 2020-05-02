@@ -8,6 +8,7 @@
 #include <raymath.h>
 #include <rlights.h>
 
+#include "misc_functions.h"
 #include "fractacube.h"
 #include "action.h"
 
@@ -169,8 +170,14 @@ private:
   Vector3 m_spectral_profile
   { 1.0f, 0.5f, 0.75f };
 
-  Vector3 m_chromal_profile
-  { 1.0f, 0.75f, 0.5f };
+  Vector3 m_chromatic_profile
+  { 1.0f, 0.75f, 0.5f};
+
+  const float m_chromacity
+  { 0.25f };
+
+  Color m_chroma_color
+  { profile2color(m_chromatic_profile, m_chromacity)};
 
   Vector3 m_dark_profile
   { 0.1f, 0.02f, 0.2f};
@@ -184,8 +191,14 @@ private:
   bool m_dark_up
   { true };
 
-  const float m_cam_angle
+  const float m_cam_angle_average
   { 100.0f };
+
+  const float m_cam_angle_deviation
+  { 70.0f };
+
+  float m_cam_angle
+  { m_cam_angle_average - 0.0f*m_cam_angle_deviation };
 
   const float m_cam_field
   { -0.001f };

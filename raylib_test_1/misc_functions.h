@@ -39,10 +39,20 @@ void spectral_shift(Vector3 &spectral_profile,
                     const float delta_profile)
 noexcept;
 
+void chromatic_shift(Vector3 &spectral_profile,
+                     const float delta_profile)
+noexcept;
+
 void dark_shift(Color &color,
                 const float delta_time,
                 float &opacity,
                 bool &dark_up)
+noexcept;
+
+void acid_trip(const float cam_angle_average,
+               const float cam_angle_deviation,
+               float &cam_angle,
+               float &opacity)
 noexcept;
 
 void scale_color(Color &color,
@@ -58,6 +68,10 @@ void change_opacity(Color &color,
 noexcept;
 
 Color profile2color(const Vector3 &profile)
+noexcept;
+
+Color profile2color(const Vector3 &profile,
+                    const float opacity)
 noexcept;
 
 std::vector <std::string> int_vector_to_strings(const std::vector <int> &vec)

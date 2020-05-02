@@ -7,7 +7,6 @@
 #define RLIGHTS_IMPLEMENTATION
 #include <rlights.h>
 
-#include "misc_functions.h"
 #include "keybindings.h"
 #include "dungeon_maze.h"
 
@@ -17,6 +16,8 @@ noexcept
 {
   assert(m_multiplier > 0.0f);
   assert(m_directions.size() == 3);
+
+  acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
 
   dungeon_init(m_type_volume, m_max_dungeon_radius);
 }
@@ -351,12 +352,15 @@ noexcept
   spectral_shift(m_spectral_profile, m_delta_time);
   // dark_shift(m_dark_profile, m_delta_time);
 
+  chromatic_shift(m_chromatic_profile, m_delta_time);
+
   movetate();
   wrapping(m_position, m_wrap);
 
   camera.position = m_position;
   camera.target = Vector3Add(m_position, m_directions[0]);
   camera.up = m_directions[2];
+  camera.fovy = m_cam_angle;
 
   SetShaderValue(fogger, fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
   SetShaderValue(fogger, fogger.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
@@ -495,7 +499,13 @@ noexcept
 
   dark_shift(m_dark_color, m_delta_time, m_dark_opacity, m_dark_up);
 
+  acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
+
   DrawRectangle(0, 0, m_screen_width, m_screen_height, m_dark_color);
+
+  m_chroma_color = profile2color(m_chromatic_profile, m_chromacity);
+
+  DrawRectangle(0, 0, m_screen_width, m_screen_height, m_chroma_color);
 }
 
 void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models,
