@@ -377,6 +377,11 @@ noexcept
   { 20 };
 
   display_string(std::to_string(m_level), "Level ", x, y, size);
+
+  y += 30;
+
+  display_string("FPS: ", std::to_string(GetFPS()), x, y, size);
+
 }
 
 void dungeon_loop::pos_direct_display()
@@ -412,7 +417,8 @@ noexcept
   }
 }
 
-void dungeon_loop::cube_drawing(Model &cube_model, std::vector <Model> &cube_models)
+void dungeon_loop::cube_drawing(Model &cube_model, Model &cube_model_dark,
+                                std::vector <Model> &cube_models)
 noexcept
 {
   m_pos_int = pos_intifier();
@@ -460,9 +466,9 @@ noexcept
                                m_directions[0], m_cam_field, m_multiplier))
           {
             if (m_moving_sprite)
-            { m_fracta_cube.display(cube_models[m_cube_index], m_spectral_profile, m_screen_opacity); }
+            { m_fracta_cube.display(cube_models[m_cube_index], cube_model_dark, m_spectral_profile, m_dark_color, m_screen_opacity); }
             else
-            { m_fracta_cube.display(cube_model, m_spectral_profile, m_screen_opacity); }
+            { m_fracta_cube.display(cube_model, cube_model_dark, m_spectral_profile, m_dark_color, m_screen_opacity); }
           }
         }
       }
@@ -501,7 +507,7 @@ noexcept
 
   // acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
 
-  DrawRectangle(0, 0, m_screen_width, m_screen_height, m_dark_color);
+  // DrawRectangle(0, 0, m_screen_width, m_screen_height, m_dark_color);
 
   // m_chroma_color = profile2color(m_chromatic_profile, m_chromacity);
 
@@ -509,7 +515,8 @@ noexcept
 }
 
 void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models,
-                             Model &cube_model, std::vector <Image> &images,
+                             Model &cube_model, Model &cube_model_dark,
+                             std::vector <Image> &images,
                              Texture &texture,
                              Shader &fogger,
                              Light &light,
@@ -543,7 +550,7 @@ noexcept
 
         // BeginVrDrawing();
         BeginMode3D(camera);
-        { cube_drawing(cube_model, cube_models); }
+        { cube_drawing(cube_model, cube_model_dark, cube_models); }
 
         EndMode3D();
         // EndVrDrawing();
@@ -618,10 +625,16 @@ void dungeon_loop::run_window()
 
   Model cube_model
   { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
+                                  m_fracta_cube.get_cube_dims().y,
+                                  m_fracta_cube.get_cube_dims().z)) };
+
+  Model cube_model_dark
+  { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
                                     m_fracta_cube.get_cube_dims().y,
                                     m_fracta_cube.get_cube_dims().z)) };
 
   cube_model.materials[0].maps[MAP_DIFFUSE].texture = texture;
+  // cube_model_dark.materials[0].maps[MAP_DIFFUSE].texture = texture;
 
   Shader fogger
   { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
@@ -630,6 +643,7 @@ void dungeon_loop::run_window()
   const int fog_density_loc
   { GetShaderLocation(fogger, "fogDensity") };
   fog_init(cube_model, fogger, fog_density_loc);
+  fog_init(cube_model_dark, fogger, fog_density_loc);
 
   for (Model &c_model: cube_models)
   { fog_init(c_model, fogger, fog_density_loc); }
@@ -640,7 +654,7 @@ void dungeon_loop::run_window()
   Camera3D camera;
   camera_init(camera);
 
-  game_loop(camera, cube_models, cube_model, images, texture, fogger, light, fog_density_loc);
+  game_loop(camera, cube_models, cube_model, cube_model_dark, images, texture, fogger, light, fog_density_loc);
 
   // UnloadShader(distortion);
 

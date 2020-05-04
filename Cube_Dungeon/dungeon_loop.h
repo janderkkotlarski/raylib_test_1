@@ -20,7 +20,7 @@
 #endif
 
 const int fps
-{ 60 };
+{ 1000 };
 
 class dungeon_loop
 {
@@ -292,7 +292,8 @@ private:
   void frame_update(std::vector <Model> &cube_models)
   noexcept;
 
-  void cube_drawing(Model &cube_model, std::vector<Model> &cube_models)
+  void cube_drawing(Model &cube_model, Model &cube_model_dark,
+                    std::vector<Model> &cube_models)
   noexcept;
 
   void coord_transform(const std::vector<int> &counters,
@@ -303,7 +304,8 @@ private:
   noexcept;
 
   void game_loop(Camera &camera, std::vector<Model> &cube_models,
-                 Model &cube_model, std::vector<Image> &images,
+                 Model &cube_model, Model &cube_model_dark,
+                 std::vector<Image> &images,
                  Texture &texture,
                  Shader &fogger,
                  Light &light,

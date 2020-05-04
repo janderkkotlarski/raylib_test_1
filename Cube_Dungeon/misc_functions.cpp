@@ -316,7 +316,7 @@ void dark_shift(Color &color,
 noexcept
 {
   const float delta
-  { 0.1f };
+  { 0.2f };
 
   const float max
   { 0.35f };
@@ -341,9 +341,12 @@ noexcept
   const float cospacity
   { max*(1.0f - cos(1.0f*PI*opacity/max)) };
 
-  color.a = (unsigned char)round(abs(255.0f*cospacity));
+  // color.a = (unsigned char)round(abs(255.0f*cospacity));
 
-
+  color.r = (unsigned char)round(abs(255.0f*0.1f*cospacity));
+  color.g = 0;
+  color.b = 2*color.r;
+  color.a = 255;
 }
 
 void acid_trip(const float cam_angle_average,

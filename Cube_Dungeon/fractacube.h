@@ -162,8 +162,9 @@ public:
                       const cube_type c_type)
   noexcept;
 
-  void display(Model &cube_model,
+  void display(Model &cube_model, Model &cube_model_dark,
                const Vector3 &spectral_profile,
+               const Color &dark_color,
                const float screen_opacity)
   noexcept;
 };
