@@ -142,6 +142,9 @@ private:
   const float m_fog_color[4]
   { 0.0f, 0.0f, 0.0f, 1.0f };
 
+  float m_fog_color_[4]
+  { 0.1f, 0.0f, 0.2f, 1.0f };
+
   const float m_fog_density
   { 0.005f };
 
@@ -239,7 +242,13 @@ private:
 
   void fog_init(Model &cube_model,
                 Shader &fogger,
+                const float fog_color[],
                 const int fog_density_loc)
+  noexcept;
+
+  void fog_init_(Model &cube_model_,
+                Shader &fogger_,
+                const int fog_density_loc_)
   noexcept;
 
   void camera_init(Camera &camera)
@@ -280,7 +289,9 @@ private:
 
   void player_move(Camera &camera,
                    Shader &fogger,
-                   const int fog_density_loc)
+                   Shader &fogger_,
+                   const int fog_density_loc,
+                   const int fog_density_loc_)
   noexcept;
 
   void infos()
@@ -308,8 +319,10 @@ private:
                  std::vector<Image> &images,
                  Texture &texture,
                  Shader &fogger,
+                 Shader &fogger_,
                  Light &light,
-                 const int fog_density_loc)
+                 const int fog_density_loc,
+                 const int fog_density_loc_)
   noexcept;
 
 public:

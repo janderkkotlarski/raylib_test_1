@@ -32,6 +32,7 @@ noexcept
 
 void dungeon_loop::fog_init(Model &cube_model,
                             Shader &fogger,
+                            const float fog_color[4],
                             const int fog_density_loc)
 noexcept
 {
@@ -43,10 +44,29 @@ noexcept
   fogger.locs[LOC_VECTOR_VIEW] = GetShaderLocation(fogger, "viewPos");
 
 
-  SetShaderValue(fogger, ambient_loc, m_fog_color, UNIFORM_VEC4);
+  SetShaderValue(fogger, ambient_loc, fog_color, UNIFORM_VEC4);
   SetShaderValue(fogger, fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
 
   cube_model.materials[0].shader = fogger;
+}
+
+void dungeon_loop::fog_init_(Model &cube_model_,
+                            Shader &fogger_,
+                            const int fog_density_loc_)
+noexcept
+{
+
+  const float ambient_loc
+  { (float)GetShaderLocation(fogger_, "ambient") };
+
+  fogger_.locs[LOC_MATRIX_MODEL] = GetShaderLocation(fogger_, "matModel");
+  fogger_.locs[LOC_VECTOR_VIEW] = GetShaderLocation(fogger_, "viewPos");
+
+
+  SetShaderValue(fogger_, ambient_loc, m_fog_color_, UNIFORM_VEC4);
+  SetShaderValue(fogger_, fog_density_loc_, &m_fog_density, UNIFORM_FLOAT);
+
+  cube_model_.materials[0].shader = fogger_;
 }
 
 void dungeon_loop::camera_init(Camera &camera)
@@ -343,7 +363,9 @@ noexcept
 
 void dungeon_loop::player_move(Camera &camera,
                                Shader &fogger,
-                               const int fog_density_loc)
+                               Shader &fogger_,
+                               const int fog_density_loc,
+                               const int fog_density_loc_)
 noexcept
 {
   m_velocity = m_delta_time*m_speed;
@@ -364,6 +386,9 @@ noexcept
 
   SetShaderValue(fogger, fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
   SetShaderValue(fogger, fogger.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
+
+  SetShaderValue(fogger_, fog_density_loc_, &m_fog_density, UNIFORM_FLOAT);
+  SetShaderValue(fogger_, fogger_.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
 }
 
 void dungeon_loop::infos()
@@ -503,7 +528,7 @@ noexcept
     { DrawRectangle(0, 0, m_screen_width, m_screen_height, screen_color); }
   }
 
-  dark_shift(m_dark_color, m_delta_time, m_dark_opacity, m_dark_up);
+  dark_shift(m_fog_color_, m_delta_time, m_dark_opacity, m_dark_up);
 
   // acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
 
@@ -519,8 +544,10 @@ void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models,
                              std::vector <Image> &images,
                              Texture &texture,
                              Shader &fogger,
+                             Shader &fogger_,
                              Light &light,
-                             const int fog_density_loc)
+                             const int fog_density_loc,
+                             const int fog_density_loc_)
 noexcept
 {
   while (m_game)
@@ -537,7 +564,7 @@ noexcept
 
     while (m_loop)
     {
-      player_move(camera, fogger, fog_density_loc);
+      player_move(camera, fogger, fogger_, fog_density_loc, fog_density_loc_);
       play_actions();
 
 
@@ -622,6 +649,8 @@ void dungeon_loop::run_window()
 
   Texture texture = LoadTexture("cube_face_0.png");
 
+  Texture texture_ = LoadTexture("cube_face_0_.png");
+
 
   Model cube_model
   { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
@@ -630,23 +659,30 @@ void dungeon_loop::run_window()
 
   Model cube_model_dark
   { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
-                                    m_fracta_cube.get_cube_dims().y,
-                                    m_fracta_cube.get_cube_dims().z)) };
+                                  m_fracta_cube.get_cube_dims().y,
+                                  m_fracta_cube.get_cube_dims().z)) };
 
   cube_model.materials[0].maps[MAP_DIFFUSE].texture = texture;
-  // cube_model_dark.materials[0].maps[MAP_DIFFUSE].texture = texture;
+  cube_model_dark.materials[0].maps[MAP_DIFFUSE].texture = texture_;
 
   Shader fogger
   { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
                FormatText("dark_fog.fs", GLSL_VERSION)) };
 
+  Shader fogger_
+  { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
+               FormatText("dark_fog.fs", GLSL_VERSION)) };
+
   const int fog_density_loc
   { GetShaderLocation(fogger, "fogDensity") };
-  fog_init(cube_model, fogger, fog_density_loc);
-  fog_init(cube_model_dark, fogger, fog_density_loc);
+  fog_init(cube_model, fogger, m_fog_color, fog_density_loc);
+
+  const int fog_density_loc_
+  { GetShaderLocation(fogger_, "fogDensity") };
+  fog_init(cube_model_dark, fogger_, m_fog_color_, fog_density_loc_);
 
   for (Model &c_model: cube_models)
-  { fog_init(c_model, fogger, fog_density_loc); }
+  { fog_init(c_model, fogger, m_fog_color, fog_density_loc); }
 
   Light light
   { CreateLight(LIGHT_POINT, m_position, Vector3Zero(), m_light_color, fogger) };
@@ -654,7 +690,8 @@ void dungeon_loop::run_window()
   Camera3D camera;
   camera_init(camera);
 
-  game_loop(camera, cube_models, cube_model, cube_model_dark, images, texture, fogger, light, fog_density_loc);
+  game_loop(camera, cube_models, cube_model, cube_model_dark, images, texture,
+            fogger, fogger_, light, fog_density_loc, fog_density_loc_);
 
   // UnloadShader(distortion);
 

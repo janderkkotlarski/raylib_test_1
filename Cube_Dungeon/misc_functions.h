@@ -43,7 +43,7 @@ void chromatic_shift(Vector3 &spectral_profile,
                      const float delta_profile)
 noexcept;
 
-void dark_shift(Color &color,
+void dark_shift(float dark_color[4],
                 const float delta_time,
                 float &opacity,
                 bool &dark_up)
