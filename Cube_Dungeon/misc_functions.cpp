@@ -191,6 +191,19 @@ noexcept
   return strings;
 }
 
+void color2profile(const Color &color,
+                   std::vector <float> &profile)
+noexcept
+{
+  const float mult
+  { 1.0f };
+
+  profile[0] = mult*(float)color.r/255.0f;
+  profile[1] = mult*(float)color.g/255.0f;
+  profile[2] = mult*(float)color.b/255.0f;
+  profile[3] = mult*(float)color.a/255.0f;
+}
+
 void spectral_shift(Vector3 &spectral_profile,
                     const float delta_profile)
 noexcept
@@ -248,6 +261,16 @@ noexcept
     if (spectral_profile.x < 0.5f)
     { spectral_profile.x = 0.5f; }
   }
+}
+
+float* vector2array_float(std::vector <float> &vec)
+{
+  float arr[vec.size()];
+
+  for (unsigned count{ 0 }; count < vec.size(); ++count)
+  { arr[count] = vec[count]; }
+
+  return arr;
 }
 
 void chromatic_shift(Vector3 &spectral_profile,
@@ -309,7 +332,7 @@ noexcept
   }
 }
 
-void dark_shift(float dark_color[4],
+void dark_shift(std::vector <float> &dark_profile,
                 const float delta_time,
                 float &opacity,
                 bool &dark_up)
@@ -341,8 +364,8 @@ noexcept
   const float cospacity
   { max*(1.0f - cos(1.0f*PI*opacity/max)) };
 
-  dark_color[0] = 0.1f*cospacity;
-  dark_color[2] = 0.2f*cospacity;
+  dark_profile[0] = 0.1f*cospacity;
+  dark_profile[2] = 0.2f*cospacity;
 }
 
 void acid_trip(const float cam_angle_average,

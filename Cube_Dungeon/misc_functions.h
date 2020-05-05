@@ -35,6 +35,10 @@ void display_string_vector(const std::vector <std::string> vector_strings,
                            const int size)
 noexcept;
 
+void color2profile(const Color &color,
+                   std::vector <float> &profile)
+noexcept;
+
 void spectral_shift(Vector3 &spectral_profile,
                     const float delta_profile)
 noexcept;
@@ -43,7 +47,7 @@ void chromatic_shift(Vector3 &spectral_profile,
                      const float delta_profile)
 noexcept;
 
-void dark_shift(float dark_color[4],
+void dark_shift(std::vector<float> &dark_profile,
                 const float delta_time,
                 float &opacity,
                 bool &dark_up)

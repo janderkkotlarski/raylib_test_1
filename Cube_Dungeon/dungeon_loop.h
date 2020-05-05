@@ -139,10 +139,16 @@ private:
   const Color m_light_color
   { m_light_intensity, m_light_intensity, m_light_intensity, 255 };
 
-  const float m_fog_color[4]
-  { 0.0f, 0.0f, 0.0f, 1.0f };
+  std::vector  <float> m_cube_face_color
+  { 1.0f, 1.0f, 1.0f, 1.0f };
 
-  float m_fog_color_[4]
+  int m_fog_density_loc
+  { 0 };
+
+  int m_dark_density_loc
+  { 0 };
+
+  std::vector <float> m_cube_vein_color
   { 0.1f, 0.0f, 0.2f, 1.0f };
 
   const float m_fog_density
@@ -240,15 +246,17 @@ private:
   std::vector <int> pos_intifier()
   noexcept;
 
-  void fog_init(Model &cube_model,
-                Shader &fogger,
-                const float fog_color[],
-                const int fog_density_loc)
+  void fog_refresh(Model &cube_model,
+                   Shader &fogger,
+                   const std::vector <float> &fog_profile)
   noexcept;
 
-  void fog_init_(Model &cube_model_,
-                Shader &fogger_,
-                const int fog_density_loc_)
+  void dark_refresh(Model &cube_model,
+                    Shader &fogger,
+                    const std::vector <float> &fog_profile)
+  noexcept;
+
+  void fog_init(Shader &fogger)
   noexcept;
 
   void camera_init(Camera &camera)
@@ -289,9 +297,7 @@ private:
 
   void player_move(Camera &camera,
                    Shader &fogger,
-                   Shader &fogger_,
-                   const int fog_density_loc,
-                   const int fog_density_loc_)
+                   Shader &darker)
   noexcept;
 
   void infos()
@@ -304,7 +310,7 @@ private:
   noexcept;
 
   void cube_drawing(Model &cube_model, Model &cube_model_dark,
-                    std::vector<Model> &cube_models)
+                    std::vector<Model> &cube_models, Shader &fogger)
   noexcept;
 
   void coord_transform(const std::vector<int> &counters,
@@ -319,10 +325,8 @@ private:
                  std::vector<Image> &images,
                  Texture &texture,
                  Shader &fogger,
-                 Shader &fogger_,
-                 Light &light,
-                 const int fog_density_loc,
-                 const int fog_density_loc_)
+                 Shader &darker,
+                 Light &light)
   noexcept;
 
 public:
