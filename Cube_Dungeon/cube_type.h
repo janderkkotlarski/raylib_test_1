@@ -83,6 +83,12 @@ enum class cube_type
   // blue
 };
 
+unsigned type2index(const cube_type c_type)
+noexcept;
+
+cube_type index2type(const unsigned index)
+noexcept;
+
 bool type_collision(const cube_type c_type)
 noexcept;
 

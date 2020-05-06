@@ -3,6 +3,7 @@
 #include "misc_functions.h"
 
 unsigned type2index(const cube_type c_type)
+noexcept
 {
   switch (c_type)
   {
@@ -57,6 +58,64 @@ unsigned type2index(const cube_type c_type)
   }
 
   return 0;
+}
+
+cube_type index2type(const unsigned index)
+noexcept
+{
+  switch (index)
+  {
+    case 0:
+      return cube_type::none;
+      break;
+    case 1:
+      return cube_type::concrete;
+      break;
+    case 2:
+      return cube_type::alabaster;
+      break;
+    case 3:
+      return cube_type::invisible;
+      break;
+    case 4:
+      return cube_type::transparent;
+      break;
+    case 5:
+      return cube_type::next;
+      break;
+    case 6:
+      return cube_type::special;
+      break;
+    case 7:
+      return cube_type::previous;
+      break;
+    case 8:
+      return cube_type::setback;
+      break;
+    case 9:
+      return cube_type::catalyst;
+      break;
+    case 10:
+      return cube_type::trigger;
+      break;
+    case 11:
+      return cube_type::miscellaneous;
+      break;
+    case 12:
+      return cube_type::ruby;
+      break;
+    case 13:
+      return cube_type::citrine;
+      break;
+    case 14:
+      return cube_type::emerald;
+      break;
+    case 15:
+      return cube_type::sapphire;
+      break;
+  }
+
+  return cube_type::none;
 }
 
 bool type_collision(const cube_type c_type)
