@@ -9,19 +9,15 @@ enum class cube_type
   // absorbable, empty
   // black
 
-  player,
-  // player
-  // parts in color sync with all "next" squares
+  concrete,
+  // inabsorbable, inedible
+  // brick
+  // grey
 
-  trigger,
+  alabaster,
   // absorbable, inedible
-  // presence or nonpresence will change certain other squares
-  // orange
-
-  special,
-  // absorbable, edible, +500 points
-  // portal to a special level
-  // repeatedly spectrally rotating from blue to red
+  // brick
+  // white
 
   invisible,
   // inabsorbable, inedible
@@ -33,25 +29,15 @@ enum class cube_type
   // brick
   // black
 
-  concrete,
-  // inabsorbable, inedible
-  // brick
-  // grey
-
-  alabaster,
-  // absorbable, inedible
-  // brick
-  // white
-
-  catalyst,
-  // absorbable, inedible
-  // reacts with certain other squares
-  // teal
-
   next,
   // absorbable, edible, +100 points
   // portal to next level
   // repeatedly rotating from red to blue
+
+  special,
+  // absorbable, edible, +500 points
+  // portal to a special level
+  // repeatedly spectrally rotating from blue to red
 
   previous,
   // absorbable, edible, -50 points
@@ -62,6 +48,19 @@ enum class cube_type
   // absorbable, edible, -25 points
   // transports back to the start
   // superdark
+
+  catalyst,
+  // absorbable, inedible
+  // reacts with certain other squares
+  // teal
+
+  trigger,
+  // absorbable, inedible
+  // presence or nonpresence will change certain other squares
+  // orange
+
+  miscellaneous,
+  // a type for whatever purpose needed
 
   ruby,
   // absorbable, edible, +1 point
@@ -87,7 +86,7 @@ enum class cube_type
 bool type_collision(const cube_type c_type)
 noexcept;
 
-Color type_color(const cube_type ct,
+Color type_color(const cube_type c_type,
                  const Vector3 &spectral_profile)
 noexcept;
 
