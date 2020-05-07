@@ -40,6 +40,7 @@ SOURCES += \
         keybindings.cpp \
         main.cpp \
         misc_functions.cpp \
+        raylib_functions.cpp \
         vec_3_int.cpp
 
 HEADERS += \
@@ -50,4 +51,5 @@ HEADERS += \
   fractacube.h \
   keybindings.h \
   misc_functions.h \
+  raylib_functions.h \
   vec_3_int.h

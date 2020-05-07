@@ -9,6 +9,7 @@
 
 #include "keybindings.h"
 #include "dungeon_maze.h"
+#include "raylib_functions.h"
 
 dungeon_loop::dungeon_loop()
 noexcept
@@ -66,13 +67,6 @@ noexcept
   SetShaderValue(fogger, m_dark_density_loc, &m_fog_density, UNIFORM_FLOAT);
 
   cube_model.materials[0].shader = fogger;
-}
-
-void dungeon_loop::fog_init(Shader &fogger)
-noexcept
-{
-  fogger.locs[LOC_MATRIX_MODEL] = GetShaderLocation(fogger, "matModel");
-  fogger.locs[LOC_VECTOR_VIEW] = GetShaderLocation(fogger, "viewPos");  
 }
 
 void dungeon_loop::camera_init(Camera &camera)
@@ -551,7 +545,6 @@ noexcept
 void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models,
                              Model &cube_model, Model &cube_model_dark,
                              std::vector <Image> &images,
-                             Texture &texture,
                              Shader &fogger,
                              Shader &darker,
                              Light &light)
@@ -616,10 +609,14 @@ void dungeon_loop::run_window()
   const std::string file_name
   { "cube_face_" };
 
-  const std::string file_type
+  std::string file_type
   { ".png" };
 
-  std::vector <Image> images;
+  std::vector <Model> cube_models;
+
+  std::vector <Image> face_images;
+
+  std::vector <Shader> fog_shaders;
 
   bool loading
   { true };
@@ -627,28 +624,82 @@ void dungeon_loop::run_window()
   unsigned count
   { 0 };
 
+  init_cubes_images_fogs(cube_models, face_images, fog_shaders, m_fracta_cube, file_name, file_type, m_spectral_profile, m_chromatic_profile);
+
   while(loading)
   {
     const std::string file_name_type
     { file_name + std::to_string(count) + file_type };
 
     if (FileExists(file_name_type.c_str()))
-    { images.push_back(LoadImage(file_name_type.c_str())); }
+    {
+      face_images.push_back(LoadImage(file_name_type.c_str()));
+
+      ImageRotateCW(&face_images[count]);
+
+      cube_models.push_back(LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
+                                                          m_fracta_cube.get_cube_dims().y,
+                                                          m_fracta_cube.get_cube_dims().z)));
+
+      cube_models[count].materials[0].maps[MAP_DIFFUSE].texture = LoadTextureFromImage(face_images[count]);
+
+      fog_shaders.push_back(LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
+                                       FormatText("dark_fog.fs", GLSL_VERSION)));
+
+      fog_init(fog_shaders[count]);
+      fog_refresh(cube_models[count], fog_shaders[count], color2profile(type_color(index2type(count), m_spectral_profile, m_chromatic_profile)));
+
+    }
     else
     { loading = false; }
 
     ++count;
   }
 
-  std::vector <Model> cube_models;
+  std::vector <Image> dark_images;
 
-  for(Image &img: images)
+  loading = true;
+
+  count = 0;
+
+  file_type = "_.png";
+
+  while(loading)
+  {
+    const std::string file_name_type
+    { file_name + std::to_string(count) + file_type };
+
+    if (FileExists(file_name_type.c_str()))
+    { face_images.push_back(LoadImage(file_name_type.c_str())); }
+    else
+    { loading = false; }
+
+    ++count;
+  }
+
+
+
+  for(Image &img: face_images)
   {
     cube_models.push_back(LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
                                                         m_fracta_cube.get_cube_dims().y,
                                                         m_fracta_cube.get_cube_dims().z)));
 
     ImageRotateCW(&img);
+
+  }
+
+  std::vector <Model> dark_models;
+
+  for(Image &img: dark_images)
+  {
+    dark_models.push_back(LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
+                                                        m_fracta_cube.get_cube_dims().y,
+                                                        m_fracta_cube.get_cube_dims().z)));
+
+    ImageRotateCW(&img);
+
+
   }
 
   /* { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
@@ -676,6 +727,9 @@ void dungeon_loop::run_window()
   { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
                FormatText("dark_fog.fs", GLSL_VERSION)) };
 
+  fogger = LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
+                      FormatText("dark_fog.fs", GLSL_VERSION));
+
   Shader darker
   { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
                FormatText("dark_fog.fs", GLSL_VERSION)) };
@@ -688,22 +742,13 @@ void dungeon_loop::run_window()
   fog_init(darker);
   dark_refresh(cube_model_dark, darker, m_cube_vein_color);
 
-  for (Model &c_model: cube_models)
-  {
-    fog_init(fogger);
-    fog_refresh(c_model, fogger, m_cube_face_color);
-  }
-
-  // Light light
-  // { CreateLight(LIGHT_POINT, m_position, Vector3Zero(), m_light_color, fogger) };
-
   Light light;
 
   Camera3D camera;
   camera_init(camera);
 
-  game_loop(camera, cube_models, cube_model, cube_model_dark, images, texture,
-            fogger, darker, light);
+  game_loop(camera, cube_models, cube_model, cube_model_dark,
+            face_images, fogger, darker, light);
 
   // UnloadShader(distortion);
 

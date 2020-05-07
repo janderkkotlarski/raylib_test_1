@@ -78,6 +78,13 @@ Color profile2color(const Vector3 &profile,
                     const float opacity)
 noexcept;
 
+void color2profile(const Color &color,
+                   std::vector <float> &profile)
+noexcept;
+
+std::vector <float> color2profile(const Color &color)
+noexcept;
+
 std::vector <std::string> int_vector_to_strings(const std::vector <int> &vec)
 noexcept;
 

@@ -45,7 +45,7 @@ noexcept
       break;
   }
 
-  return 0;
+  return -1;
 }
 
 cube_type index2type(const unsigned index)
@@ -117,7 +117,7 @@ noexcept
   switch (c_type)
   {
     case cube_type::none:
-      color = Color{ 0, 0, 0, 255 };
+      color = Color{ 0, 0, 0, 0 };
       break;
     case cube_type::concrete:
       color = Color{ 63, 63, 63, 255 };

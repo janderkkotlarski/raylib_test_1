@@ -204,6 +204,22 @@ noexcept
   profile[3] = mult*(float)color.a/255.0f;
 }
 
+std::vector <float> color2profile(const Color &color)
+noexcept
+{
+  std::vector <float> profile;
+
+  const float mult
+  { 1.0f };
+
+  profile.push_back(mult*(float)color.r/255.0f);
+  profile.push_back(mult*(float)color.g/255.0f);
+  profile.push_back(mult*(float)color.b/255.0f);
+  profile.push_back(mult*(float)color.a/255.0f);
+
+  return profile;
+}
+
 void spectral_shift(Vector3 &spectral_profile,
                     const float delta_profile)
 noexcept

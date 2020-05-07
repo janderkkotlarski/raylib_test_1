@@ -256,9 +256,6 @@ private:
                     const std::vector <float> &fog_profile)
   noexcept;
 
-  void fog_init(Shader &fogger)
-  noexcept;
-
   void camera_init(Camera &camera)
   noexcept;
 
@@ -323,7 +320,6 @@ private:
   void game_loop(Camera &camera, std::vector<Model> &cube_models,
                  Model &cube_model, Model &cube_model_dark,
                  std::vector<Image> &images,
-                 Texture &texture,
                  Shader &fogger,
                  Shader &darker,
                  Light &light)

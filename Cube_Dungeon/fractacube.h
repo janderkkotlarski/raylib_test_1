@@ -153,9 +153,11 @@ public:
   noexcept;
 
   Vector3 get_position()
+  const noexcept
   { return m_pos_int.get_Vector3(); }
 
   Vector3 get_cube_dims()
+  const noexcept
   { return m_cube_dims; }
 
   void set_pos_type(const int x, const int y, const int z,
