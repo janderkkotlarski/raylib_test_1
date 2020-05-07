@@ -496,12 +496,12 @@ noexcept
                                m_directions[0], m_cam_field, m_multiplier))
           {
             if (m_moving_sprite)
-            { m_fracta_cube.display(cube_models[m_cube_index], cube_model_dark, m_spectral_profile, m_dark_color, m_screen_opacity); }
+            { m_fracta_cube.display(cube_models[m_cube_index], cube_model_dark, m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity); }
             else
             {
-              color2profile(type_color(c_type, m_spectral_profile), m_cube_face_color);
+              color2profile(type_color(c_type, m_spectral_profile, m_chromatic_profile), m_cube_face_color);
               fog_refresh(cube_model, fogger, m_cube_face_color);
-              m_fracta_cube.display(cube_model, cube_model_dark, m_spectral_profile, m_dark_color, m_screen_opacity);
+              m_fracta_cube.display(cube_model, cube_model_dark, m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity);
             }
           }
         }
@@ -526,7 +526,7 @@ noexcept
     m_screen_opacity = m_time/m_period;
 
     Color screen_color
-    { type_color(m_collide_type, m_spectral_profile) };
+    { type_color(m_collide_type, m_spectral_profile, m_chromatic_profile) };
 
     scale_color(screen_color, m_light_intensity);
     scale_color(screen_color, 1.5f);

@@ -558,12 +558,13 @@ void display_cube(const Vector3 &position,
                   const Vector3 &cube_dims,
                   const cube_type c_type,
                   const Vector3 &spectral_profile,
+                  const Vector3 &chromatic_profile,
                   const float decay,
                   const float multiplier)
 noexcept
 {
   Color cube_color
-  { type_color(c_type, spectral_profile) };
+  { type_color(c_type, spectral_profile, chromatic_profile) };
 
   // Color edge_color
   // { WHITE };

@@ -7,53 +7,41 @@ noexcept
 {
   switch (c_type)
   {
-    case cube_type::none:
+    case cube_type::concrete:
       return 0;
       break;
-    case cube_type::concrete:
+    case cube_type::alabaster:
       return 1;
       break;
-    case cube_type::alabaster:
+    case cube_type::next:
       return 2;
       break;
-    case cube_type::invisible:
+    case cube_type::special:
       return 3;
       break;
-    case cube_type::transparent:
+    case cube_type::previous:
       return 4;
       break;
-    case cube_type::next:
+    case cube_type::catalyst:
       return 5;
       break;
-    case cube_type::special:
+    case cube_type::trigger:
       return 6;
       break;
-    case cube_type::previous:
+    case cube_type::miscellaneous:
       return 7;
       break;
-    case cube_type::setback:
+    case cube_type::ruby:
       return 8;
       break;
-    case cube_type::catalyst:
+    case cube_type::citrine:
       return 9;
       break;
-    case cube_type::trigger:
+    case cube_type::emerald:
       return 10;
       break;
-    case cube_type::miscellaneous:
-      return 11;
-      break;
-    case cube_type::ruby:
-      return 12;
-      break;
-    case cube_type::citrine:
-      return 13;
-      break;
-    case cube_type::emerald:
-      return 14;
-      break;
     case cube_type::sapphire:
-      return 15;
+      return 11;
       break;
   }
 
@@ -66,51 +54,39 @@ noexcept
   switch (index)
   {
     case 0:
-      return cube_type::none;
-      break;
-    case 1:
       return cube_type::concrete;
       break;
-    case 2:
+    case 1:
       return cube_type::alabaster;
       break;
-    case 3:
-      return cube_type::invisible;
-      break;
-    case 4:
-      return cube_type::transparent;
-      break;
-    case 5:
+    case 2:
       return cube_type::next;
       break;
-    case 6:
+    case 3:
       return cube_type::special;
       break;
-    case 7:
+    case 4:
       return cube_type::previous;
       break;
-    case 8:
-      return cube_type::setback;
-      break;
-    case 9:
+    case 5:
       return cube_type::catalyst;
       break;
-    case 10:
+    case 6:
       return cube_type::trigger;
       break;
-    case 11:
+    case 7:
       return cube_type::miscellaneous;
       break;
-    case 12:
+    case 8:
       return cube_type::ruby;
       break;
-    case 13:
+    case 9:
       return cube_type::citrine;
       break;
-    case 14:
+    case 10:
       return cube_type::emerald;
       break;
-    case 15:
+    case 11:
       return cube_type::sapphire;
       break;
   }
@@ -131,7 +107,8 @@ noexcept
 }
 
 Color type_color(const cube_type c_type,
-                 const Vector3 &spectral_profile)
+                 const Vector3 &spectral_profile,
+                 const Vector3 &chromatic_profile)
 noexcept
 {
   Color color
@@ -158,7 +135,7 @@ noexcept
       color = profile2color(spectral_profile);
       break;
     case cube_type::special:
-      color = Color{ 127, 255, 255, 255 };
+      color = profile2color(chromatic_profile);
       break;
     case cube_type::previous:
       color = Color{ 127, 0, 255, 255 };

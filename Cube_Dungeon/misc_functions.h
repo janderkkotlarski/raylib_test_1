@@ -162,7 +162,9 @@ noexcept;
 void display_cube(const Vector3 &position,
                   Vector3 &cube_position,
                   const Vector3 &cube_dims,
-                  const cube_type c_type, const Vector3 &spectral_profile,
+                  const cube_type c_type,
+                  const Vector3 &spectral_profile,
+                  const Vector3 &chromatic_profile,
                   const float decay,
                   const float multiplier)
 noexcept;

@@ -164,6 +164,7 @@ public:
 
   void display(Model &cube_model, Model &cube_model_dark,
                const Vector3 &spectral_profile,
+               const Vector3 &chromatic_profile,
                const Color &dark_color,
                const float screen_opacity)
   noexcept;

@@ -93,7 +93,8 @@ bool type_collision(const cube_type c_type)
 noexcept;
 
 Color type_color(const cube_type c_type,
-                 const Vector3 &spectral_profile)
+                 const Vector3 &spectral_profile,
+                 const Vector3 &chromatic_profile)
 noexcept;
 
 bool transit(const cube_type &transit_type)
