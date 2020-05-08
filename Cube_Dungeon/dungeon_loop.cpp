@@ -422,8 +422,8 @@ noexcept
 }
 
 void dungeon_loop::cube_drawing(Model &cube_model, Model &cube_model_dark,
-                                std::vector <Model> &cube_models,
-                                Shader &fogger)
+                                std::vector <Model> &cube_models, std::vector <Model> &dark_models,
+                                Shader &fogger, std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders)
 noexcept
 {
   m_pos_int = pos_intifier();
@@ -563,7 +563,7 @@ noexcept
 
         // BeginVrDrawing();
         BeginMode3D(camera);
-        { cube_drawing(cube_model, cube_model_dark, cube_models, fogger); }
+        { cube_drawing(cube_model, cube_model_dark, cube_models, dark_models, fogger, fog_shaders, dark_shaders); }
 
         EndMode3D();
         // EndVrDrawing();
