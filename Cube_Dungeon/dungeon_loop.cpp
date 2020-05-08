@@ -466,17 +466,19 @@ noexcept
         {
           m_fracta_cube.set_pos_type(m_coord_int[0], m_coord_int[1], m_coord_int[2], c_type);
 
+          const unsigned index
+          { type2index(c_type) };
+
           if (display_selector(m_position,
                                Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
                                m_directions[0], m_cam_field, m_multiplier))
           {
-            if (m_moving_sprite)
-            { m_fracta_cube.display(cube_models[m_cube_index], cube_model_dark, m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity); }
-            else
+            if (index != 42)
             {
-              color2profile(type_color(c_type, m_spectral_profile, m_chromatic_profile), m_cube_face_color);
-              fog_refresh(cube_model, fogger, m_cube_face_color, m_fog_density_loc, m_fog_density);
-              m_fracta_cube.display(cube_model, cube_model_dark, m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity);
+              const std::vector <float> color_profile
+              { color2profile(type_color(c_type, m_spectral_profile, m_chromatic_profile)) };
+              // fog_refresh(cube_model, fogger, m_cube_face_color, m_fog_density_loc, m_fog_density);
+              m_fracta_cube.display(cube_models[index], dark_models[index], m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity);
             }
           }
         }

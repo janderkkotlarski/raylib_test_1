@@ -45,7 +45,7 @@ noexcept
       break;
   }
 
-  return -1;
+  return 42;
 }
 
 cube_type index2type(const unsigned index)
