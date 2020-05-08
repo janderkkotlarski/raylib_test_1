@@ -421,9 +421,7 @@ noexcept
   }
 }
 
-void dungeon_loop::cube_drawing(Model &cube_model, Model &cube_model_dark,
-                                std::vector <Model> &cube_models, std::vector <Model> &dark_models,
-                                Shader &fogger, std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders)
+void dungeon_loop::cube_drawing(Model &cube_model, Model &cube_model_dark)
 noexcept
 {
   m_pos_int = pos_intifier();
@@ -466,7 +464,7 @@ noexcept
         {
           m_fracta_cube.set_pos_type(m_coord_int[0], m_coord_int[1], m_coord_int[2], c_type);
 
-          const unsigned index
+          const unsigned c_index
           { type2index(c_type) };
 
           if (display_selector(m_position,
@@ -475,14 +473,15 @@ noexcept
           {
             if (index != 42)
             {
-              const Color cube_color
+              const Color cubes_color
               { type_color(c_type, m_spectral_profile, m_chromatic_profile) };
               // fog_refresh(cube_model, fogger, m_cube_face_color, m_fog_density_loc, m_fog_density);
-              m_fracta_cube.display(cube_models[index], dark_models[index], m_spectral_profile, m_chromatic_profile, cube_color, m_screen_opacity);
+              // m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_spectral_profile, m_chromatic_profile, cubes_color, m_screen_opacity);
 
+              const Color cube_color
+              { type_color(c_type, m_spectral_profile, m_chromatic_profile) };
 
-
-              // m_fracta_cube.display(cube_models[index], dark_models[index], m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity);
+              m_fracta_cube.display(cube_model, cube_model_dark, m_spectral_profile, m_chromatic_profile, cube_color, m_screen_opacity);
             }
           }
         }
@@ -560,8 +559,8 @@ noexcept
 
       // fog_refresh(cube_model_dark, darker, m_cube_vein_color, m_fog_density_loc, m_fog_density);
 
-      // light.position = m_position;
-      // UpdateLightValues(fogger, light);
+      light.position = m_position;
+      UpdateLightValues(fogger, light);
 
       BeginDrawing();
       {
@@ -569,7 +568,7 @@ noexcept
 
         // BeginVrDrawing();
         BeginMode3D(camera);
-        { cube_drawing(cube_model, cube_model_dark, cube_models, dark_models, fogger, fog_shaders, dark_shaders); }
+        { cube_drawing(cube_model, cube_model_dark); }
 
         EndMode3D();
         // EndVrDrawing();

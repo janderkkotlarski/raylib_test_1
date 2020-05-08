@@ -301,9 +301,7 @@ private:
   void frame_update(std::vector <Model> &cube_models)
   noexcept;
 
-  void cube_drawing(Model &cube_model, Model &cube_model_dark,
-                    std::vector <Model> &cube_models, std::vector <Model> &dark_models,
-                    Shader &fogger, std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders)
+  void cube_drawing(Model &cube_model, Model &cube_model_dark)
   noexcept;
 
   void coord_transform(const std::vector<int> &counters,
