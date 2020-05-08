@@ -246,11 +246,6 @@ private:
   std::vector <int> pos_intifier()
   noexcept;
 
-  void fog_refresh(Model &cube_model,
-                   Shader &fogger,
-                   const std::vector <float> &fog_profile)
-  noexcept;
-
   void dark_refresh(Model &cube_model,
                     Shader &fogger,
                     const std::vector <float> &fog_profile)
@@ -317,9 +312,9 @@ private:
   void transition()
   noexcept;
 
-  void game_loop(Camera &camera, std::vector<Model> &cube_models,
+  void game_loop(Camera &camera, std::vector <Model> &cube_models, std::vector <Model> &dark_models,
                  Model &cube_model, Model &cube_model_dark,
-                 std::vector<Image> &images,
+                 std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
                  Shader &fogger,
                  Shader &darker,
                  Light &light)

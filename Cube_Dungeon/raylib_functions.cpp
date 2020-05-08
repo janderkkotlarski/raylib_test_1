@@ -9,15 +9,53 @@ noexcept
   fog_shader.locs[LOC_VECTOR_VIEW] = GetShaderLocation(fog_shader, "viewPos");
 }
 
-void init_cubes_images_fogs(dungeon_loop &d_loop,
-                            std::vector <Model> &cube_models,
+void fog_refresh(Model &cube_model,
+                 Shader &fogg_shader,
+                 const std::vector <float> &fog_profile,
+                 const int fog_density_loc,
+                 const float fog_density)
+noexcept
+{
+  const float ambient_loc
+  { (float)GetShaderLocation(fogg_shader, "ambient") };
+
+  float fog_color[fog_profile.size()];
+
+  for (unsigned count { 0 }; count < fog_profile.size(); ++count)
+  { fog_color[count] = fog_profile[count]; }
+
+  SetShaderValue(fogg_shader, ambient_loc, fog_color, UNIFORM_VEC4);
+  SetShaderValue(fogg_shader, fog_density_loc, &fog_density, UNIFORM_FLOAT);
+
+  cube_model.materials[0].shader = fogg_shader;
+}
+
+void refresh_fogs(std::vector <Model> &cube_models,
+                  std::vector <Shader> &fog_shaders,
+                  const std::vector <float> &fog_profile,
+                  const int fog_density_loc,
+                  const float fog_density,
+                  const Vector3 &spectral_profile,
+                  const Vector3 &chromatic_profile)
+ noexcept
+{
+  for (unsigned count{ 0 }; count < cube_models.size(); ++count)
+  {
+    fog_refresh(cube_models[count], fog_shaders[count], color2profile(type_color(index2type(count), spectral_profile, chromatic_profile)),
+                fog_density_loc, fog_density);
+  }
+}
+
+void init_cubes_images_fogs(std::vector <Model> &cube_models,
                             std::vector <Image> &face_images,
                             std::vector <Shader> &fog_shaders,
                             const fractacube &f_cube,
                             const std::string &file_name,
                             const std::string &file_type,
                             const Vector3 &spectral_profile,
-                            const Vector3 &chromatic_profile)
+                            const Vector3 &chromatic_profile,
+                            const int fog_density_loc,
+                            const float fog_density)
 noexcept
 {
   #if defined(PLATFORM_DESKTOP)
@@ -53,7 +91,8 @@ noexcept
                                        FormatText("dark_fog.fs", GLSL_VERSION)));
 
       fog_init(fog_shaders[count]);
-      d_loop.fog_refresh(cube_models[count], fog_shaders[count], color2profile(type_color(index2type(count), spectral_profile, chromatic_profile)));
+      fog_refresh(cube_models[count], fog_shaders[count], color2profile(type_color(index2type(count), spectral_profile, chromatic_profile)),
+                  fog_density_loc, fog_density);
 
     }
     else
