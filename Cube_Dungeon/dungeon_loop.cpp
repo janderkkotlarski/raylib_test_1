@@ -475,10 +475,14 @@ noexcept
           {
             if (index != 42)
             {
-              const std::vector <float> color_profile
-              { color2profile(type_color(c_type, m_spectral_profile, m_chromatic_profile)) };
+              const Color cube_color
+              { type_color(c_type, m_spectral_profile, m_chromatic_profile) };
               // fog_refresh(cube_model, fogger, m_cube_face_color, m_fog_density_loc, m_fog_density);
-              m_fracta_cube.display(cube_models[index], dark_models[index], m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity);
+              m_fracta_cube.display(cube_models[index], dark_models[index], m_spectral_profile, m_chromatic_profile, cube_color, m_screen_opacity);
+
+
+
+              // m_fracta_cube.display(cube_models[index], dark_models[index], m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity);
             }
           }
         }
@@ -554,9 +558,9 @@ noexcept
 
       refresh_fogs(dark_models, dark_shaders, m_cube_face_color, m_fog_density_loc, m_fog_density, m_spectral_profile, m_chromatic_profile);
 
-      fog_refresh(cube_model_dark, darker, m_cube_vein_color, m_fog_density_loc, m_fog_density);
+      // fog_refresh(cube_model_dark, darker, m_cube_vein_color, m_fog_density_loc, m_fog_density);
 
-      light.position = m_position;
+      // light.position = m_position;
       // UpdateLightValues(fogger, light);
 
       BeginDrawing();

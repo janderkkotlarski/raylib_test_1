@@ -120,7 +120,7 @@ noexcept
       color = Color{ 0, 0, 0, 0 };
       break;
     case cube_type::concrete:
-      color = Color{ 63, 63, 63, 255 };
+      color = Color{ 127, 127, 127, 255 };
       break;
     case cube_type::alabaster:
       color = Color{ 255, 255, 255, 255 };
