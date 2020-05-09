@@ -5,9 +5,14 @@
 
 
 void fog_init(Shader &fog_shader,
-              const std::vector <float> &fog_profile)
+              const std::vector <float> &fog_profile,
+              int &fog_density_loc,
+              const float fog_density)
 noexcept
 {
+  fog_shader = LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
+                          FormatText("dark_fog.fs", GLSL_VERSION));
+
   fog_shader.locs[LOC_MATRIX_MODEL] = GetShaderLocation(fog_shader, "matModel");
   fog_shader.locs[LOC_VECTOR_VIEW] = GetShaderLocation(fog_shader, "viewPos");
 
@@ -15,6 +20,9 @@ noexcept
   { (float)GetShaderLocation(fog_shader, "ambient") };
 
   SetShaderValue(fog_shader, ambient_loc, &fog_profile, UNIFORM_VEC4);
+
+  fog_density_loc = GetShaderLocation(fog_shader, "fogDensity");
+  SetShaderValue(fog_shader, fog_density_loc, &fog_density, UNIFORM_FLOAT);
 }
 
 void fog_refresh(Shader &fog_shader,
@@ -49,7 +57,7 @@ void init_cubes_images_fogs(std::vector <Model> &cube_models,
                             const fractacube &f_cube,
                             const std::string &file_name,
                             const std::string &file_type,
-                            const int fog_density_loc,
+                            int &fog_density_loc,
                             const float fog_density)
 noexcept
 {
@@ -76,10 +84,12 @@ noexcept
 
       cube_models[count].materials[0].maps[MAP_DIFFUSE].texture = LoadTextureFromImage(face_images[count]);
 
-      fog_shaders.push_back(LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
-                                       FormatText("dark_fog.fs", GLSL_VERSION)));
+      fog_shaders.push_back(Shader{});
 
-      fog_init(fog_shaders[count], fog_profile);
+      fog_shaders[count] = LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
+                                      FormatText("dark_fog.fs", GLSL_VERSION));
+
+      fog_init(fog_shaders[count], fog_profile, fog_density_loc, fog_density);
 
       fog_refresh(fog_shaders[count], position, fog_density_loc, fog_density);
       cube_models[count].materials[0].shader = fog_shaders[count];

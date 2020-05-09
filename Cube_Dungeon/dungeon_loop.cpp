@@ -31,25 +31,6 @@ noexcept
            int(round(m_position.z/m_multiplier)) } ;
 }
 
-void dungeon_loop::dark_refresh(Model &cube_model,
-                                Shader &fogger,
-                                const std::vector <float> &fog_profile)
-noexcept
-{
-  const float ambient_loc
-  { (float)GetShaderLocation(fogger, "ambient") };
-
-  float fog_color[fog_profile.size()];
-
-  for (unsigned count { 0 }; count < fog_profile.size(); ++count)
-  { fog_color[count] = fog_profile[count]; }
-
-  SetShaderValue(fogger, ambient_loc, fog_color, UNIFORM_VEC4);
-  SetShaderValue(fogger, m_dark_density_loc, &m_fog_density, UNIFORM_FLOAT);
-
-  cube_model.materials[0].shader = fogger;
-}
-
 void dungeon_loop::camera_init(Camera &camera)
 noexcept
 {

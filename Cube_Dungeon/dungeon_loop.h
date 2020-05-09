@@ -234,11 +234,6 @@ private:
   std::vector <int> pos_intifier()
   noexcept;
 
-  void dark_refresh(Model &cube_model,
-                    Shader &fogger,
-                    const std::vector <float> &fog_profile)
-  noexcept;
-
   void camera_init(Camera &camera)
   noexcept;
 

@@ -69,7 +69,6 @@ noexcept
           { Vector3Add(sub_pos, Vector3Scale(m_pos_int.get_Vector3(), m_multiplier)) };
 
           Color cube_color
-          // { Color{ 0, 0, 0, 0 } };
           { type_color(m_type, spectral_profile, chromatic_profile) };
 
 
@@ -79,9 +78,10 @@ noexcept
           if (m_type == cube_type::setback)
           { DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color); }
           else
-          {            
-            DrawModel(cube_model, cube_pos, m_dims_mult, cube_color);
-            DrawModel(cube_model_dark, cube_pos, m_scale, dark_color);
+          {
+            DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color);
+            // DrawModel(cube_model, cube_pos, m_dims_mult, cube_color);
+            // DrawModel(cube_model_dark, cube_pos, m_scale, dark_color);
           }
         }
       }

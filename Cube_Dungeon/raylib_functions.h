@@ -16,7 +16,9 @@
 #endif
 
 void fog_init(Shader &fog_shader,
-              const std::vector <float> &fog_profile)
+              const std::vector <float> &fog_profile,
+              int &fog_density_loc,
+              const float fog_density)
 noexcept;
 
 void fog_refresh(Shader &fog_shader,
@@ -40,7 +42,7 @@ void init_cubes_images_fogs(std::vector <Model> &cube_models,
                             const fractacube &f_cube,
                             const std::string &file_name,
                             const std::string &file_type,
-                            const int fog_density_loc,
+                            int &fog_density_loc,
                             const float fog_density)
 noexcept;
 
