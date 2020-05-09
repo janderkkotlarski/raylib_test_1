@@ -342,9 +342,7 @@ noexcept
   }
 }
 
-void dungeon_loop::player_move(Camera &camera,
-                               Shader &fogger,
-                               Shader &darker)
+void dungeon_loop::player_move(Camera &camera)
 noexcept
 {
   m_velocity = m_delta_time*m_speed;
@@ -362,12 +360,6 @@ noexcept
   camera.target = Vector3Add(m_position, m_directions[0]);
   camera.up = m_directions[2];
   camera.fovy = m_cam_angle;
-
-  SetShaderValue(fogger, m_fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
-  SetShaderValue(fogger, fogger.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
-
-  SetShaderValue(darker, m_dark_density_loc, &m_fog_density, UNIFORM_FLOAT);
-  SetShaderValue(darker, darker.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
 }
 
 void dungeon_loop::infos()
@@ -421,7 +413,8 @@ noexcept
   }
 }
 
-void dungeon_loop::cube_drawing(Model &cube_model, Model &cube_model_dark)
+void dungeon_loop::cube_drawing(std::vector <Model> &cube_models,
+                                std::vector <Model> &dark_models)
 noexcept
 {
   m_pos_int = pos_intifier();
@@ -475,13 +468,8 @@ noexcept
             {
               const Color cubes_color
               { type_color(c_type, m_spectral_profile, m_chromatic_profile) };
-              // fog_refresh(cube_model, fogger, m_cube_face_color, m_fog_density_loc, m_fog_density);
-              // m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_spectral_profile, m_chromatic_profile, cubes_color, m_screen_opacity);
 
-              const Color cube_color
-              { type_color(c_type, m_spectral_profile, m_chromatic_profile) };
-
-              m_fracta_cube.display(cube_model, cube_model_dark, m_spectral_profile, m_chromatic_profile, cube_color, m_screen_opacity);
+              m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity);
             }
           }
         }
@@ -517,23 +505,15 @@ noexcept
     { DrawRectangle(0, 0, m_screen_width, m_screen_height, screen_color); }
   }
 
-  dark_shift(m_cube_vein_color, m_delta_time, m_dark_opacity, m_dark_up);
+  dark_shift(m_cube_vein_profile, m_delta_time, m_dark_opacity, m_dark_up);
 
   // acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
 
   // DrawRectangle(0, 0, m_screen_width, m_screen_height, m_dark_color);
-
-  // m_chroma_color = profile2color(m_chromatic_profile, m_chromacity);
-
-  // DrawRectangle(0, 0, m_screen_width, m_screen_height, m_chroma_color);
 }
 
 void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models, std::vector <Model> &dark_models,
-                             Model &cube_model, Model &cube_model_dark,
-                             std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
-                             Shader &fogger,
-                             Shader &darker,
-                             Light &light)
+                             std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders)
 noexcept
 {
   while (m_game)
@@ -550,17 +530,14 @@ noexcept
 
     while (m_loop)
     {
-      player_move(camera, fogger, darker);
+      player_move(camera);
       play_actions();
 
-      refresh_fogs(cube_models, fog_shaders, m_cube_face_color, m_fog_density_loc, m_fog_density, m_spectral_profile, m_chromatic_profile);
+      refresh_fogs(cube_models, fog_shaders, m_position, m_fog_density_loc, m_fog_density);
 
-      refresh_fogs(dark_models, dark_shaders, m_cube_face_color, m_fog_density_loc, m_fog_density, m_spectral_profile, m_chromatic_profile);
+      refresh_fogs(dark_models, dark_shaders, m_position, m_fog_density_loc, m_fog_density);
 
-      // fog_refresh(cube_model_dark, darker, m_cube_vein_color, m_fog_density_loc, m_fog_density);
-
-      light.position = m_position;
-      UpdateLightValues(fogger, light);
+      // fog_refresh(cube_model_dark, darker, m_cube_vein_profile, m_fog_density_loc, m_fog_density);
 
       BeginDrawing();
       {
@@ -568,7 +545,7 @@ noexcept
 
         // BeginVrDrawing();
         BeginMode3D(camera);
-        { cube_drawing(cube_model, cube_model_dark); }
+        { cube_drawing(cube_models, dark_models); }
 
         EndMode3D();
         // EndVrDrawing();
@@ -579,7 +556,7 @@ noexcept
         pos_direct_display();        
         transition();
 
-        frame_update(cube_models);
+        // frame_update(cube_models);
 
         infos();
       }
@@ -608,8 +585,8 @@ void dungeon_loop::run_window()
 
   std::vector <Shader> fog_shaders;
 
-  init_cubes_images_fogs(cube_models, face_images, fog_shaders, m_fracta_cube, file_name, file_type,
-                         m_spectral_profile, m_chromatic_profile, m_fog_density_loc, m_fog_density);
+  init_cubes_images_fogs(cube_models, face_images, fog_shaders, m_position, m_fog_profile,
+                         m_fracta_cube, file_name, file_type, m_fog_density_loc, m_fog_density);
 
   file_type = "_.png";
 
@@ -619,52 +596,14 @@ void dungeon_loop::run_window()
 
   std::vector <Shader> dark_shaders;
 
-  init_cubes_images_fogs(dark_models, dark_images, dark_shaders, m_fracta_cube, file_name, file_type,
-                         m_spectral_profile, m_chromatic_profile, m_dark_density_loc, m_fog_density);
-
-  Texture texture = LoadTexture("cube_face_0.png");
-  Texture texture_ = LoadTexture("cube_face_0_.png");
-
-
-  Model cube_model
-  { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
-                                  m_fracta_cube.get_cube_dims().y,
-                                  m_fracta_cube.get_cube_dims().z)) };
-
-  Model cube_model_dark
-  { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
-                                  m_fracta_cube.get_cube_dims().y,
-                                  m_fracta_cube.get_cube_dims().z)) };
-
-  cube_model.materials[0].maps[MAP_DIFFUSE].texture = texture;
-  cube_model_dark.materials[0].maps[MAP_DIFFUSE].texture = texture_;
-
-  Shader fogger
-  { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
-               FormatText("dark_fog.fs", GLSL_VERSION)) };
-
-  fogger = LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
-                      FormatText("dark_fog.fs", GLSL_VERSION));
-
-  Shader darker
-  { LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
-               FormatText("dark_fog.fs", GLSL_VERSION)) };
-
-  m_fog_density_loc = GetShaderLocation(fogger, "fogDensity");
-  fog_init(fogger);
-  fog_refresh(cube_model, fogger, m_cube_face_color, m_fog_density_loc, m_fog_density);
-
-  m_dark_density_loc = GetShaderLocation(darker, "fogDensity");
-  fog_init(darker);
-  fog_refresh(cube_model_dark, darker, m_cube_vein_color, m_dark_density_loc, m_fog_density);
-
-  Light light;
+  init_cubes_images_fogs(dark_models, dark_images, dark_shaders, m_position, m_fog_profile,
+                         m_fracta_cube, file_name, file_type, m_dark_density_loc, m_fog_density);
 
   Camera3D camera;
   camera_init(camera);
 
-  game_loop(camera, cube_models, dark_models, cube_model, cube_model_dark,
-            fog_shaders, dark_shaders, fogger, darker, light);
+  game_loop(camera, cube_models, dark_models,
+            fog_shaders, dark_shaders);
 
   // UnloadShader(distortion);
 

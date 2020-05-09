@@ -2,46 +2,41 @@
 
 #include "cube_type.h"
 
-void fog_init(Shader &fog_shader)
+
+
+void fog_init(Shader &fog_shader,
+              const std::vector <float> &fog_profile)
 noexcept
 {
   fog_shader.locs[LOC_MATRIX_MODEL] = GetShaderLocation(fog_shader, "matModel");
   fog_shader.locs[LOC_VECTOR_VIEW] = GetShaderLocation(fog_shader, "viewPos");
+
+  const float ambient_loc
+  { (float)GetShaderLocation(fog_shader, "ambient") };
+
+  SetShaderValue(fog_shader, ambient_loc, &fog_profile, UNIFORM_VEC4);
 }
 
-void fog_refresh(Model &cube_model,
-                 Shader &fogg_shader,
-                 const std::vector <float> &fog_profile,
+void fog_refresh(Shader &fog_shader,
+                 const Vector3 &position,
                  const int fog_density_loc,
                  const float fog_density)
 noexcept
 {
-  const float ambient_loc
-  { (float)GetShaderLocation(fogg_shader, "ambient") };
-
-  float fog_color[fog_profile.size()];
-
-  for (unsigned count { 0 }; count < fog_profile.size(); ++count)
-  { fog_color[count] = fog_profile[count]; }
-
-  SetShaderValue(fogg_shader, ambient_loc, fog_color, UNIFORM_VEC4);
-  SetShaderValue(fogg_shader, fog_density_loc, &fog_density, UNIFORM_FLOAT);
-
-  cube_model.materials[0].shader = fogg_shader;
+  SetShaderValue(fog_shader, fog_density_loc, &fog_density, UNIFORM_FLOAT);
+  SetShaderValue(fog_shader, fog_shader.locs[LOC_VECTOR_VIEW], &position.x, UNIFORM_VEC3);  
 }
 
 void refresh_fogs(std::vector <Model> &cube_models,
                   std::vector <Shader> &fog_shaders,
-                  const std::vector <float> &fog_profile,
+                  const Vector3 &position,
                   const int fog_density_loc,
-                  const float fog_density,
-                  const Vector3 &spectral_profile,
-                  const Vector3 &chromatic_profile)
+                  const float fog_density)
  noexcept
 {
   for (unsigned count{ 0 }; count < cube_models.size(); ++count)
   {
-    fog_refresh(cube_models[count], fog_shaders[count], color2profile(type_color(index2type(count), spectral_profile, chromatic_profile)),
+    fog_refresh(fog_shaders[count], position,
                 fog_density_loc, fog_density);
   }
 }
@@ -49,21 +44,15 @@ void refresh_fogs(std::vector <Model> &cube_models,
 void init_cubes_images_fogs(std::vector <Model> &cube_models,
                             std::vector <Image> &face_images,
                             std::vector <Shader> &fog_shaders,
+                            const Vector3 &position,
+                            const std::vector <float> &fog_profile,
                             const fractacube &f_cube,
                             const std::string &file_name,
                             const std::string &file_type,
-                            const Vector3 &spectral_profile,
-                            const Vector3 &chromatic_profile,
                             const int fog_density_loc,
                             const float fog_density)
 noexcept
 {
-  #if defined(PLATFORM_DESKTOP)
-    #define GLSL_VERSION            330
-  #else   // PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
-    #define GLSL_VERSION            100
-  #endif
-
   bool loading
   { true };
 
@@ -90,9 +79,10 @@ noexcept
       fog_shaders.push_back(LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
                                        FormatText("dark_fog.fs", GLSL_VERSION)));
 
-      fog_init(fog_shaders[count]);
-      fog_refresh(cube_models[count], fog_shaders[count], color2profile(type_color(index2type(count), spectral_profile, chromatic_profile)),
-                  fog_density_loc, fog_density);
+      fog_init(fog_shaders[count], fog_profile);
+
+      fog_refresh(fog_shaders[count], position, fog_density_loc, fog_density);
+      cube_models[count].materials[0].shader = fog_shaders[count];
 
     }
     else

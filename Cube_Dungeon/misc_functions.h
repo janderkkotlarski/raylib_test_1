@@ -39,11 +39,11 @@ void color2profile(const Color &color,
                    std::vector <float> &profile)
 noexcept;
 
-void spectral_shift(Vector3 &spectral_profile,
+void spectral_shift(std::vector<float> &spectral_profile,
                     const float delta_profile)
 noexcept;
 
-void chromatic_shift(Vector3 &spectral_profile,
+void chromatic_shift(std::vector<float> &chromatic_profile,
                      const float delta_profile)
 noexcept;
 
@@ -71,11 +71,7 @@ void change_opacity(Color &color,
                     const float opacity)
 noexcept;
 
-Color profile2color(const Vector3 &profile)
-noexcept;
-
-Color profile2color(const Vector3 &profile,
-                    const float opacity)
+Color profile2color(const std::vector <float> &profile)
 noexcept;
 
 void color2profile(const Color &color,
@@ -170,8 +166,8 @@ void display_cube(const Vector3 &position,
                   Vector3 &cube_position,
                   const Vector3 &cube_dims,
                   const cube_type c_type,
-                  const Vector3 &spectral_profile,
-                  const Vector3 &chromatic_profile,
+                  const std::vector<float> &spectral_profile,
+                  const std::vector<float> &chromatic_profile,
                   const float decay,
                   const float multiplier)
 noexcept;

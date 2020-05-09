@@ -220,7 +220,7 @@ noexcept
   return profile;
 }
 
-void spectral_shift(Vector3 &spectral_profile,
+void spectral_shift(std::vector <float> &spectral_profile,
                     const float delta_profile)
 noexcept
 {
@@ -228,54 +228,54 @@ noexcept
   { 1.0f };
 
 
-  if (spectral_profile.x == 1.0f && spectral_profile.y == 0.5f && spectral_profile.z < 1.0f)
+  if (spectral_profile[0] == 1.0f && spectral_profile[1] == 0.5f && spectral_profile[2] < 1.0f)
   {
-    spectral_profile.z += delta*delta_profile;
+    spectral_profile[2] += delta*delta_profile;
 
-    if (spectral_profile.z > 1.0f)
-    { spectral_profile.z = 1.0f; }
+    if (spectral_profile[2] > 1.0f)
+    { spectral_profile[2] = 1.0f; }
   }
 
-  if (spectral_profile.z == 1.0f && spectral_profile.x == 0.5f && spectral_profile.y < 1.0f)
+  if (spectral_profile[2] == 1.0f && spectral_profile[0] == 0.5f && spectral_profile[1] < 1.0f)
   {
-    spectral_profile.y += delta*delta_profile;
+    spectral_profile[1] += delta*delta_profile;
 
 
-    if (spectral_profile.y > 1.0f)
-    { spectral_profile.y = 1.0f; }
+    if (spectral_profile[1] > 1.0f)
+    { spectral_profile[1] = 1.0f; }
   }
 
-  if (spectral_profile.y == 1.0f && spectral_profile.z == 0.5f && spectral_profile.x < 1.0f)
+  if (spectral_profile[1] == 1.0f && spectral_profile[2] == 0.5f && spectral_profile[0] < 1.0f)
   {
-    spectral_profile.x += delta*delta_profile;
+    spectral_profile[0] += delta*delta_profile;
 
 
-    if (spectral_profile.x > 1.0f)
-    { spectral_profile.x = 1.0f; }
+    if (spectral_profile[0] > 1.0f)
+    { spectral_profile[0] = 1.0f; }
   }
 
-  if (spectral_profile.x == 0.5f && spectral_profile.y == 1.0f && spectral_profile.z > 0.5f)
+  if (spectral_profile[0] == 0.5f && spectral_profile[1] == 1.0f && spectral_profile[2] > 0.5f)
   {
-    spectral_profile.z -= delta*delta_profile;
+    spectral_profile[2] -= delta*delta_profile;
 
-    if (spectral_profile.z < 0.5f)
-    { spectral_profile.z = 0.5f; }
+    if (spectral_profile[2] < 0.5f)
+    { spectral_profile[2] = 0.5f; }
   }
 
-  if (spectral_profile.z == 0.5f && spectral_profile.x == 1.0f && spectral_profile.y > 0.5f)
+  if (spectral_profile[2] == 0.5f && spectral_profile[0] == 1.0f && spectral_profile[1] > 0.5f)
   {
-    spectral_profile.y -= delta*delta_profile;
+    spectral_profile[1] -= delta*delta_profile;
 
-    if (spectral_profile.y < 0.5f)
-    { spectral_profile.y = 0.5f; }
+    if (spectral_profile[1] < 0.5f)
+    { spectral_profile[1] = 0.5f; }
   }
 
-  if (spectral_profile.y == 0.5f && spectral_profile.z == 1.0f && spectral_profile.x > 0.5f)
+  if (spectral_profile[1] == 0.5f && spectral_profile[2] == 1.0f && spectral_profile[0] > 0.5f)
   {
-    spectral_profile.x -= delta*delta_profile;
+    spectral_profile[0] -= delta*delta_profile;
 
-    if (spectral_profile.x < 0.5f)
-    { spectral_profile.x = 0.5f; }
+    if (spectral_profile[0] < 0.5f)
+    { spectral_profile[0] = 0.5f; }
   }
 }
 
@@ -289,7 +289,7 @@ float* vector2array_float(std::vector <float> &vec)
   return arr;
 }
 
-void chromatic_shift(Vector3 &spectral_profile,
+void chromatic_shift(std::vector <float> &chromatic_profile,
                      const float delta_profile)
 noexcept
 {
@@ -297,54 +297,54 @@ noexcept
   { 1.0f };
 
 
-  if (spectral_profile.x == 0.5f && spectral_profile.y == 1.0f && spectral_profile.z < 1.0f)
+  if (chromatic_profile[0] == 0.5f && chromatic_profile[1] == 1.0f && chromatic_profile[2] < 1.0f)
   {
-    spectral_profile.z += delta*delta_profile;
+    chromatic_profile[2] += delta*delta_profile;
 
-    if (spectral_profile.z > 1.0f)
-    { spectral_profile.z = 1.0f; }
+    if (chromatic_profile[2] > 1.0f)
+    { chromatic_profile[2] = 1.0f; }
   }
 
-  if (spectral_profile.z == 0.5f && spectral_profile.x == 1.0f && spectral_profile.y < 1.0f)
+  if (chromatic_profile[2] == 0.5f && chromatic_profile[0] == 1.0f && chromatic_profile[1] < 1.0f)
   {
-    spectral_profile.y += delta*delta_profile;
+    chromatic_profile[1] += delta*delta_profile;
 
 
-    if (spectral_profile.y > 1.0f)
-    { spectral_profile.y = 1.0f; }
+    if (chromatic_profile[1] > 1.0f)
+    { chromatic_profile[1] = 1.0f; }
   }
 
-  if (spectral_profile.y == 0.5f && spectral_profile.z == 1.0f && spectral_profile.x < 1.0f)
+  if (chromatic_profile[1] == 0.5f && chromatic_profile[2] == 1.0f && chromatic_profile[0] < 1.0f)
   {
-    spectral_profile.x += delta*delta_profile;
+    chromatic_profile[0] += delta*delta_profile;
 
 
-    if (spectral_profile.x > 1.0f)
-    { spectral_profile.x = 1.0f; }
+    if (chromatic_profile[0] > 1.0f)
+    { chromatic_profile[0] = 1.0f; }
   }
 
-  if (spectral_profile.x == 1.0f && spectral_profile.y == 0.5f && spectral_profile.z > 0.5f)
+  if (chromatic_profile[0] == 1.0f && chromatic_profile[1] == 0.5f && chromatic_profile[2] > 0.5f)
   {
-    spectral_profile.z -= delta*delta_profile;
+    chromatic_profile[2] -= delta*delta_profile;
 
-    if (spectral_profile.z < 0.5f)
-    { spectral_profile.z = 0.5f; }
+    if (chromatic_profile[2] < 0.5f)
+    { chromatic_profile[2] = 0.5f; }
   }
 
-  if (spectral_profile.z == 1.0f && spectral_profile.x == 0.5f && spectral_profile.y > 0.5f)
+  if (chromatic_profile[2] == 1.0f && chromatic_profile[0] == 0.5f && chromatic_profile[1] > 0.5f)
   {
-    spectral_profile.y -= delta*delta_profile;
+    chromatic_profile[1] -= delta*delta_profile;
 
-    if (spectral_profile.y < 0.5f)
-    { spectral_profile.y = 0.5f; }
+    if (chromatic_profile[1] < 0.5f)
+    { chromatic_profile[1] = 0.5f; }
   }
 
-  if (spectral_profile.y == 1.0f && spectral_profile.z == 0.5f && spectral_profile.x > 0.5f)
+  if (chromatic_profile[1] == 1.0f && chromatic_profile[2] == 0.5f && chromatic_profile[0] > 0.5f)
   {
-    spectral_profile.x -= delta*delta_profile;
+    chromatic_profile[0] -= delta*delta_profile;
 
-    if (spectral_profile.x < 0.5f)
-    { spectral_profile.x = 0.5f; }
+    if (chromatic_profile[0] < 0.5f)
+    { chromatic_profile[0] = 0.5f; }
   }
 }
 
@@ -420,25 +420,25 @@ noexcept
   color.a = opac;
 }
 
-Color profile2color(const Vector3 &profile)
+Color profile2color(const std::vector <float> &profile)
 noexcept
 {
-  return Color
-  { (unsigned char)(int)round(255.0f*profile.x),
-    (unsigned char)(int)round(255.0f*profile.y),
-    (unsigned char)(int)round(255.0f*profile.z),
-    255};
-}
+  Color color
+  { 0, 0, 0, 0 };
 
-Color profile2color(const Vector3 &profile,
-                    const float opacity)
-noexcept
-{
-  return Color
-  { (unsigned char)(int)round(255.0f*profile.x),
-    (unsigned char)(int)round(255.0f*profile.y),
-    (unsigned char)(int)round(255.0f*profile.z),
-    (unsigned char)(int)round(255.0f*opacity)};
+  if (profile.size() > 0)
+  { color.r = (unsigned char)(int)round(255.0f*profile[0]); }
+
+  if (profile.size() > 1)
+  { color.g = (unsigned char)(int)round(255.0f*profile[1]); }
+
+  if (profile.size() > 2)
+  { color.b = (unsigned char)(int)round(255.0f*profile[2]); }
+
+  if (profile.size() > 3)
+  { color.a = (unsigned char)(int)round(255.0f*profile[3]); }
+
+  return color;
 }
 
 void rotate_first_second(Vector3 &first,
@@ -573,8 +573,8 @@ void display_cube(const Vector3 &position,
                   Vector3 &cube_position,
                   const Vector3 &cube_dims,
                   const cube_type c_type,
-                  const Vector3 &spectral_profile,
-                  const Vector3 &chromatic_profile,
+                  const std::vector <float> &spectral_profile,
+                  const std::vector <float> &chromatic_profile,
                   const float decay,
                   const float multiplier)
 noexcept

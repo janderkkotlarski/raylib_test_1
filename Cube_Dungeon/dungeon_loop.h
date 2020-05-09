@@ -111,9 +111,6 @@ private:
   const std::vector <int> m_cube_pos
   { 2, 0, 0 };
 
-  bool m_moving_sprite
-  { false };
-
   const int m_frames
   { 48 };
 
@@ -136,11 +133,8 @@ private:
   const unsigned char m_light_intensity
   { 63 };
 
-  const Color m_light_color
-  { m_light_intensity, m_light_intensity, m_light_intensity, 255 };
-
-  std::vector  <float> m_cube_face_color
-  { 1.0f, 1.0f, 1.0f, 1.0f };
+  const std::vector <float> m_fog_profile
+  { 0.0f, 0.0f, 0.0f, 1.0f };
 
   int m_fog_density_loc
   { 0 };
@@ -148,7 +142,7 @@ private:
   int m_dark_density_loc
   { 0 };
 
-  std::vector <float> m_cube_vein_color
+  std::vector <float> m_cube_vein_profile
   { 0.1f, 0.0f, 0.2f, 1.0f };
 
   const float m_fog_density
@@ -176,20 +170,14 @@ private:
 
   fractacube m_fracta_cube;
 
-  Vector3 m_spectral_profile
-  { 1.0f, 0.5f, 0.75f };
+  std::vector <float> m_spectral_profile
+  { 1.0f, 0.5f, 0.75f, 1.0f };
 
-  Vector3 m_chromatic_profile
-  { 1.0f, 0.75f, 0.5f};
+  std::vector <float> m_chromatic_profile
+  { 1.0f, 0.75f, 0.5f, 1.0f };
 
-  const float m_chromacity
-  { 0.25f };
-
-  Color m_chroma_color
-  { profile2color(m_chromatic_profile, m_chromacity)};
-
-  Vector3 m_dark_profile
-  { 0.1f, 0.02f, 0.2f};
+  std::vector <float> m_dark_profile
+  { 0.1f, 0.02f, 0.2f, 1.0f};
 
   Color m_dark_color
   { 15, 0, 31, 0 };
@@ -287,9 +275,7 @@ private:
   void test_cheats()
   noexcept;
 
-  void player_move(Camera &camera,
-                   Shader &fogger,
-                   Shader &darker)
+  void player_move(Camera &camera)
   noexcept;
 
   void infos()
@@ -301,7 +287,8 @@ private:
   void frame_update(std::vector <Model> &cube_models)
   noexcept;
 
-  void cube_drawing(Model &cube_model, Model &cube_model_dark)
+  void cube_drawing(std::vector<Model> &cube_models,
+                    std::vector<Model> &dark_models)
   noexcept;
 
   void coord_transform(const std::vector<int> &counters,
@@ -312,11 +299,7 @@ private:
   noexcept;
 
   void game_loop(Camera &camera, std::vector <Model> &cube_models, std::vector <Model> &dark_models,
-                 Model &cube_model, Model &cube_model_dark,
-                 std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
-                 Shader &fogger,
-                 Shader &darker,
-                 Light &light)
+                 std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders)
   noexcept;
 
 public:

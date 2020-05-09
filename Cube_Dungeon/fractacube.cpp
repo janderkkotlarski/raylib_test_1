@@ -40,8 +40,8 @@ noexcept
 }
 
 void fractacube::display(Model &cube_model, Model &cube_model_dark,
-                         const Vector3 &spectral_profile,
-                         const Vector3 &chromatic_profile,
+                         const std::vector <float> &spectral_profile,
+                         const std::vector <float> &chromatic_profile,
                          const Color &dark_color,
                          const float screen_opacity)
 noexcept
@@ -69,9 +69,12 @@ noexcept
           { Vector3Add(sub_pos, Vector3Scale(m_pos_int.get_Vector3(), m_multiplier)) };
 
           Color cube_color
+          // { Color{ 0, 0, 0, 0 } };
           { type_color(m_type, spectral_profile, chromatic_profile) };
 
-          // scale_color(cube_color, 1.0f - screen_opacity);
+
+
+          // scale_color(cube_color, 0.5f);
 
           if (m_type == cube_type::setback)
           { DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color); }

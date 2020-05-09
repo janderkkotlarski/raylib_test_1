@@ -107,8 +107,8 @@ noexcept
 }
 
 Color type_color(const cube_type c_type,
-                 const Vector3 &spectral_profile,
-                 const Vector3 &chromatic_profile)
+                 const std::vector <float> &spectral_profile,
+                 const std::vector <float> &chromatic_profile)
 noexcept
 {
   Color color

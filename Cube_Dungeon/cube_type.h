@@ -1,6 +1,8 @@
 #ifndef CUBE_TYPE_H
 #define CUBE_TYPE_H
 
+#include <vector>
+
 #include <raylib.h>
 
 enum class cube_type
@@ -93,8 +95,8 @@ bool type_collision(const cube_type c_type)
 noexcept;
 
 Color type_color(const cube_type c_type,
-                 const Vector3 &spectral_profile,
-                 const Vector3 &chromatic_profile)
+                 const std::vector <float> &spectral_profile,
+                 const std::vector <float> &chromatic_profile)
 noexcept;
 
 bool transit(const cube_type &transit_type)
