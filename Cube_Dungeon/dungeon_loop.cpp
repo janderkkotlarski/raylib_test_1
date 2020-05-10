@@ -580,6 +580,26 @@ void dungeon_loop::run_window()
   init_cubes_images_fogs(dark_models, dark_images, dark_shaders, m_position, m_fog_profile,
                          m_fracta_cube, file_name, file_type, m_dark_density_loc, m_fog_density);
 
+  /*
+  cube_models.push_back(LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
+                                                      m_fracta_cube.get_cube_dims().y,
+                                                      m_fracta_cube.get_cube_dims().z)));
+
+  cube_models[face_images.size()].materials[0].maps[MAP_DIFFUSE].texture = LoadTextureFromImage(face_images[0]);
+
+  fog_shaders.push_back(LoadShader(FormatText("resources/shaders/glsl%i/base_lighting.vs", GLSL_VERSION),
+                                   FormatText("resources/shaders/glsl%i/fog.fs", GLSL_VERSION)));
+
+  fog_shaders[face_images.size()].locs[LOC_MATRIX_MODEL] = GetShaderLocation(fog_shaders[face_images.size()], "matModel");
+  fog_shaders[face_images.size()].locs[LOC_VECTOR_VIEW] = GetShaderLocation(fog_shaders[face_images.size()], "viewPos");
+
+  int ambientLoc = GetShaderLocation(fog_shaders[face_images.size()], "ambient");
+  SetShaderValue(fog_shaders[face_images.size()], ambientLoc, &m_fog_profile, UNIFORM_VEC4);
+
+  cube_models[face_images.size()].materials[0].shader = fog_shaders[face_images.size()];
+  */
+
+
   Camera3D camera;
   camera_init(camera);
 

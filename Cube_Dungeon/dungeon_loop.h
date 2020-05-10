@@ -134,7 +134,7 @@ private:
   { 63 };
 
   const std::vector <float> m_fog_profile
-  { 0.0f, 0.0f, 0.0f, 1.0f };
+  { 0.2f, 0.2f, 0.2f, 1.0f };
 
   int m_fog_density_loc
   { 0 };
