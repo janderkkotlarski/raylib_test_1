@@ -136,7 +136,13 @@ private:
   const std::vector <float> m_ambient_profile
   { 0.2f, 0.2f, 0.2f, 1.0f };
 
+  const std::vector <float> m_rambient_profile
+  { 0.2f, 0.2f, 0.2f, 1.0f };
+
   int m_fog_density_loc
+  { 0 };
+
+  int m_frog_density_loc
   { 0 };
 
   int m_dark_density_loc
@@ -283,7 +289,8 @@ private:
   noexcept;
 
   void cube_drawing(std::vector<Model> &cube_models,
-                    std::vector<Model> &dark_models)
+                    std::vector<Model> &dark_models,
+                    Model &model)
   noexcept;
 
   void coord_transform(const std::vector<int> &counters,
@@ -294,7 +301,10 @@ private:
   noexcept;
 
   void game_loop(Camera &camera, std::vector <Model> &cube_models, std::vector <Model> &dark_models,
-                 std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders)
+                 Model &model,
+                 std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
+                 Shader &shader,
+                 const int fog_density_loc)
   noexcept;
 
 public:
