@@ -566,7 +566,7 @@ void dungeon_loop::run_window()
 
   std::vector <Shader> fog_shaders;
 
-  init_cubes_images_fogs(cube_models, face_images, fog_shaders, m_position, m_fog_profile,
+  init_cubes_images_fogs(cube_models, face_images, fog_shaders, m_position, m_ambient_profile,
                          m_fracta_cube, file_name, file_type, m_fog_density_loc, m_fog_density);
 
   file_type = "_.png";
@@ -577,7 +577,7 @@ void dungeon_loop::run_window()
 
   std::vector <Shader> dark_shaders;
 
-  init_cubes_images_fogs(dark_models, dark_images, dark_shaders, m_position, m_fog_profile,
+  init_cubes_images_fogs(dark_models, dark_images, dark_shaders, m_position, m_ambient_profile,
                          m_fracta_cube, file_name, file_type, m_dark_density_loc, m_fog_density);
 
   /*
@@ -594,7 +594,7 @@ void dungeon_loop::run_window()
   fog_shaders[face_images.size()].locs[LOC_VECTOR_VIEW] = GetShaderLocation(fog_shaders[face_images.size()], "viewPos");
 
   int ambientLoc = GetShaderLocation(fog_shaders[face_images.size()], "ambient");
-  SetShaderValue(fog_shaders[face_images.size()], ambientLoc, &m_fog_profile, UNIFORM_VEC4);
+  SetShaderValue(fog_shaders[face_images.size()], ambientLoc, &m_ambient_profile, UNIFORM_VEC4);
 
   cube_models[face_images.size()].materials[0].shader = fog_shaders[face_images.size()];
   */

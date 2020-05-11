@@ -5,7 +5,7 @@
 
 
 void fog_init(Shader &fog_shader,
-              const std::vector <float> &fog_profile,
+              const std::vector <float> &ambient_profile,
               int &fog_density_loc,
               const float fog_density)
 noexcept
@@ -19,7 +19,7 @@ noexcept
   const float ambient_loc
   { (float)GetShaderLocation(fog_shader, "ambient") };
 
-  SetShaderValue(fog_shader, ambient_loc, &fog_profile, UNIFORM_VEC4);
+  SetShaderValue(fog_shader, ambient_loc, &ambient_profile, UNIFORM_VEC4);
 
   fog_density_loc = GetShaderLocation(fog_shader, "fogDensity");
   SetShaderValue(fog_shader, fog_density_loc, &fog_density, UNIFORM_FLOAT);
@@ -53,7 +53,7 @@ void init_cubes_images_fogs(std::vector <Model> &cube_models,
                             std::vector <Image> &face_images,
                             std::vector <Shader> &fog_shaders,
                             const Vector3 &position,
-                            const std::vector <float> &fog_profile,
+                            const std::vector <float> &ambient_profile,
                             const fractacube &f_cube,
                             const std::string &file_name,
                             const std::string &file_type,
@@ -89,7 +89,7 @@ noexcept
       fog_shaders[count] = LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
                                       FormatText("dark_fog.fs", GLSL_VERSION));
 
-      fog_init(fog_shaders[count], fog_profile, fog_density_loc, fog_density);
+      fog_init(fog_shaders[count], ambient_profile, fog_density_loc, fog_density);
 
       fog_refresh(fog_shaders[count], position, fog_density_loc, fog_density);
       cube_models[count].materials[0].shader = fog_shaders[count];

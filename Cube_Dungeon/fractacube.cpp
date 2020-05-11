@@ -79,8 +79,8 @@ noexcept
           { DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color); }
           else
           {
-            DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color);
-            // DrawModel(cube_model, cube_pos, m_dims_mult, cube_color);
+            // DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color);
+            DrawModel(cube_model, cube_pos, m_dims_mult, cube_color);
             // DrawModel(cube_model_dark, cube_pos, m_scale, dark_color);
           }
         }

@@ -133,7 +133,7 @@ private:
   const unsigned char m_light_intensity
   { 63 };
 
-  const std::vector <float> m_fog_profile
+  const std::vector <float> m_ambient_profile
   { 0.2f, 0.2f, 0.2f, 1.0f };
 
   int m_fog_density_loc
