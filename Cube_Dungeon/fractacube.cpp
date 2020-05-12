@@ -39,12 +39,7 @@ noexcept
   m_type = c_type;
 }
 
-void fractacube::display(Model &cube_model, Model &cube_model_dark,
-                         const std::vector <float> &spectral_profile,
-                         const std::vector <float> &chromatic_profile,
-                         const float candy_factor,
-                         const Color &dark_color,
-                         const float screen_opacity)
+void fractacube::display(Model &cube_model, Model &cube_model_dark)
 noexcept
 {
   const int extra
@@ -69,19 +64,16 @@ noexcept
           Vector3 cube_pos
           { Vector3Add(sub_pos, Vector3Scale(m_pos_int.get_Vector3(), m_multiplier)) };
 
-          Color cube_color
-          { type_color(cube_type::special, spectral_profile, chromatic_profile, candy_factor) };
-
-
-          // scale_color(cube_color, 0.5f);
+          const Color setback_color
+          { 0, 0, 0, 63 };
 
           if (m_type == cube_type::setback)
-          { DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color); }
+          { DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, setback_color); }
           else
           {
             // DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color);
             DrawModel(cube_model, cube_pos, m_dims_mult, WHITE);
-            // DrawModel(cube_model_dark, cube_pos, m_scale, dark_color);
+            DrawModel(cube_model_dark, cube_pos, m_scale, WHITE);
           }
         }
       }

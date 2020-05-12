@@ -165,15 +165,4 @@ bool display_selector(const Vector3 &position,
                       const float multiplier)
 noexcept;
 
-void display_cube(const Vector3 &position,
-                  Vector3 &cube_position,
-                  const Vector3 &cube_dims,
-                  const cube_type c_type,
-                  const std::vector<float> &spectral_profile,
-                  const std::vector<float> &chromatic_profile,
-                  const float candy_factor,
-                  const float decay,
-                  const float multiplier)
-noexcept;
-
 #endif // MISC_FUNCTIONS_H

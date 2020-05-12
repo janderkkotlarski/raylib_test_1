@@ -565,33 +565,3 @@ noexcept
            Vector3DotProduct(difference, difference) <= sight*sight) ||
           Vector3DotProduct(difference, difference) <= 4.0f*multiplier*multiplier);
 }
-
-void display_cube(const Vector3 &position,
-                  Vector3 &cube_position,
-                  const Vector3 &cube_dims,
-                  const cube_type c_type,
-                  const std::vector <float> &spectral_profile,
-                  const std::vector <float> &chromatic_profile,
-                  const float candy_factor,
-                  const float decay,
-                  const float multiplier)
-noexcept
-{
-  Color cube_color
-  { type_color(c_type, spectral_profile, chromatic_profile, candy_factor) };
-
-  // Color edge_color
-  // { WHITE };
-
-  const Vector3 difference
-  { Vector3Subtract(cube_position, position) };
-
-    const Color dim_color
-    { dimmer(difference, cube_color, decay, multiplier) };
-
-    // const Color dedge_color
-    // { dimmer(difference, edge_color, decay, multiplier) };
-
-    DrawCube(cube_position, cube_dims.x, cube_dims.y, cube_dims.z, dim_color);
-    // DrawCubeWires(cube_position, cube_dims.x, cube_dims.y, cube_dims.z, dedge_color);
-}

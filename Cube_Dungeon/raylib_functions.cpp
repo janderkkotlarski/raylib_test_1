@@ -53,7 +53,6 @@ void refresh_fogs(std::vector <Model> &cube_models,
                   const std::vector <float> &spectral_profile,
                   const std::vector <float> &chromatic_profile,
                   const float candy_factor,
-                  const std::vector <float> &ambient_profile,
                   const int fog_density_loc,
                   const float fog_density)
  noexcept
@@ -63,8 +62,10 @@ void refresh_fogs(std::vector <Model> &cube_models,
     const cube_type c_type
     { index2type(count) };
 
-    const Color color
-    { type_color(c_type, spectral_profile, chromatic_profile, candy_factor)};
+    std::vector <float> ambient_profile
+    { 0.0f, 0.0f, 0.0f, 1.0f };
+
+    type2proflex(c_type, ambient_profile, spectral_profile, chromatic_profile, candy_factor);
 
     fog_refresh(fog_shaders[count], position, ambient_profile,
                 fog_density_loc, fog_density);

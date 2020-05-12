@@ -1,5 +1,7 @@
 #include "cube_type.h"
 
+#include <cassert>
+
 #include "misc_functions.h"
 
 unsigned type2index(const cube_type c_type)
@@ -106,101 +108,83 @@ noexcept
   return false;
 }
 
-Color type_color(const cube_type c_type,
-                 const std::vector <float> &spectral_profile,
-                 const std::vector <float> &chromatic_profile,
-                 const float candy_factor)
+bool type2profile(const cube_type c_type,
+                  std::vector <float> &profile)
 noexcept
 {
-  Color color
-  { 0, 0, 0, 255 };
-
-  switch (c_type)
+  if (profile.size() == 4)
   {
-    case cube_type::none:
-      color = Color{ 0, 0, 0, 0 };
-      break;
-    case cube_type::concrete:
-      color = Color{ 127, 127, 127, 255 };
-      break;
-    case cube_type::alabaster:
-      color = Color{ 255, 255, 255, 255 };
-      break;
-    case cube_type::invisible:
-      color = Color{ 0, 0, 0, 0 };
-      break;
-    case cube_type::transparent:
-      color = Color{ 0, 0, 0, 0 };
-      break;
-    case cube_type::previous:
-      color = Color{ 127, 0, 255, 255 };
-      break;
-    case cube_type::setback:
-      color = Color{ 0, 0, 0, 23 };
-      break;
-    case cube_type::catalyst:
-      color = Color{ 127, 255, 191, 255 };
-      break;
-    case cube_type::trigger:
-      color = Color{ 255, 191, 127, 255 };
-      break;
-    case cube_type::miscellaneous:
-      color = Color{ 255, 191, 127, 127 };
-      break;
-    case cube_type::next:
-      color = profile2color(spectral_profile);
-      break;
-    case cube_type::special:
-      color = profile2color(chromatic_profile);
-      break;
-    case cube_type::ruby:
-      color = profile2color(std::vector <float>{candy_factor, 0.0f, 0.0f, 1.0f });
-      break;
-    case cube_type::citrine:
-      color = profile2color(std::vector <float>{candy_factor, candy_factor, 0.0f, 1.0f });
-      break;
-    case cube_type::emerald:
-      color = profile2color(std::vector <float>{0.0f, candy_factor, 0.0f, 1.0f });
-      break;
-    case cube_type::sapphire:
-      color = profile2color(std::vector <float>{0.0f, 0.0f, candy_factor, 1.0f });
-      break;
+    switch (c_type)
+    {
+      case cube_type::concrete:
+        profile = std::vector <float>{0.5f, 0.5f, 0.5f, 1.0f };
+        return true;
+        break;
+      case cube_type::alabaster:
+        profile = std::vector <float>{1.0f, 1.0f, 1.0f, 1.0f };
+        return true;
+        break;
+      case cube_type::previous:
+        profile = std::vector <float>{0.5f, 0.0f, 1.0f, 1.0f };
+        return true;
+        break;
+      case cube_type::catalyst:
+        profile = std::vector <float>{0.5f, 1.0f, 0.75f, 1.0f };
+        return true;
+        break;
+      case cube_type::trigger:
+        profile = std::vector <float>{1.0f, 0.75f, 0.5f, 1.0f };
+        return true;
+        break;
+      case cube_type::miscellaneous:
+        profile = std::vector <float>{0.5f, 0.25f, 0.0f, 1.0f };
+        return true;
+        break;
+    }
   }
 
-  return color;
+  return false;
 }
 
-Color type2flexcolor (const cube_type c_type,
-                      const std::vector <float> &spectral_profile,
-                      const std::vector <float> &chromatic_profile,
-                      const float candy_factor)
+bool type2proflex (const cube_type c_type,
+                   std::vector <float> &profile,
+                   const std::vector <float> &spectral_profile,
+                   const std::vector <float> &chromatic_profile,
+                   const float candy_factor)
+noexcept
 {
-  Color color
-  { 0, 0, 0, 255 };
-
-  switch (c_type)
+  if (profile.size() == 4)
   {
-    case cube_type::next:
-      color = profile2color(spectral_profile);
-      break;
-    case cube_type::special:
-      color = profile2color(chromatic_profile);
-      break;
-    case cube_type::ruby:
-      color = profile2color(std::vector <float>{candy_factor, 0.0f, 0.0f, 1.0f });
-      break;
-    case cube_type::citrine:
-      color = profile2color(std::vector <float>{candy_factor, candy_factor, 0.0f, 1.0f });
-      break;
-    case cube_type::emerald:
-      color = profile2color(std::vector <float>{0.0f, candy_factor, 0.0f, 1.0f });
-      break;
-    case cube_type::sapphire:
-      color = profile2color(std::vector <float>{0.0f, 0.0f, candy_factor, 1.0f });
-      break;
+    switch (c_type)
+    {
+      case cube_type::next:
+        profile = spectral_profile;
+        return true;
+        break;
+      case cube_type::special:
+        profile = chromatic_profile;
+        return true;
+        break;
+      case cube_type::ruby:
+        profile = std::vector <float>{candy_factor, 0.0f, 0.0f, 1.0f };
+        return true;
+        break;
+      case cube_type::citrine:
+        profile = std::vector <float>{candy_factor, candy_factor, 0.0f, 1.0f };
+        return true;
+        break;
+      case cube_type::emerald:
+        profile = std::vector <float>{0.0f, candy_factor, 0.0f, 1.0f };
+        return true;
+        break;
+      case cube_type::sapphire:
+        profile = std::vector <float>{0.0f, 0.0f, candy_factor, 1.0f };
+        return true;
+        break;
+    }
   }
 
-
+  return false;
 }
 
 bool transit(const cube_type &transit_type)

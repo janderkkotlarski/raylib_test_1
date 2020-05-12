@@ -94,10 +94,15 @@ noexcept;
 bool type_collision(const cube_type c_type)
 noexcept;
 
-Color type_color(const cube_type c_type,
-                 const std::vector <float> &spectral_profile,
-                 const std::vector <float> &chromatic_profile,
-                 const float candy_factor)
+bool type2profile(const cube_type c_type,
+                  std::vector <float> &profile)
+noexcept;
+
+bool type2proflex (const cube_type c_type,
+                   std::vector <float> &profile,
+                   const std::vector <float> &spectral_profile,
+                   const std::vector <float> &chromatic_profile,
+                   const float candy_factor)
 noexcept;
 
 bool transit(const cube_type &transit_type)

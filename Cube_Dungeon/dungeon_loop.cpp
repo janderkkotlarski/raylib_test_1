@@ -447,15 +447,8 @@ noexcept
                                m_directions[0], m_cam_field, m_multiplier))
           {
             if (index != 42)
-            {
-              // const Color cubes_color
-              // { type_color(c_type, m_spectral_profile, m_chromatic_profile, m_candy_factor) };
-
-
-
-              // m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity);
-
-              m_fracta_cube.display(cube_models[c_index], model, m_spectral_profile, m_chromatic_profile, m_candy_factor, m_dark_color, m_screen_opacity);
+            {    
+              m_fracta_cube.display(model, cube_models[c_index]);
             }
           }
         }
@@ -480,7 +473,7 @@ noexcept
     m_screen_opacity = m_time/m_period;
 
     Color screen_color
-    { type_color(m_collide_type, m_spectral_profile, m_chromatic_profile, m_candy_factor) };
+    { profile2color(m_chromatic_profile) };
 
     scale_color(screen_color, m_light_intensity);
     scale_color(screen_color, 1.5f);
@@ -524,25 +517,30 @@ noexcept
 
       refresh_fogs(cube_models, fog_shaders, m_position,
                    m_spectral_profile, m_chromatic_profile, m_candy_factor,
-                   m_ambient_profile, m_fog_density_loc, m_fog_density);
+                   m_fog_density_loc, m_fog_density);
 
       refresh_fogs(dark_models, dark_shaders, m_position,
                    m_spectral_profile, m_chromatic_profile, m_candy_factor,
-                   m_ambient_profile, m_fog_density_loc, m_fog_density);
+                   m_fog_density_loc, m_fog_density);
 
+      /*
       const int ambientLoc = GetShaderLocation(shader, "ambient");
 
-      float ambient_profile[4]
+      float ambient_prof[4]
       { 1.0f, 1.0f, 1.0f, 1.0f };
 
-      vector2array_float(m_chromatic_profile, ambient_profile);
+      vector2array_float(m_chromatic_profile, ambient_prof);
 
-      SetShaderValue(shader, ambientLoc, ambient_profile, UNIFORM_VEC4);
+      SetShaderValue(shader, ambientLoc, ambient_prof, UNIFORM_VEC4);
 
       SetShaderValue(shader, fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
       SetShaderValue(shader, shader.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
+      */
 
-      // fog_refresh(cube_model_dark, darker, m_cube_vein_profile, m_fog_density_loc, m_fog_density);
+      std::vector <float> ambient_profile
+      { m_spectral_profile };
+
+      fog_refresh(shader, m_position, ambient_profile, m_fog_density_loc, m_fog_density);
 
       BeginDrawing();
       {

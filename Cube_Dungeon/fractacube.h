@@ -164,12 +164,7 @@ public:
                       const cube_type c_type)
   noexcept;
 
-  void display(Model &cube_model, Model &cube_model_dark,
-               const std::vector<float> &spectral_profile,
-               const std::vector<float> &chromatic_profile,
-               const float candy_factor,
-               const Color &dark_color,
-               const float screen_opacity)
+  void display(Model &cube_model, Model &cube_model_dark)
   noexcept;
 };
 
