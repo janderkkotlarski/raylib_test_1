@@ -279,14 +279,11 @@ noexcept
   }
 }
 
-float* vector2array_float(std::vector <float> &vec)
+void vector2array_float(const std::vector <float> &vec,
+                        float (&arr)[4])
 {
-  float arr[vec.size()];
-
   for (unsigned count{ 0 }; count < vec.size(); ++count)
   { arr[count] = vec[count]; }
-
-  return arr;
 }
 
 void chromatic_shift(std::vector <float> &chromatic_profile,

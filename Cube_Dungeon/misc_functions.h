@@ -102,6 +102,9 @@ noexcept;
 std::vector <std::string> vector3_to_strings(const Vector3 &vec)
 noexcept;
 
+void vector2array_float(const std::vector <float> &vec,
+                        float (&arr)[4]);
+
 void rotate_first_second(Vector3 &first,
                          Vector3 &second,
                          const float theta)

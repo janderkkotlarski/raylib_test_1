@@ -524,14 +524,14 @@ noexcept
 
       refresh_fogs(dark_models, dark_shaders, m_position, m_fog_density_loc, m_fog_density);
 
-      SetShaderValue(shader, fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
+      // SetShaderValue(shader, fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
       SetShaderValue(shader, shader.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
 
       // fog_refresh(cube_model_dark, darker, m_cube_vein_profile, m_fog_density_loc, m_fog_density);
 
       BeginDrawing();
       {
-        ClearBackground(profile2color(m_chromatic_profile));
+        ClearBackground(BLACK);
 
         // BeginVrDrawing();
         BeginMode3D(camera);
@@ -605,8 +605,14 @@ void dungeon_loop::run_window()
   f_shader.locs[LOC_MATRIX_MODEL] = GetShaderLocation(f_shader, "matModel");
   f_shader.locs[LOC_VECTOR_VIEW] = GetShaderLocation(f_shader, "viewPos");
 
-  const float ambient_profile[4]
-  { 0.2f, 0.2f, 0.2f, 1.0f };
+
+  const std::vector <float> ambi_profile
+  { 1.0f, 1.0f, 1.0f, 1.0f };
+
+  float ambient_profile[4]
+  { 0.0f, 1.0f, 1.0f, 1.0f };
+
+  vector2array_float(ambi_profile, ambient_profile);
 
   const int ambientLoc = GetShaderLocation(f_shader, "ambient");
   SetShaderValue(f_shader, ambientLoc, ambient_profile, UNIFORM_VEC4);
