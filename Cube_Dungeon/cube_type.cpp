@@ -108,7 +108,8 @@ noexcept
 
 Color type_color(const cube_type c_type,
                  const std::vector <float> &spectral_profile,
-                 const std::vector <float> &chromatic_profile)
+                 const std::vector <float> &chromatic_profile,
+                 const float candy_factor)
 noexcept
 {
   Color color
@@ -131,12 +132,6 @@ noexcept
     case cube_type::transparent:
       color = Color{ 0, 0, 0, 0 };
       break;
-    case cube_type::next:
-      color = profile2color(spectral_profile);
-      break;
-    case cube_type::special:
-      color = profile2color(chromatic_profile);
-      break;
     case cube_type::previous:
       color = Color{ 127, 0, 255, 255 };
       break;
@@ -152,24 +147,33 @@ noexcept
     case cube_type::miscellaneous:
       color = Color{ 255, 191, 127, 127 };
       break;
+    case cube_type::next:
+      color = profile2color(spectral_profile);
+      break;
+    case cube_type::special:
+      color = profile2color(chromatic_profile);
+      break;
     case cube_type::ruby:
-      color = Color{ 255, 0, 0, 255 };
+      color = profile2color(std::vector <float>{candy_factor, 0.0f, 0.0f, 1.0f });
       break;
     case cube_type::citrine:
-      color = Color{ 255, 255, 0, 255 };
+      color = profile2color(std::vector <float>{candy_factor, candy_factor, 0.0f, 1.0f });
       break;
     case cube_type::emerald:
-      color = Color{ 0, 255, 0, 255 };
+      color = profile2color(std::vector <float>{0.0f, candy_factor, 0.0f, 1.0f });
       break;
     case cube_type::sapphire:
-      color = Color{ 0, 0, 255, 255 };
+      color = profile2color(std::vector <float>{0.0f, 0.0f, candy_factor, 1.0f });
       break;
   }
 
   return color;
 }
 
-Color type2changecolor (const cube_type c_type)
+Color type2flexcolor (const cube_type c_type,
+                      const std::vector <float> &spectral_profile,
+                      const std::vector <float> &chromatic_profile,
+                      const float candy_factor)
 {
   Color color
   { 0, 0, 0, 255 };
@@ -183,18 +187,20 @@ Color type2changecolor (const cube_type c_type)
       color = profile2color(chromatic_profile);
       break;
     case cube_type::ruby:
-      color = Color{ 255, 0, 0, 255 };
+      color = profile2color(std::vector <float>{candy_factor, 0.0f, 0.0f, 1.0f });
       break;
     case cube_type::citrine:
-      color = Color{ 255, 255, 0, 255 };
+      color = profile2color(std::vector <float>{candy_factor, candy_factor, 0.0f, 1.0f });
       break;
     case cube_type::emerald:
-      color = Color{ 0, 255, 0, 255 };
+      color = profile2color(std::vector <float>{0.0f, candy_factor, 0.0f, 1.0f });
       break;
     case cube_type::sapphire:
-      color = Color{ 0, 0, 255, 255 };
+      color = profile2color(std::vector <float>{0.0f, 0.0f, candy_factor, 1.0f });
       break;
   }
+
+
 }
 
 bool transit(const cube_type &transit_type)

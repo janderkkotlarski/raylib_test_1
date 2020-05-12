@@ -182,6 +182,9 @@ private:
   std::vector <float> m_chromatic_profile
   { 1.0f, 0.75f, 0.5f, 1.0f };
 
+  float m_candy_factor
+  { 1.0f };
+
   std::vector <float> m_dark_profile
   { 0.1f, 0.02f, 0.2f, 1.0f};
 

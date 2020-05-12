@@ -96,7 +96,8 @@ noexcept;
 
 Color type_color(const cube_type c_type,
                  const std::vector <float> &spectral_profile,
-                 const std::vector <float> &chromatic_profile)
+                 const std::vector <float> &chromatic_profile,
+                 const float candy_factor)
 noexcept;
 
 bool transit(const cube_type &transit_type)

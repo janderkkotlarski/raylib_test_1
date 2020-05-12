@@ -34,6 +34,9 @@ noexcept;
 void refresh_fogs(std::vector <Model> &cube_models,
                   std::vector <Shader> &fog_shaders,
                   const Vector3 &position,
+                  const std::vector<float> &spectral_profile,
+                  const std::vector<float> &chromatic_profile,
+                  const float candy_factor,
                   const std::vector <float> &ambient_profile,
                   const int fog_density_loc,
                   const float fog_density)

@@ -448,14 +448,14 @@ noexcept
           {
             if (index != 42)
             {
-              const Color cubes_color
-              { type_color(c_type, m_spectral_profile, m_chromatic_profile) };
+              // const Color cubes_color
+              // { type_color(c_type, m_spectral_profile, m_chromatic_profile, m_candy_factor) };
 
 
 
               // m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity);
 
-              m_fracta_cube.display(model, model, m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity);
+              m_fracta_cube.display(cube_models[c_index], model, m_spectral_profile, m_chromatic_profile, m_candy_factor, m_dark_color, m_screen_opacity);
             }
           }
         }
@@ -480,7 +480,7 @@ noexcept
     m_screen_opacity = m_time/m_period;
 
     Color screen_color
-    { type_color(m_collide_type, m_spectral_profile, m_chromatic_profile) };
+    { type_color(m_collide_type, m_spectral_profile, m_chromatic_profile, m_candy_factor) };
 
     scale_color(screen_color, m_light_intensity);
     scale_color(screen_color, 1.5f);
@@ -522,9 +522,13 @@ noexcept
       player_move(camera);
       play_actions();
 
-      refresh_fogs(cube_models, fog_shaders, m_position, m_ambient_profile, m_fog_density_loc, m_fog_density);
+      refresh_fogs(cube_models, fog_shaders, m_position,
+                   m_spectral_profile, m_chromatic_profile, m_candy_factor,
+                   m_ambient_profile, m_fog_density_loc, m_fog_density);
 
-      refresh_fogs(dark_models, dark_shaders, m_position, m_ambient_profile, m_fog_density_loc, m_fog_density);
+      refresh_fogs(dark_models, dark_shaders, m_position,
+                   m_spectral_profile, m_chromatic_profile, m_candy_factor,
+                   m_ambient_profile, m_fog_density_loc, m_fog_density);
 
       const int ambientLoc = GetShaderLocation(shader, "ambient");
 

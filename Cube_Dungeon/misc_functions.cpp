@@ -572,12 +572,13 @@ void display_cube(const Vector3 &position,
                   const cube_type c_type,
                   const std::vector <float> &spectral_profile,
                   const std::vector <float> &chromatic_profile,
+                  const float candy_factor,
                   const float decay,
                   const float multiplier)
 noexcept
 {
   Color cube_color
-  { type_color(c_type, spectral_profile, chromatic_profile) };
+  { type_color(c_type, spectral_profile, chromatic_profile, candy_factor) };
 
   // Color edge_color
   // { WHITE };
