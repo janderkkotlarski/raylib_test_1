@@ -426,7 +426,7 @@ noexcept
         const std::vector <int> dungeon_pos;
 
         for (unsigned ind{ 0 }; ind < 3; ++ind)
-        {  m_dungeon_index[ind] = unsigned(m_index_int[ind] + m_dungeon_radius); }
+        { m_dungeon_index[ind] = unsigned(m_index_int[ind] + m_dungeon_radius); }
 
         const cube_type c_type
         { m_type_volume[m_dungeon_index[0]]
@@ -450,6 +450,8 @@ noexcept
             {
               const Color cubes_color
               { type_color(c_type, m_spectral_profile, m_chromatic_profile) };
+
+
 
               // m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_spectral_profile, m_chromatic_profile, m_dark_color, m_screen_opacity);
 
@@ -524,7 +526,16 @@ noexcept
 
       refresh_fogs(dark_models, dark_shaders, m_position, m_fog_density_loc, m_fog_density);
 
-      // SetShaderValue(shader, fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
+      const int ambientLoc = GetShaderLocation(shader, "ambient");
+
+      float ambient_profile[4]
+      { 1.0f, 1.0f, 1.0f, 1.0f };
+
+      vector2array_float(m_chromatic_profile, ambient_profile);
+
+      SetShaderValue(shader, ambientLoc, ambient_profile, UNIFORM_VEC4);
+
+      SetShaderValue(shader, fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
       SetShaderValue(shader, shader.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
 
       // fog_refresh(cube_model_dark, darker, m_cube_vein_profile, m_fog_density_loc, m_fog_density);
@@ -534,7 +545,7 @@ noexcept
         ClearBackground(BLACK);
 
         // BeginVrDrawing();
-        BeginMode3D(camera);
+        BeginMode3D(camera);        
         { cube_drawing(cube_models, dark_models, model); }
 
         EndMode3D();

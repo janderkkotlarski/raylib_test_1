@@ -23,6 +23,7 @@ noexcept;
 
 void fog_refresh(Shader &fog_shader,
                  const Vector3 &position,
+                 const std::vector <float> &ambient_profile,
                  const int fog_density_loc,
                  const float fog_density)
 noexcept;
@@ -30,6 +31,7 @@ noexcept;
 void refresh_fogs(std::vector <Model> &cube_models,
                   std::vector <Shader> &fog_shaders,
                   const Vector3 &position,
+                  const std::vector <float> &ambient_profile,
                   const int fog_density_loc,
                   const float fog_density)
  noexcept;
