@@ -2,7 +2,19 @@
 
 #include "cube_type.h"
 
+void fog_ambient(Shader &fog_shader,
+                 const std::vector <float> &ambient_profile)
+{
+  const float ambient_loc
+  { (float)GetShaderLocation(fog_shader, "ambient") };
 
+  float ambient_floats[]
+  { 0.0f, 0.0f, 0.0f, 1.0f };
+
+  vector2array_float(ambient_profile, ambient_floats);
+
+  SetShaderValue(fog_shader, ambient_loc, ambient_floats, UNIFORM_VEC4);
+}
 
 void fog_init(Shader &fog_shader,
               const std::vector <float> &ambient_profile,
@@ -16,15 +28,7 @@ noexcept
   fog_shader.locs[LOC_MATRIX_MODEL] = GetShaderLocation(fog_shader, "matModel");
   fog_shader.locs[LOC_VECTOR_VIEW] = GetShaderLocation(fog_shader, "viewPos");
 
-  const float ambient_loc
-  { (float)GetShaderLocation(fog_shader, "ambient") };
-
-  float ambient_floats[]
-  { 0.0f, 0.0f, 0.0f, 1.0f };
-
-  vector2array_float(ambient_profile, ambient_floats);
-
-  SetShaderValue(fog_shader, ambient_loc, ambient_floats, UNIFORM_VEC4);
+  fog_ambient(fog_shader, ambient_profile);
 
   fog_density_loc = GetShaderLocation(fog_shader, "fogDensity");
   SetShaderValue(fog_shader, fog_density_loc, &fog_density, UNIFORM_FLOAT);
@@ -37,15 +41,8 @@ void fog_refresh(Shader &fog_shader,
                  const float fog_density)
 noexcept
 {
-  const float ambient_loc
-  { (float)GetShaderLocation(fog_shader, "ambient") };
+  fog_ambient(fog_shader, ambient_profile);
 
-  float ambient_floats[]
-  { 0.0f, 0.0f, 0.0f, 1.0f };
-
-  vector2array_float(ambient_profile, ambient_floats);
-
-  SetShaderValue(fog_shader, ambient_loc, ambient_floats, UNIFORM_VEC4);
   SetShaderValue(fog_shader, fog_density_loc, &fog_density, UNIFORM_FLOAT);
   SetShaderValue(fog_shader, fog_shader.locs[LOC_VECTOR_VIEW], &position.x, UNIFORM_VEC3);  
 }

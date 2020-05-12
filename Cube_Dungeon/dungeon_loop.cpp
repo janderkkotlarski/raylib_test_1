@@ -522,9 +522,9 @@ noexcept
       player_move(camera);
       play_actions();
 
-      refresh_fogs(cube_models, fog_shaders, m_position, m_fog_density_loc, m_fog_density);
+      refresh_fogs(cube_models, fog_shaders, m_position, m_ambient_profile, m_fog_density_loc, m_fog_density);
 
-      refresh_fogs(dark_models, dark_shaders, m_position, m_fog_density_loc, m_fog_density);
+      refresh_fogs(dark_models, dark_shaders, m_position, m_ambient_profile, m_fog_density_loc, m_fog_density);
 
       const int ambientLoc = GetShaderLocation(shader, "ambient");
 

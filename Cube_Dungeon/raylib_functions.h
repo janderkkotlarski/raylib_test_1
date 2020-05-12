@@ -10,10 +10,13 @@
 #include "dungeon_loop.h"
 
 #if defined(PLATFORM_DESKTOP)
-  #define GLSL_VERSION            330
-#else   // PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
   #define GLSL_VERSION            100
+#else   // PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
+  #define GLSL_VERSION            330
 #endif
+
+void fog_ambient(Shader &fog_shader,
+                 const std::vector <float> &ambient_profile);
 
 void fog_init(Shader &fog_shader,
               const std::vector <float> &ambient_profile,
