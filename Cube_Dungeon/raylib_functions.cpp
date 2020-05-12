@@ -57,6 +57,11 @@ void refresh_fogs(std::vector <Model> &cube_models,
 {
   for (unsigned count{ 0 }; count < cube_models.size(); ++count)
   {
+    const cube_type c_type
+    { index2type(count) };
+
+
+
     fog_refresh(fog_shaders[count], position, ambient_profile,
                 fog_density_loc, fog_density);
   }

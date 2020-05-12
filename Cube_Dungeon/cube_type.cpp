@@ -150,7 +150,7 @@ noexcept
       color = Color{ 255, 191, 127, 255 };
       break;
     case cube_type::miscellaneous:
-      color = Color{ 255, 191, 127, 255 };
+      color = Color{ 255, 191, 127, 127 };
       break;
     case cube_type::ruby:
       color = Color{ 255, 0, 0, 255 };
@@ -167,6 +167,34 @@ noexcept
   }
 
   return color;
+}
+
+Color type2changecolor (const cube_type c_type)
+{
+  Color color
+  { 0, 0, 0, 255 };
+
+  switch (c_type)
+  {
+    case cube_type::next:
+      color = profile2color(spectral_profile);
+      break;
+    case cube_type::special:
+      color = profile2color(chromatic_profile);
+      break;
+    case cube_type::ruby:
+      color = Color{ 255, 0, 0, 255 };
+      break;
+    case cube_type::citrine:
+      color = Color{ 255, 255, 0, 255 };
+      break;
+    case cube_type::emerald:
+      color = Color{ 0, 255, 0, 255 };
+      break;
+    case cube_type::sapphire:
+      color = Color{ 0, 0, 255, 255 };
+      break;
+  }
 }
 
 bool transit(const cube_type &transit_type)
