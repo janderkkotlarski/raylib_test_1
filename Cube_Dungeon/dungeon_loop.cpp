@@ -531,7 +531,7 @@ noexcept
 
       BeginDrawing();
       {
-        ClearBackground(BLACK);
+        ClearBackground(profile2color(m_chromatic_profile));
 
         // BeginVrDrawing();
         BeginMode3D(camera);
@@ -605,8 +605,11 @@ void dungeon_loop::run_window()
   f_shader.locs[LOC_MATRIX_MODEL] = GetShaderLocation(f_shader, "matModel");
   f_shader.locs[LOC_VECTOR_VIEW] = GetShaderLocation(f_shader, "viewPos");
 
+  const float ambient_profile[4]
+  { 0.2f, 0.2f, 0.2f, 1.0f };
+
   const int ambientLoc = GetShaderLocation(f_shader, "ambient");
-  SetShaderValue(f_shader, ambientLoc, &m_rambient_profile, UNIFORM_VEC4);
+  SetShaderValue(f_shader, ambientLoc, ambient_profile, UNIFORM_VEC4);
 
   const int fog_density_loc
   { GetShaderLocation(f_shader, "fogDensity") };

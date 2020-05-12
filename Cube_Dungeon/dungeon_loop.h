@@ -20,7 +20,7 @@
 #endif
 
 const int fps
-{ 1000 };
+{ 10000 };
 
 class dungeon_loop
 {
@@ -136,8 +136,8 @@ private:
   const std::vector <float> m_ambient_profile
   { 0.2f, 0.2f, 0.2f, 1.0f };
 
-  const std::vector <float> m_rambient_profile
-  { 0.2f, 0.2f, 0.2f, 1.0f };
+  std::vector <float> m_rambient_profile
+  { 10.0f, 0.2f, 0.2f, 1.0f };
 
   int m_fog_density_loc
   { 0 };
