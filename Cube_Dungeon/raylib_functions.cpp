@@ -9,7 +9,7 @@ void fog_ambient(Shader &fog_shader,
   { (float)GetShaderLocation(fog_shader, "ambient") };
 
   float ambient_floats[]
-  { 0.0f, 0.0f, 0.0f, 1.0f };
+  { 0.0f, 10.0f, 10.0f, 1.0f };
 
   vector2array_float(ambient_profile, ambient_floats);
 
@@ -17,7 +17,7 @@ void fog_ambient(Shader &fog_shader,
 }
 
 void fog_init(Shader &fog_shader,
-              const std::vector <float> &ambient_profile,
+              std::vector <float> &ambient_profile,
               int &fog_density_loc,
               const float fog_density)
 noexcept
@@ -63,7 +63,7 @@ void refresh_fogs(std::vector <Model> &cube_models,
     { index2type(count) };
 
     std::vector <float> ambient_profile
-    { 0.0f, 0.0f, 0.0f, 1.0f };
+    { 0.0f, 0.0f, 10.0f, 1.0f };
 
     type2proflex(c_type, ambient_profile, spectral_profile, chromatic_profile, candy_factor);
 
@@ -76,7 +76,7 @@ void init_cubes_images_fogs(std::vector <Model> &cube_models,
                             std::vector <Image> &face_images,
                             std::vector <Shader> &fog_shaders,
                             const Vector3 &position,
-                            const std::vector <float> &ambient_profile,
+                            std::vector <float> &ambient_profile,
                             const fractacube &f_cube,
                             const std::string &file_name,
                             const std::string &file_type,
