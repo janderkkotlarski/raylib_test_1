@@ -41,6 +41,14 @@ void refresh_fogs(std::vector <Model> &cube_models,
                   const float fog_density)
  noexcept;
 
+void refresh_darks(std::vector <Model> &cube_models,
+                  std::vector <Shader> &fog_shaders,
+                  const Vector3 &position,
+                  const std::vector <float> &dark_profile,
+                  const int fog_density_loc,
+                  const float fog_density)
+noexcept;
+
 void init_cubes_images_fogs(std::vector <Model> &cube_models,
                             std::vector <Image> &face_images,
                             std::vector <Shader> &fog_shaders,

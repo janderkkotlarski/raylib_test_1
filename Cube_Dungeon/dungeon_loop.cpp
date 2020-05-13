@@ -330,7 +330,6 @@ noexcept
   m_theta = m_delta_time*m_angle;
 
   spectral_shift(m_spectral_profile, m_delta_time);
-  // dark_shift(m_dark_profile, m_delta_time);
 
   chromatic_shift(m_chromatic_profile, m_delta_time);
 
@@ -448,7 +447,7 @@ noexcept
           {
             if (index != 42)
             {    
-              m_fracta_cube.display(model, cube_models[c_index]);
+              m_fracta_cube.display(cube_models[c_index], dark_models[c_index]);
             }
           }
         }
@@ -519,9 +518,8 @@ noexcept
                    m_spectral_profile, m_chromatic_profile, m_candy_factor,
                    m_fog_density_loc, m_fog_density);
 
-      refresh_fogs(dark_models, dark_shaders, m_position,
-                   m_spectral_profile, m_chromatic_profile, m_candy_factor,
-                   m_fog_density_loc, m_fog_density);
+      refresh_darks(dark_models, dark_shaders, m_position,
+                   m_dark_profile, m_fog_density_loc, m_fog_density);
 
       /*
       const int ambientLoc = GetShaderLocation(shader, "ambient");

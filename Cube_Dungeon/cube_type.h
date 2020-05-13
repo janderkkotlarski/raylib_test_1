@@ -105,6 +105,10 @@ bool type2proflex (const cube_type c_type,
                    const float candy_factor)
 noexcept;
 
+void scale_profile(std::vector <float> &profile,
+                   const float scale)
+noexcept;
+
 bool transit(const cube_type &transit_type)
 noexcept;
 

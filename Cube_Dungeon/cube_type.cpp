@@ -117,7 +117,7 @@ noexcept
     switch (c_type)
     {
       case cube_type::concrete:
-        profile = std::vector <float>{0.5f, 0.5f, 0.5f, 1.0f };
+        profile = std::vector <float>{0.25f, 0.25f, 0.25f, 1.0f };
         return true;
         break;
       case cube_type::alabaster:
@@ -141,6 +141,7 @@ noexcept
         return true;
         break;
     }
+
   }
 
   return false;
@@ -185,6 +186,16 @@ noexcept
   }
 
   return false;
+}
+
+void scale_profile(std::vector <float> &profile,
+                   const float scale)
+noexcept
+{
+  for (float &part: profile)
+  { part *= scale; }
+
+  profile[3] = 1.0f;
 }
 
 bool transit(const cube_type &transit_type)

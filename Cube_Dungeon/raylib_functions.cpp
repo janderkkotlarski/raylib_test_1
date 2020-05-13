@@ -55,7 +55,7 @@ void refresh_fogs(std::vector <Model> &cube_models,
                   const float candy_factor,
                   const int fog_density_loc,
                   const float fog_density)
- noexcept
+noexcept
 {
   for (unsigned count{ 0 }; count < cube_models.size(); ++count)
   {
@@ -65,7 +65,31 @@ void refresh_fogs(std::vector <Model> &cube_models,
     std::vector <float> ambient_profile
     { 0.0f, 0.0f, 10.0f, 1.0f };
 
+    type2profile(c_type, ambient_profile);
+
     type2proflex(c_type, ambient_profile, spectral_profile, chromatic_profile, candy_factor);
+
+    scale_profile(ambient_profile, 10.0f);
+
+    fog_refresh(fog_shaders[count], position, ambient_profile,
+                fog_density_loc, fog_density);
+  }
+}
+
+void refresh_darks(std::vector <Model> &cube_models,
+                  std::vector <Shader> &fog_shaders,
+                  const Vector3 &position,
+                  const std::vector <float> &dark_profile,
+                  const int fog_density_loc,
+                  const float fog_density)
+noexcept
+{
+  for (unsigned count{ 0 }; count < cube_models.size(); ++count)
+  {
+    std::vector <float> ambient_profile
+    { dark_profile };
+
+    scale_profile(ambient_profile, 10.0f);
 
     fog_refresh(fog_shaders[count], position, ambient_profile,
                 fog_density_loc, fog_density);
