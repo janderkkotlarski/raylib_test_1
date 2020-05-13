@@ -519,7 +519,7 @@ noexcept
                    m_fog_density_loc, m_fog_density);
 
       refresh_darks(dark_models, dark_shaders, m_position,
-                   m_dark_profile, m_fog_density_loc, m_fog_density);
+                   m_cube_vein_profile, m_fog_density_loc, m_fog_density);
 
       /*
       const int ambientLoc = GetShaderLocation(shader, "ambient");

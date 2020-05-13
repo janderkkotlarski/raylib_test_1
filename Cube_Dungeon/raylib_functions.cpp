@@ -69,7 +69,7 @@ noexcept
 
     type2proflex(c_type, ambient_profile, spectral_profile, chromatic_profile, candy_factor);
 
-    scale_profile(ambient_profile, 10.0f);
+    scale_profile(ambient_profile, 5.0f);
 
     fog_refresh(fog_shaders[count], position, ambient_profile,
                 fog_density_loc, fog_density);
@@ -89,7 +89,7 @@ noexcept
     std::vector <float> ambient_profile
     { dark_profile };
 
-    scale_profile(ambient_profile, 10.0f);
+    scale_profile(ambient_profile, 5.0f);
 
     fog_refresh(fog_shaders[count], position, ambient_profile,
                 fog_density_loc, fog_density);
