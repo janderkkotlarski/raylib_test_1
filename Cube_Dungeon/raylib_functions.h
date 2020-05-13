@@ -58,7 +58,8 @@ void init_cubes_images_fogs(std::vector <Model> &cube_models,
                             const std::string &file_name,
                             const std::string &file_type,
                             int &fog_density_loc,
-                            const float fog_density)
+                            const float fog_density,
+                            const bool dark_bloom)
 noexcept;
 
 #endif // RAYLIB_FUNCTIONS_H

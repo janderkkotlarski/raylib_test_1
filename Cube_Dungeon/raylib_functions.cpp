@@ -69,7 +69,7 @@ noexcept
 
     type2proflex(c_type, ambient_profile, spectral_profile, chromatic_profile, candy_factor);
 
-    scale_profile(ambient_profile, 5.0f);
+    scale_profile(ambient_profile, 10.0f);
 
     fog_refresh(fog_shaders[count], position, ambient_profile,
                 fog_density_loc, fog_density);
@@ -105,7 +105,8 @@ void init_cubes_images_fogs(std::vector <Model> &cube_models,
                             const std::string &file_name,
                             const std::string &file_type,
                             int &fog_density_loc,
-                            const float fog_density)
+                            const float fog_density,
+                            const bool dark_bloom)
 noexcept
 {
   bool loading
@@ -135,6 +136,9 @@ noexcept
 
       fog_shaders[count] = LoadShader(FormatText("base_lighting.vs", GLSL_VERSION),
                                       FormatText("dark_fog.fs", GLSL_VERSION));
+
+      if (dark_bloom)
+      { fog_shaders[count] = LoadShader(0, FormatText("bloom.fs", GLSL_VERSION)); }
 
       fog_init(fog_shaders[count], ambient_profile, fog_density_loc, fog_density);
 

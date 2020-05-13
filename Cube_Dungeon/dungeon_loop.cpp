@@ -587,7 +587,7 @@ void dungeon_loop::run_window()
   std::vector <Shader> fog_shaders;
 
   init_cubes_images_fogs(cube_models, face_images, fog_shaders, m_position, m_ambient_profile,
-                         m_fracta_cube, file_name, file_type, m_fog_density_loc, m_fog_density);
+                         m_fracta_cube, file_name, file_type, m_fog_density_loc, m_fog_density, false);
 
   file_type = "_.png";
 
@@ -598,7 +598,7 @@ void dungeon_loop::run_window()
   std::vector <Shader> dark_shaders;
 
   init_cubes_images_fogs(dark_models, dark_images, dark_shaders, m_position, m_ambient_profile,
-                         m_fracta_cube, file_name, file_type, m_dark_density_loc, m_fog_density);
+                         m_fracta_cube, file_name, file_type, m_dark_density_loc, m_fog_density, true);
 
   Model c_model
   { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
