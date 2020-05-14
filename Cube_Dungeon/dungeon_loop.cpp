@@ -219,7 +219,7 @@ noexcept
   }
 }
 
-void dungeon_loop::play_actions()
+void dungeon_loop::play_actions(const Sound &movement)
 noexcept
 {
   m_cube_dungeon_pos = { coordinator(m_position.x),
@@ -240,6 +240,14 @@ noexcept
 
     if (m_act != action::none)
     { collide(); }
+
+    if (m_act == action::forward ||
+        m_act == action::backward ||
+        m_act == action::right ||
+        m_act == action::left ||
+        m_act == action::up ||
+        m_act == action::down)
+    { PlaySoundMulti(movement); }
 
     m_time = 0.0f;
   }
@@ -496,7 +504,8 @@ void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models, s
                              Model &model,
                              std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
                              Shader &shader,
-                             const int fog_density_loc)
+                             const int fog_density_loc,
+                             const Sound &movement)
 noexcept
 {
   while (m_game)
@@ -514,7 +523,7 @@ noexcept
     while (m_loop)
     {
       player_move(camera);
-      play_actions();
+      play_actions(movement);
 
       refresh_fogs(cube_models, fog_shaders, m_position,
                    m_spectral_profile, m_chromatic_profile, m_candy_factor,
@@ -575,6 +584,11 @@ noexcept
 void dungeon_loop::run_window()
 {
   InitWindow(m_screen_width, m_screen_height, "Cube Dungeon");
+
+  InitAudioDevice();
+
+  Sound movement
+  { LoadSound("move.wav") };
 
   const std::string file_name
   { "cube_face_" };
@@ -641,7 +655,8 @@ void dungeon_loop::run_window()
   camera_init(camera);
 
   game_loop(camera, cube_models, dark_models, c_model,
-            fog_shaders, dark_shaders, f_shader, fog_density_loc);
+            fog_shaders, dark_shaders, f_shader, fog_density_loc,
+            movement);
 
   // UnloadShader(distortion);
 
