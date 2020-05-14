@@ -72,9 +72,11 @@ void level_filler(cube_type &c_type,
                   const int z)
 noexcept
 {
-  pillars(c_type, cube_type::concrete, x, y, z);
+  if (level >= 3)
+  { pillars(c_type, cube_type::concrete, x, y, z); }
 
-  if (level < 20)
+  if (level >= 3 &&
+      level < 20)
   { random_wall(c_type, level, x, y, z); }
 
   outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
@@ -173,9 +175,13 @@ noexcept
 }
 
 void single_placements(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                       const int level,
                        const int dungeon_radius)
 noexcept
 {
+  if (level <= 2)
+  { cube_of_cubes(type_volume, cube_type::ruby, dungeon_radius, dungeon_radius, dungeon_radius, 1); }
+
   plus_3d(type_volume, cube_type::none,
           2*dungeon_radius - 2,
           dungeon_radius,
@@ -203,5 +209,24 @@ noexcept
     type_volume[x - 1 + 2*sign][y][z] = c_type;
     type_volume[x][y - 1 + 2*sign][z] = c_type;
     type_volume[x][y][z - 1 + 2*sign] = c_type;
+  }
+}
+
+
+void cube_of_cubes(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                   const cube_type &c_type,
+                   const int x,
+                   const int y,
+                   const int z,
+                   const int radius)
+noexcept
+{
+  for (int index{ -abs(radius) }; index <= abs(radius); ++index)
+  {
+    for (int indey{ -abs(radius) }; indey <= abs(radius); ++indey)
+    {
+      for (int indez{ -abs(radius) }; indez <= abs(radius); ++indez)
+      { type_volume[x + index][y + indey][z + indez] = c_type; }
+    }
   }
 }

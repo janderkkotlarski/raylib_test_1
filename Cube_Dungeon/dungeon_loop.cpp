@@ -506,7 +506,7 @@ noexcept
 
     level_init();
     dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
-    single_placements(m_type_volume, m_dungeon_radius);
+    single_placements(m_type_volume, m_level, m_dungeon_radius);
     collide();
 
     while (m_loop)

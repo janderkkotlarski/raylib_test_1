@@ -53,6 +53,7 @@ int wall_percentage(const cube_type c_type,
 noexcept;
 
 void single_placements(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                       const int level,
                        const int dungeon_radius)
 noexcept;
 
@@ -61,6 +62,14 @@ void plus_3d(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int x,
              const int y,
              const int z)
+noexcept;
+
+void cube_of_cubes(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                   const cube_type &c_type,
+                   const int x,
+                   const int y,
+                   const int z,
+                   const int radius)
 noexcept;
 
 #endif // DUNGEON_FUNCTIONS_H
