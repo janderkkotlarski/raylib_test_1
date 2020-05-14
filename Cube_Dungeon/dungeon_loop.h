@@ -273,7 +273,7 @@ private:
   void collide()
   noexcept;
 
-  void play_actions(const Sound &movement)
+  void play_actions(const Sound &bass, const Sound &drum)
   noexcept;
 
   void other_actions()
@@ -311,7 +311,8 @@ private:
                  std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
                  Shader &shader,
                  const int fog_density_loc,
-                 const Sound &movement)
+                 const Sound &bass,
+                 const Sound &drum)
   noexcept;
 
 public:
