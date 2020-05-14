@@ -185,6 +185,9 @@ private:
   float m_candy_factor
   { 1.0f };
 
+  bool m_candy_up
+  { false };
+
   std::vector <float> m_dark_profile
   { 0.1f, 0.02f, 0.2f, 1.0f};
 

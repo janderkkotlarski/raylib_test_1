@@ -180,7 +180,12 @@ void single_placements(std::vector< std::vector <std::vector <cube_type>>> &type
 noexcept
 {
   if (level <= 2)
-  { cube_of_cubes(type_volume, cube_type::ruby, dungeon_radius, dungeon_radius, dungeon_radius, 1); }
+  {
+    cube_of_cubes(type_volume, cube_type::ruby,
+                  dungeon_radius, dungeon_radius,
+                  dungeon_radius, dungeon_radius,
+                  dungeon_radius, dungeon_radius);
+  }
 
   plus_3d(type_volume, cube_type::none,
           2*dungeon_radius - 2,
@@ -215,18 +220,17 @@ noexcept
 
 void cube_of_cubes(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
                    const cube_type &c_type,
-                   const int x,
-                   const int y,
-                   const int z,
-                   const int radius)
+                   const unsigned x1, const unsigned x2,
+                   const unsigned y1, const unsigned y2,
+                   const unsigned z1, const unsigned z2)
 noexcept
 {
-  for (int index{ -abs(radius) }; index <= abs(radius); ++index)
+  for (unsigned index{ x1 }; index <= x2; ++index)
   {
-    for (int indey{ -abs(radius) }; indey <= abs(radius); ++indey)
+    for (unsigned indey{ y1 }; indey <= y2; ++indey)
     {
-      for (int indez{ -abs(radius) }; indez <= abs(radius); ++indez)
-      { type_volume[x + index][y + indey][z + indez] = c_type; }
+      for (unsigned indez{ z1 }; indez <= z2; ++indez)
+      { type_volume[index][indey][indez] = c_type; }
     }
   }
 }

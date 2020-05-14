@@ -66,10 +66,9 @@ noexcept;
 
 void cube_of_cubes(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
                    const cube_type &c_type,
-                   const int x,
-                   const int y,
-                   const int z,
-                   const int radius)
+                   const unsigned x1, const unsigned x2,
+                   const unsigned y1, const unsigned y2,
+                   const unsigned z1, const unsigned z2)
 noexcept;
 
 #endif // DUNGEON_FUNCTIONS_H

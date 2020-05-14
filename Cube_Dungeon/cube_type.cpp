@@ -1,6 +1,7 @@
 #include "cube_type.h"
 
 #include <cassert>
+#include <math.h>
 
 #include "misc_functions.h"
 
@@ -156,6 +157,9 @@ noexcept
 {
   if (profile.size() == 4)
   {
+    const float candy_scale
+    { 0.5f - 0.5f*cos(0.5f*PI*candy_factor) };
+
     switch (c_type)
     {
       case cube_type::next:
@@ -167,19 +171,19 @@ noexcept
         return true;
         break;
       case cube_type::ruby:
-        profile = std::vector <float>{candy_factor, 0.0f, 0.0f, 1.0f };
+        profile = std::vector <float>{candy_scale, 0.0f, 0.0f, 1.0f };
         return true;
         break;
       case cube_type::citrine:
-        profile = std::vector <float>{candy_factor, candy_factor, 0.0f, 1.0f };
+        profile = std::vector <float>{candy_scale, candy_scale, 0.0f, 1.0f };
         return true;
         break;
       case cube_type::emerald:
-        profile = std::vector <float>{0.0f, candy_factor, 0.0f, 1.0f };
+        profile = std::vector <float>{0.0f, candy_scale, 0.0f, 1.0f };
         return true;
         break;
       case cube_type::sapphire:
-        profile = std::vector <float>{0.0f, 0.0f, candy_factor, 1.0f };
+        profile = std::vector <float>{0.0f, 0.0f, candy_scale, 1.0f };
         return true;
         break;
     }

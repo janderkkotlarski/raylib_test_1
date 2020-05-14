@@ -483,6 +483,8 @@ noexcept
     { DrawRectangle(0, 0, m_screen_width, m_screen_height, screen_color); }
   }
 
+  candy_blink(m_candy_factor, m_delta_time, m_candy_up);
+
   dark_shift(m_cube_vein_profile, m_delta_time, m_dark_opacity, m_dark_up);
 
   // acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);

@@ -345,6 +345,32 @@ noexcept
   }
 }
 
+void candy_blink(float &candy_factor,
+                 const float delta_time,
+                 bool &candy_up)
+noexcept
+{
+  const float delta
+  { 1.0f };
+
+  if (candy_up)
+  { candy_factor += delta*delta_time; }
+  else
+  { candy_factor -= delta*delta_time; }
+
+  if (candy_factor >= 1.0f)
+  {
+    candy_factor = 1.0f;
+    candy_up = false;
+  }
+
+  if (candy_factor <= 0.0f)
+  {
+    candy_factor = 0.0f;
+    candy_up = true;
+  }
+}
+
 void dark_shift(std::vector <float> &dark_profile,
                 const float delta_time,
                 float &opacity,
