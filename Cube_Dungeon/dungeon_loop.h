@@ -11,7 +11,7 @@
 #include "misc_functions.h"
 #include "fractacube.h"
 #include "action.h"
-
+#include "synchrogear.h"
 
 #if defined(PLATFORM_DESKTOP)
   #define GLSL_VERSION            100
@@ -235,6 +235,31 @@ private:
   std::vector <int> m_int_dump
   { 0, 0, 0 };
 
+  const std::vector <synchrogear> m_drum_loop
+  {
+    synchrogear::drum, synchrogear::drum, synchrogear::drum, synchrogear::drum,
+    synchrogear::drum, synchrogear::drum, synchrogear::drum, synchrogear::drum,
+    synchrogear::drum, synchrogear::drum, synchrogear::drum, synchrogear::drum,
+    synchrogear::drum, synchrogear::drum, synchrogear::drum, synchrogear::drum
+  };
+
+  const std::vector <synchrogear> m_bass_loop
+  {
+    synchrogear::bass_g_5, synchrogear::bass_g_5, synchrogear::bass_g_5, synchrogear::bass_g_5,
+    synchrogear::bass_g_5, synchrogear::bass_g_5, synchrogear::bass_g_5, synchrogear::bass_g_5,
+    synchrogear::bass_a_5, synchrogear::bass_a_5, synchrogear::bass_a_5, synchrogear::bass_a_5,
+    synchrogear::bass_f_5, synchrogear::bass_f_5, synchrogear::bass_e_5, synchrogear::bass_e_5
+  };
+
+  const std::vector <std::vector <synchrogear>> m_music_tracks
+  { m_drum_loop, m_bass_loop };
+
+  const unsigned m_track_length
+  { m_drum_loop.size() };
+
+  unsigned m_track_index
+  { 0 };
+
   /// functions
   ///
   ///
@@ -273,7 +298,8 @@ private:
   void collide()
   noexcept;
 
-  void play_actions(const Sound &bass, const Sound &drum)
+  void play_actions(Sound &drum,
+                    Sound &bass)
   noexcept;
 
   void other_actions()
@@ -311,8 +337,8 @@ private:
                  std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
                  Shader &shader,
                  const int fog_density_loc,
-                 const Sound &bass,
-                 const Sound &drum)
+                 Sound &drum,
+                 Sound &bass)
   noexcept;
 
 public:

@@ -219,8 +219,8 @@ noexcept
   }
 }
 
-void dungeon_loop::play_actions(const Sound &bass,
-                                const Sound &drum)
+void dungeon_loop::play_actions(Sound &drum,
+                                Sound &bass)
 noexcept
 {
   m_cube_dungeon_pos = { coordinator(m_position.x),
@@ -251,6 +251,14 @@ noexcept
     {
       PlaySoundMulti(drum);
       PlaySoundMulti(bass);
+
+      ++m_track_index;
+
+      if (m_track_index >= m_track_length)
+      { m_track_index = 0; }
+
+      drum = LoadSound(sync2string(m_music_tracks[0][m_track_index]).c_str());
+      bass = LoadSound(sync2string(m_music_tracks[1][m_track_index]).c_str());
     }
 
     m_time = 0.0f;
@@ -509,8 +517,8 @@ void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models, s
                              std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
                              Shader &shader,
                              const int fog_density_loc,
-                             const Sound &bass,
-                             const Sound &drum)
+                             Sound &drum,
+                             Sound &bass)
 noexcept
 {
   while (m_game)
@@ -528,7 +536,7 @@ noexcept
     while (m_loop)
     {
       player_move(camera);
-      play_actions(bass, drum);
+      play_actions(drum, bass);
 
       refresh_fogs(cube_models, fog_shaders, m_position,
                    m_spectral_profile, m_chromatic_profile, m_candy_factor,
@@ -592,11 +600,16 @@ void dungeon_loop::run_window()
 
   InitAudioDevice();
 
-  Sound bass
-  { LoadSound("bass_e_5.wav") };
+  std::string temp
+  { "" };
 
   Sound drum
-  { LoadSound("drum.wav")};
+  { LoadSound(sync2string(m_music_tracks[0][m_track_index]).c_str()) };
+
+  Sound bass
+  { LoadSound(sync2string(m_music_tracks[1][m_track_index]).c_str()) };
+
+
 
   const std::string file_name
   { "cube_face_" };
@@ -664,7 +677,7 @@ void dungeon_loop::run_window()
 
   game_loop(camera, cube_models, dark_models, c_model,
             fog_shaders, dark_shaders, f_shader, fog_density_loc,
-            bass, drum);
+            drum, bass);
 
   // UnloadShader(distortion);
 
