@@ -248,6 +248,9 @@ noexcept
         m_act == action::up ||
         m_act == action::down)
     {
+      play_tracks(track_samples, m_music_tracks, m_track_index);
+
+      /*
       for (unsigned sample_index{ 0 }; sample_index < track_samples.size(); ++sample_index)
       {
         if (m_music_tracks[sample_index][m_track_index] != synchrogear::silence)
@@ -261,6 +264,7 @@ noexcept
 
       for (unsigned sample_index{ 0 }; sample_index < track_samples.size(); ++sample_index)
       { track_samples[sample_index] = LoadSound(sync2string(m_music_tracks[sample_index][m_track_index]).c_str()); }
+      */
     }
 
     m_time = 0.0f;
@@ -524,11 +528,6 @@ noexcept
 {
   while (m_game)
   {
-    // cube_model.materials[0].maps[MAP_DIFFUSE].texture = texture;
-
-    // for (unsigned count{ 0 }; count < cube_models.size(); ++count)
-    // { cube_models[count].materials[0].maps[MAP_DIFFUSE].texture = LoadTextureFromImage(images[count]); }
-
     level_init();
     dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
     single_placements(m_type_volume, m_level, m_dungeon_radius);
@@ -546,20 +545,6 @@ noexcept
       refresh_darks(dark_models, dark_shaders, m_position,
                    m_cube_vein_profile, m_fog_density_loc, m_fog_density);
 
-      /*
-      const int ambientLoc = GetShaderLocation(shader, "ambient");
-
-      float ambient_prof[4]
-      { 1.0f, 1.0f, 1.0f, 1.0f };
-
-      vector2array_float(m_chromatic_profile, ambient_prof);
-
-      SetShaderValue(shader, ambientLoc, ambient_prof, UNIFORM_VEC4);
-
-      SetShaderValue(shader, fog_density_loc, &m_fog_density, UNIFORM_FLOAT);
-      SetShaderValue(shader, shader.locs[LOC_VECTOR_VIEW], &m_position.x, UNIFORM_VEC3);
-      */
-
       std::vector <float> ambient_profile
       { m_spectral_profile };
 
@@ -569,20 +554,16 @@ noexcept
       {
         ClearBackground(BLACK);
 
-        // BeginVrDrawing();
         BeginMode3D(camera);        
         { cube_drawing(cube_models, dark_models, model); }
 
         EndMode3D();
-        // EndVrDrawing();
 
         if (m_test)
         { infos(); }
 
         pos_direct_display();        
         transition();
-
-        // frame_update(cube_models);
 
         infos();
       }

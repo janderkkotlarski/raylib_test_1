@@ -2,6 +2,9 @@
 #define SYNCHROGEAR_H
 
 #include <string>
+#include <vector>
+
+#include <raylib.h>
 
 enum class synchrogear
 {
@@ -21,6 +24,41 @@ enum class synchrogear
 };
 
 std::string sync2string(const synchrogear sg)
+noexcept;
+
+std::vector <synchrogear> silence_loop()
+noexcept;
+
+std::vector <synchrogear> drum_loop_1()
+noexcept;
+
+std::vector <synchrogear> drum_track()
+noexcept;
+
+std::vector <synchrogear> bass_loop_1()
+noexcept;
+
+std::vector <synchrogear> bass_track()
+noexcept;
+
+std::vector <synchrogear> stick_loop_1()
+noexcept;
+
+std::vector <synchrogear> stick_track()
+noexcept;
+
+std::vector <synchrogear> synth_1_loop_1()
+noexcept;
+
+std::vector <synchrogear> synth_1_track()
+noexcept;
+
+std::vector <std::vector <synchrogear>> music_tracks_generator()
+noexcept;
+
+void play_tracks(std::vector <Sound> &track_samples,
+                 const std::vector <std::vector <synchrogear>> &music_tracks,
+                 unsigned &track_index)
 noexcept;
 
 #endif // SYNCHROGEAR_H

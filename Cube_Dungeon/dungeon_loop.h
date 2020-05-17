@@ -235,50 +235,13 @@ private:
   std::vector <int> m_int_dump
   { 0, 0, 0 };
 
-  const std::vector <synchrogear> m_drum_loop
-  {
-    synchrogear::drum, synchrogear::drum, synchrogear::drum, synchrogear::drum,
-    synchrogear::drum, synchrogear::drum, synchrogear::drum, synchrogear::drum,
-    synchrogear::drum, synchrogear::drum, synchrogear::drum, synchrogear::drum,
-    synchrogear::drum, synchrogear::drum, synchrogear::drum, synchrogear::drum
-  };
-
-  const std::vector <synchrogear> m_bass_loop
-  {
-    synchrogear::bass_g_5, synchrogear::bass_g_5, synchrogear::bass_g_5, synchrogear::bass_g_5,
-    synchrogear::bass_g_5, synchrogear::bass_g_5, synchrogear::bass_g_5, synchrogear::bass_g_5,
-    synchrogear::bass_a_5, synchrogear::bass_a_5, synchrogear::bass_a_5, synchrogear::bass_a_5,
-    synchrogear::bass_f_5, synchrogear::bass_f_5, synchrogear::bass_e_5, synchrogear::bass_e_5
-  };
-
-  const std::vector <synchrogear> m_stick_loop
-  {
-    synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1b,
-    synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1b,
-    synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1b,
-    synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1b
-  };
-
-  const std::vector <synchrogear> m_synth_1_loop
-  {
-    synchrogear::synth_1_a_5, synchrogear::silence, synchrogear::silence, synchrogear::silence,
-    synchrogear::synth_1_c_6, synchrogear::silence, synchrogear::silence, synchrogear::silence,
-    synchrogear::synth_1_g_5, synchrogear::silence, synchrogear::silence, synchrogear::silence,
-    synchrogear::synth_1_f_5, synchrogear::synth_1_e_5_, synchrogear::silence, synchrogear::silence
-  };
-
   const std::vector <std::vector <synchrogear>> m_music_tracks
-  { m_drum_loop, m_bass_loop, m_stick_loop, m_synth_1_loop };
-
-  const unsigned m_track_length
-  { m_drum_loop.size() };
+  { music_tracks_generator() };
 
   unsigned m_track_index
   { 0 };
 
   /// functions
-  ///
-  ///
 
   void camera_position(Camera &camera)
   noexcept
