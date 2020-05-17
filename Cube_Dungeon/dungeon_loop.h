@@ -152,7 +152,7 @@ private:
   { 0.1f, 0.0f, 0.2f, 1.0f };
 
   const float m_fog_density
-  { 0.004f };
+  { 0.003f };
 
   const int m_horizon
   { 4 };
@@ -251,8 +251,24 @@ private:
     synchrogear::bass_f_5, synchrogear::bass_f_5, synchrogear::bass_e_5, synchrogear::bass_e_5
   };
 
+  const std::vector <synchrogear> m_stick_loop
+  {
+    synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1b,
+    synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1b,
+    synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1b,
+    synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1a, synchrogear::stick_1b
+  };
+
+  const std::vector <synchrogear> m_synth_1_loop
+  {
+    synchrogear::synth_1_a_5, synchrogear::silence, synchrogear::silence, synchrogear::silence,
+    synchrogear::synth_1_c_6, synchrogear::silence, synchrogear::silence, synchrogear::silence,
+    synchrogear::synth_1_g_5, synchrogear::silence, synchrogear::silence, synchrogear::silence,
+    synchrogear::synth_1_f_5, synchrogear::synth_1_e_5_, synchrogear::silence, synchrogear::silence
+  };
+
   const std::vector <std::vector <synchrogear>> m_music_tracks
-  { m_drum_loop, m_bass_loop };
+  { m_drum_loop, m_bass_loop, m_stick_loop, m_synth_1_loop };
 
   const unsigned m_track_length
   { m_drum_loop.size() };
@@ -298,8 +314,7 @@ private:
   void collide()
   noexcept;
 
-  void play_actions(Sound &drum,
-                    Sound &bass)
+  void play_actions(std::vector<Sound> &track_samples)
   noexcept;
 
   void other_actions()
@@ -337,8 +352,7 @@ private:
                  std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
                  Shader &shader,
                  const int fog_density_loc,
-                 Sound &drum,
-                 Sound &bass)
+                 std::vector<Sound> &track_samples)
   noexcept;
 
 public:

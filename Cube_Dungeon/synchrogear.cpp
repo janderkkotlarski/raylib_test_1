@@ -6,7 +6,7 @@ noexcept
   switch (sg)
   {
     case synchrogear::silence:
-      return "";
+      return "silence.wav";
       break;
     case synchrogear::drum:
       return "drum.wav";
@@ -23,7 +23,28 @@ noexcept
     case synchrogear::bass_a_5:
       return "bass_a_5.wav";
       break;
+    case synchrogear::stick_1a:
+      return "stick_1a.wav";
+      break;
+    case synchrogear::stick_1b:
+      return "stick_1b.wav";
+      break;
+    case synchrogear::synth_1_e_5_:
+      return "synth_1_e_5_.wav";
+      break;
+    case synchrogear::synth_1_f_5:
+      return "synth_1_f_5.wav";
+      break;
+    case synchrogear::synth_1_g_5:
+      return "synth_1_g_5.wav";
+      break;
+    case synchrogear::synth_1_a_5:
+      return "synth_1_a_5.wav";
+      break;
+    case synchrogear::synth_1_c_6:
+      return "synth_1_c_6.wav";
+      break;
   }
 
-  return "";
+  return "silence.wav";
 }

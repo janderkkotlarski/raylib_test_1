@@ -219,8 +219,7 @@ noexcept
   }
 }
 
-void dungeon_loop::play_actions(Sound &drum,
-                                Sound &bass)
+void dungeon_loop::play_actions(std::vector <Sound> &track_samples)
 noexcept
 {
   m_cube_dungeon_pos = { coordinator(m_position.x),
@@ -249,16 +248,19 @@ noexcept
         m_act == action::up ||
         m_act == action::down)
     {
-      PlaySoundMulti(drum);
-      PlaySoundMulti(bass);
+      for (unsigned sample_index{ 0 }; sample_index < track_samples.size(); ++sample_index)
+      {
+        // if (m_music_tracks[sample_index][m_track_index] != synchrogear::silence)
+        { PlaySoundMulti(track_samples[sample_index]); }
+      }
 
       ++m_track_index;
 
       if (m_track_index >= m_track_length)
       { m_track_index = 0; }
 
-      drum = LoadSound(sync2string(m_music_tracks[0][m_track_index]).c_str());
-      bass = LoadSound(sync2string(m_music_tracks[1][m_track_index]).c_str());
+      for (unsigned sample_index{ 0 }; sample_index < track_samples.size(); ++sample_index)
+      { track_samples[sample_index] = LoadSound(sync2string(m_music_tracks[sample_index][m_track_index]).c_str()); }
     }
 
     m_time = 0.0f;
@@ -517,8 +519,7 @@ void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models, s
                              std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
                              Shader &shader,
                              const int fog_density_loc,
-                             Sound &drum,
-                             Sound &bass)
+                             std::vector <Sound> &track_samples)
 noexcept
 {
   while (m_game)
@@ -536,7 +537,7 @@ noexcept
     while (m_loop)
     {
       player_move(camera);
-      play_actions(drum, bass);
+      play_actions(track_samples);
 
       refresh_fogs(cube_models, fog_shaders, m_position,
                    m_spectral_profile, m_chromatic_profile, m_candy_factor,
@@ -603,13 +604,10 @@ void dungeon_loop::run_window()
   std::string temp
   { "" };
 
-  Sound drum
-  { LoadSound(sync2string(m_music_tracks[0][m_track_index]).c_str()) };
+  std::vector <Sound> track_samples;
 
-  Sound bass
-  { LoadSound(sync2string(m_music_tracks[1][m_track_index]).c_str()) };
-
-
+  for (const std::vector <synchrogear> &music_track: m_music_tracks)
+  { track_samples.push_back(LoadSound(sync2string(music_track[m_track_index]).c_str())); }
 
   const std::string file_name
   { "cube_face_" };
@@ -641,8 +639,6 @@ void dungeon_loop::run_window()
   { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
                                   m_fracta_cube.get_cube_dims().y,
                                   m_fracta_cube.get_cube_dims().z)) };
-
-
 
   c_model.materials[0].maps[MAP_DIFFUSE].texture = LoadTexture("cube_face_0.png");
 
@@ -677,7 +673,7 @@ void dungeon_loop::run_window()
 
   game_loop(camera, cube_models, dark_models, c_model,
             fog_shaders, dark_shaders, f_shader, fog_density_loc,
-            drum, bass);
+            track_samples);
 
   // UnloadShader(distortion);
 
