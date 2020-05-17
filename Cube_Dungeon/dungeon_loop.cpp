@@ -250,7 +250,7 @@ noexcept
     {
       for (unsigned sample_index{ 0 }; sample_index < track_samples.size(); ++sample_index)
       {
-        // if (m_music_tracks[sample_index][m_track_index] != synchrogear::silence)
+        if (m_music_tracks[sample_index][m_track_index] != synchrogear::silence)
         { PlaySoundMulti(track_samples[sample_index]); }
       }
 
