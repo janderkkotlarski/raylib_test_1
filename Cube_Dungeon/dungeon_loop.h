@@ -212,6 +212,9 @@ private:
   const float m_cam_field
   { -0.001f };
 
+  const bool m_synchro
+  { false };
+
   bool m_game
   { true };
 

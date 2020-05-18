@@ -72,6 +72,19 @@ void level_filler(cube_type &c_type,
                   const int z)
 noexcept
 {
+  if (level <= 2)
+  {
+    if (abs(x) - 4 % 8 == 0 ||
+        abs(y) - 4 % 8 == 0 ||
+        abs(z) - 4 % 8 == 0)
+    { c_type = cube_type::concrete; }
+
+    if (abs(x) % 8 == 0 &&
+        abs(y) % 8 == 0 &&
+        abs(z) % 8 == 0)
+    { c_type = cube_type::catalyst; }
+  }
+
   if (level >= 3)
   { pillars(c_type, cube_type::concrete, x, y, z); }
 
@@ -179,27 +192,22 @@ void single_placements(std::vector< std::vector <std::vector <cube_type>>> &type
                        const int dungeon_radius)
 noexcept
 {
-  if (level <= 2)
+  if (level >= 3)
   {
-    cube_of_cubes(type_volume, cube_type::ruby,
-                  dungeon_radius, dungeon_radius,
-                  dungeon_radius, dungeon_radius,
-                  dungeon_radius, dungeon_radius);
+    plus_3d(type_volume, cube_type::none,
+            2*dungeon_radius - 2,
+            dungeon_radius,
+            dungeon_radius);
+
+    type_volume[2*dungeon_radius - 1]
+               [dungeon_radius]
+               [dungeon_radius] = cube_type::next;
+
+    plus_3d(type_volume, cube_type::none,
+            2,
+            dungeon_radius,
+            dungeon_radius);
   }
-
-  plus_3d(type_volume, cube_type::none,
-          2*dungeon_radius - 2,
-          dungeon_radius,
-          dungeon_radius);
-
-  type_volume[2*dungeon_radius - 1]
-             [dungeon_radius]
-             [dungeon_radius] = cube_type::next;
-
-  plus_3d(type_volume, cube_type::none,
-          2,
-          dungeon_radius,
-          dungeon_radius);
 }
 
 void plus_3d(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
@@ -217,7 +225,6 @@ noexcept
   }
 }
 
-
 void cube_of_cubes(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
                    const cube_type &c_type,
                    const unsigned x1, const unsigned x2,
@@ -233,4 +240,14 @@ noexcept
       { type_volume[index][indey][indez] = c_type; }
     }
   }
+}
+
+void plane(cube_type &c_type,
+           const cube_type &p_type,
+           const unsigned pos,
+           const unsigned plane_pos)
+noexcept
+{
+  if (pos == plane_pos)
+  { c_type = p_type; }
 }

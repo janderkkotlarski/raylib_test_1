@@ -58,7 +58,8 @@ noexcept;
 
 void play_tracks(std::vector <Sound> &track_samples,
                  const std::vector <std::vector <synchrogear>> &music_tracks,
-                 unsigned &track_index)
+                 unsigned &track_index,
+                 const unsigned begin_index)
 noexcept;
 
 #endif // SYNCHROGEAR_H

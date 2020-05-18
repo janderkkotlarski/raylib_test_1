@@ -79,7 +79,7 @@ noexcept
   std::vector <synchrogear> track
   { drum_loop_1() };
 
-  for (const synchrogear note: silence_loop())
+  for (const synchrogear note: drum_loop_1())
   { track.push_back(note); }
 
   return track;
@@ -166,10 +166,11 @@ noexcept
 
 void play_tracks(std::vector <Sound> &track_samples,
                  const std::vector <std::vector <synchrogear>> &music_tracks,
-                 unsigned &track_index)
+                 unsigned &track_index,
+                 const unsigned begin_index)
 noexcept
 {
-  for (unsigned sample_index{ 0 }; sample_index < track_samples.size(); ++sample_index)
+  for (unsigned sample_index{ begin_index }; sample_index < track_samples.size(); ++sample_index)
   {
     if (music_tracks[sample_index][track_index] != synchrogear::silence)
     { PlaySoundMulti(track_samples[sample_index]); }

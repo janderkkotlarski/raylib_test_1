@@ -48,7 +48,11 @@ noexcept
 void dungeon_loop::player_init()
 noexcept
 {
-  m_start_posit = (Vector3){ 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
+  if (m_level <= 2)
+  { m_start_posit = (Vector3){ 1.0f, 0.0f, 0.0f }; }
+
+  if (m_level >= 3)
+  { m_start_posit = (Vector3){ 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f }; }
 
   m_directions = m_start_directs;
 
@@ -61,14 +65,12 @@ noexcept
   m_loop = true;
 
   if (!m_reset)
-  {
-    if (m_level > 0)
-    {
-      m_dungeon_radius += 2;
-      ++m_wall_perc;
-    }
+  { ++m_level; }
 
-    ++m_level;
+  if (m_level >= 3)
+  {
+    m_dungeon_radius = 5 + 2*m_level;
+    m_wall_perc = 40 + m_level;
   }
 
   m_reset = false;
@@ -241,30 +243,23 @@ noexcept
     if (m_act != action::none)
     { collide(); }
 
-    if (m_act == action::forward ||
-        m_act == action::backward ||
-        m_act == action::right ||
-        m_act == action::left ||
-        m_act == action::up ||
-        m_act == action::down)
+    if (m_synchro)
     {
-      play_tracks(track_samples, m_music_tracks, m_track_index);
+      if (m_act == action::forward ||
+          m_act == action::backward ||
+          m_act == action::right ||
+          m_act == action::left ||
+          m_act == action::up ||
+          m_act == action::down)
+      { play_tracks(track_samples, m_music_tracks, m_track_index, 0); }
 
-      /*
-      for (unsigned sample_index{ 0 }; sample_index < track_samples.size(); ++sample_index)
-      {
-        if (m_music_tracks[sample_index][m_track_index] != synchrogear::silence)
-        { PlaySoundMulti(track_samples[sample_index]); }
-      }
-
-      ++m_track_index;
-
-      if (m_track_index >= m_track_length)
-      { m_track_index = 0; }
-
-      for (unsigned sample_index{ 0 }; sample_index < track_samples.size(); ++sample_index)
-      { track_samples[sample_index] = LoadSound(sync2string(m_music_tracks[sample_index][m_track_index]).c_str()); }
-      */
+      if (m_act == action::rotate_right ||
+          m_act == action::rotate_left ||
+          m_act == action::rotate_up ||
+          m_act == action::rotate_down ||
+          m_act == action::roll_right ||
+          m_act == action::roll_left)
+      { play_tracks(track_samples, m_music_tracks, m_track_index, 1); }
     }
 
     m_time = 0.0f;

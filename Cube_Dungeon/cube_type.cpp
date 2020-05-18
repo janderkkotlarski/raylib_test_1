@@ -103,7 +103,10 @@ noexcept
   if (c_type == cube_type::concrete ||
       c_type == cube_type::alabaster ||
       c_type == cube_type::invisible ||
-      c_type == cube_type::transparent)
+      c_type == cube_type::transparent ||
+      c_type == cube_type::catalyst ||
+      c_type == cube_type::trigger ||
+      c_type == cube_type::miscellaneous)
   { return true; }
 
   return false;

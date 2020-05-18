@@ -71,4 +71,10 @@ void cube_of_cubes(std::vector< std::vector <std::vector <cube_type>>> &type_vol
                    const unsigned z1, const unsigned z2)
 noexcept;
 
+void plane(cube_type &c_type,
+           const cube_type &p_type,
+           const unsigned pos,
+           const unsigned plane_pos)
+noexcept;
+
 #endif // DUNGEON_FUNCTIONS_H
