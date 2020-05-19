@@ -74,14 +74,17 @@ noexcept
 {
   if (level <= 2)
   {
-    if (abs(x) - 4 % 8 == 0 ||
-        abs(y) - 4 % 8 == 0 ||
-        abs(z) - 4 % 8 == 0)
+    const int dist
+    { 2 };
+
+    if ((abs(x) - dist) % (2*dist) == 0 ||
+        (abs(y) - dist) % (2*dist) == 0 ||
+        (abs(z) - dist) % (2*dist) == 0)
     { c_type = cube_type::concrete; }
 
-    if (abs(x) % 8 == 0 &&
-        abs(y) % 8 == 0 &&
-        abs(z) % 8 == 0)
+    if (abs(x) % (2*dist) == 0 &&
+        abs(y) % (2*dist) == 0 &&
+        abs(z) % (2*dist) == 0)
     { c_type = cube_type::catalyst; }
   }
 

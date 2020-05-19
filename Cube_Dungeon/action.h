@@ -17,7 +17,8 @@ enum class action
   rotate_up,
   rotate_down,
   roll_right,
-  roll_left
+  roll_left,
+  inhale
 };
 
 action direct2action(const std::vector <std::vector <int>> &directs,

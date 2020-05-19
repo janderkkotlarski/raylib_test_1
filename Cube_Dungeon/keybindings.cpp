@@ -32,6 +32,8 @@ noexcept
   { act = action::roll_right; }
   if (IsKeyDown('U'))
   { act = action::roll_left; }
+  if (IsKeyDown('G'))
+  { act = action::inhale; }
 
   return act;
 }
@@ -65,5 +67,7 @@ noexcept
     { act = action::roll_right; }
     if (IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_LEFT_TRIGGER_1))
     { act = action::roll_left; }
+    if (IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_RIGHT_THUMB))
+    { act = action::inhale; }
   }
 }
