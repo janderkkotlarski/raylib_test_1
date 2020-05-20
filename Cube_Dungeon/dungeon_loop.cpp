@@ -134,6 +134,10 @@ noexcept
       m_hale_scale -= GetFrameTime()/m_period;
       break;
 
+    case action::exhale:
+      m_hale_scale += GetFrameTime()/m_period;
+      break;
+
     case action::none:
       m_hale_scale = 1.0f;
       break;
@@ -249,7 +253,42 @@ noexcept
     gamepad_actions(m_act);
 
     if (m_act != action::none)
-    { collide(); }
+    {
+      collide();
+
+      m_dungeon_index[0] = unsigned(round(m_position.x/m_multiplier + m_directions[0].x) + m_dungeon_radius);
+      m_dungeon_index[1] = unsigned(round(m_position.y/m_multiplier + m_directions[0].y) + m_dungeon_radius);
+      m_dungeon_index[2] = unsigned(round(m_position.z/m_multiplier + m_directions[0].z) + m_dungeon_radius);
+
+      if (m_act == action::inhale &&
+          (m_internal_type != cube_type::none ||
+           m_type_volume[m_dungeon_index[0]]
+                        [m_dungeon_index[1]]
+                        [m_dungeon_index[2]] == cube_type::concrete ||
+           m_type_volume[m_dungeon_index[0]]
+                        [m_dungeon_index[1]]
+                        [m_dungeon_index[2]] == cube_type::invisible))
+         { m_act = action::none; }
+
+      if (m_act == action::exhale)
+      {
+        if (m_internal_type != cube_type::none &&
+            m_type_volume[m_dungeon_index[0]]
+                         [m_dungeon_index[1]]
+                         [m_dungeon_index[2]] == cube_type::none)
+        {
+          m_hale_scale = 0.0f;
+
+          m_type_volume[m_dungeon_index[0]]
+                       [m_dungeon_index[1]]
+                       [m_dungeon_index[2]] = m_internal_type;
+
+          m_internal_type = cube_type::none;
+        }
+        else
+        { m_act = action::none; }
+      }
+    }
 
     if (m_synchro)
     {
@@ -292,20 +331,23 @@ noexcept
         direction.z = round(direction.z);
       }
 
-      if (m_act == action::inhale)
+      if (m_act == action::inhale &&
+          m_internal_type == cube_type::none)
       {
-        m_dungeon_index[0] = unsigned(round(m_position.x/m_multiplier) + round(m_directions[0].x) + m_dungeon_radius);
-        m_dungeon_index[1] = unsigned(round(m_position.y/m_multiplier) + round(m_directions[0].y) + m_dungeon_radius);
-        m_dungeon_index[2] = unsigned(round(m_position.z/m_multiplier) + round(m_directions[0].z) + m_dungeon_radius);
+        m_dungeon_index[0] = unsigned(round(m_position.x/m_multiplier + m_directions[0].x) + m_dungeon_radius);
+        m_dungeon_index[1] = unsigned(round(m_position.y/m_multiplier + m_directions[0].y) + m_dungeon_radius);
+        m_dungeon_index[2] = unsigned(round(m_position.z/m_multiplier + m_directions[0].z) + m_dungeon_radius);
+
+        m_internal_type =  m_type_volume[m_dungeon_index[0]]
+                                        [m_dungeon_index[1]]
+                                        [m_dungeon_index[2]];
 
         m_type_volume[m_dungeon_index[0]]
                      [m_dungeon_index[1]]
                      [m_dungeon_index[2]] = cube_type::none;
       }
 
-      m_act = action::none;      
-
-
+      m_act = action::none;
     }
   }
 }
@@ -402,15 +444,6 @@ noexcept
 
 }
 
-void dungeon_loop::pos_direct_display()
-noexcept
-{
-  if (m_int_vectors.size() > 0)
-  {
-
-  }
-}
-
 void dungeon_loop::coord_transform(const std::vector <int> &counters,
                                    const int index)
 noexcept
@@ -489,7 +522,8 @@ noexcept
           {
             if (index != 42)
             {    
-              if (m_act == action::inhale &&
+              if ((m_act == action::inhale ||
+                   m_act == action::exhale) &&
                   counters[0] == (int)m_directions[0].x &&
                   counters[1] == (int)m_directions[0].y &&
                   counters[2] == (int)m_directions[0].z)
@@ -584,7 +618,6 @@ noexcept
         if (m_test)
         { infos(); }
 
-        pos_direct_display();        
         transition();
 
         infos();

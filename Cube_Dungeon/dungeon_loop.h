@@ -114,6 +114,9 @@ private:
   const std::vector <int> m_cube_pos
   { 2, 0, 0 };
 
+  cube_type m_internal_type
+  { cube_type::none };
+
   const int m_frames
   { 48 };
 
@@ -296,9 +299,6 @@ private:
   noexcept;
 
   void infos()
-  noexcept;
-
-  void pos_direct_display()
   noexcept;
 
   void frame_update(std::vector <Model> &cube_models)
