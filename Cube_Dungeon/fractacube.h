@@ -161,10 +161,11 @@ public:
   { return m_cube_dims; }
 
   void set_pos_type(const int x, const int y, const int z,
-                      const cube_type c_type)
+                    const cube_type c_type)
   noexcept;
 
-  void display(Model &cube_model, Model &cube_model_dark)
+  void display(Model &cube_model, Model &cube_model_dark,
+               const float &hale_scale)
   noexcept;
 };
 

@@ -49,6 +49,9 @@ private:
   const float m_multiplier
   { 100.0f };
 
+  float m_hale_scale
+  { 0.1f };
+
   const float m_speed
   { 1.0f*m_multiplier/m_period };
 

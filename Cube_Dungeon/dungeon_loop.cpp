@@ -129,6 +129,14 @@ noexcept
     case action::roll_left:
       rotate_first_second(m_directions[1], m_directions[2], m_theta);
       break;
+
+    case action::inhale:
+      m_hale_scale -= GetFrameTime()/m_period;
+      break;
+
+    case action::none:
+      m_hale_scale = 1.0f;
+      break;
   }
 }
 
@@ -272,9 +280,7 @@ noexcept
     m_time += m_delta_time;
 
     if (m_time >= m_period)
-    {
-      m_act = action::none;
-
+    {      
       m_position.x = m_multiplier*round(m_position.x/m_multiplier);
       m_position.y = m_multiplier*round(m_position.y/m_multiplier);
       m_position.z = m_multiplier*round(m_position.z/m_multiplier);
@@ -285,6 +291,21 @@ noexcept
         direction.y = round(direction.y);
         direction.z = round(direction.z);
       }
+
+      if (m_act == action::inhale)
+      {
+        m_dungeon_index[0] = unsigned(round(m_position.x/m_multiplier) + round(m_directions[0].x) + m_dungeon_radius);
+        m_dungeon_index[1] = unsigned(round(m_position.y/m_multiplier) + round(m_directions[0].y) + m_dungeon_radius);
+        m_dungeon_index[2] = unsigned(round(m_position.z/m_multiplier) + round(m_directions[0].z) + m_dungeon_radius);
+
+        m_type_volume[m_dungeon_index[0]]
+                     [m_dungeon_index[1]]
+                     [m_dungeon_index[2]] = cube_type::none;
+      }
+
+      m_act = action::none;      
+
+
     }
   }
 }
@@ -468,7 +489,13 @@ noexcept
           {
             if (index != 42)
             {    
-              m_fracta_cube.display(cube_models[c_index], dark_models[c_index]);
+              if (m_act == action::inhale &&
+                  counters[0] == (int)m_directions[0].x &&
+                  counters[1] == (int)m_directions[0].y &&
+                  counters[2] == (int)m_directions[0].z)
+              { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_hale_scale); }
+              else
+              { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], 1.0f); }
             }
           }
         }
