@@ -195,6 +195,13 @@ void single_placements(std::vector< std::vector <std::vector <cube_type>>> &type
                        const int dungeon_radius)
 noexcept
 {
+  if (level <= 2)
+  {
+    type_volume[dungeon_radius - 1]
+               [dungeon_radius]
+               [dungeon_radius] = cube_type::next;
+  }
+
   if (level >= 3)
   {
     plus_3d(type_volume, cube_type::none,
