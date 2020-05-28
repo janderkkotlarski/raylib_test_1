@@ -15,8 +15,8 @@ std::vector <int> scale_int_vector(const std::vector <int> &vec,
                                    const int scale)
 noexcept;
 
-std::vector <int> add_int_vector(const std::vector <int> &vec_1,
-                                 const std::vector <int> &vec_2);
+std::vector <unsigned> add_int_vector(const std::vector <int> &vec_1,
+                                      const std::vector <int> &vec_2);
 
 std::vector <int> sub_int_vector(const std::vector <int> &vec_1,
                                  const std::vector <int> &vec_2);
@@ -89,6 +89,9 @@ noexcept;
 std::vector <std::string> int_vector_to_strings(const std::vector <int> &vec)
 noexcept;
 
+std::string vector3_to_string(const Vector3 &vec)
+noexcept;
+
 std::vector <std::string> vector3_to_strings(const Vector3 &vec)
 noexcept;
 
@@ -102,9 +105,6 @@ noexcept;
 
 Vector3 multiply_vector3(const Vector3 &vec_1,
                          const float mult)
-noexcept;
-
-std::vector <std::string> vector3_to_strings(const Vector3 &vec)
 noexcept;
 
 void vector2array_float(const std::vector <float> &vec,

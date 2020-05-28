@@ -170,10 +170,10 @@ noexcept
   return index;
 }
 
-int dungeon_loop::dungeon_warp(const int coord)
+unsigned dungeon_loop::dungeon_warp(const int coord)
 noexcept
 {
-  int index = coord;
+  unsigned index = coord;
 
   while (index < 0)
   { index += m_dungeon_span; }
@@ -219,13 +219,13 @@ noexcept
   {   
     for (int sign{ 1 }; sign >= -1; sign -=2)
     {
-      const std::vector dir
+      const std::vector <int> dir
       { scale_int_vector(direct, sign) };
 
-      std::vector <int> posit
+      std::vector <unsigned> posit
       { add_int_vector(m_cube_dungeon_pos, dir) };
 
-      for (int &part: posit)
+      for (unsigned &part: posit)
       { part = dungeon_warp(part); }
 
       if (m_act == direct2action(directs, dir))
@@ -444,11 +444,16 @@ noexcept
   const int size
   { 20 };
 
-  display_string(std::to_string(m_level), "Level ", x, y, size);
+  display_string("Level ", std::to_string(m_level), x, y, size);
 
   y += 30;
 
   display_string("FPS: ", std::to_string(GetFPS()), x, y, size);
+
+  y += 30;
+
+  display_string("Pos: " , vector3_to_string(m_position), x, y, size);
+
 
 }
 
@@ -535,7 +540,8 @@ noexcept
                   counters[0] == (int)m_directions[0].x &&
                   counters[1] == (int)m_directions[0].y &&
                   counters[2] == (int)m_directions[0].z) ||
-                  (m_collide_type == cube_type::ruby && true))
+                  (m_collide_type == cube_type::ruby &&
+                   m_dungeon_index == m_direction_shift))
               { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_hale_scale); }
               else
               { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], 1.0f); }

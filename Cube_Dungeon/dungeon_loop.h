@@ -78,8 +78,8 @@ private:
   int m_dungeon_radius
   { 6 };
 
-  int m_dungeon_span
-  { 2*m_dungeon_radius + 1};
+  unsigned m_dungeon_span
+  { 2*(unsigned)m_dungeon_radius + 1};
 
   float m_wrap
   { m_multiplier*(m_dungeon_radius + 0.5f) };
@@ -177,7 +177,7 @@ private:
   cube_type m_collide_type
   { cube_type::none };
 
-  std::vector <int> m_direction_shift
+  std::vector <unsigned> m_direction_shift
   { 0, 0, 0 };
 
   float m_screen_opacity
@@ -274,7 +274,7 @@ private:
   int dungeon_wrap(const int coord)
   noexcept;
 
-  int dungeon_warp(const int coord)
+  unsigned dungeon_warp(const int coord)
   noexcept;
 
   void movetate()

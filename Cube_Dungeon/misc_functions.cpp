@@ -47,7 +47,7 @@ noexcept
   return scavec;
 }
 
-std::vector <int> add_int_vector(const std::vector <int> &vec_1,
+std::vector <unsigned> add_int_vector(const std::vector <int> &vec_1,
                                  const std::vector <int> &vec_2)
 {
   if (vec_1.size() != vec_2.size())
@@ -62,7 +62,7 @@ std::vector <int> add_int_vector(const std::vector <int> &vec_1,
     throw -2;
   }
 
-  std::vector <int> addvec;
+  std::vector <unsigned> addvec;
 
   unsigned count
   { 0 };
@@ -70,7 +70,7 @@ std::vector <int> add_int_vector(const std::vector <int> &vec_1,
   for (const int number: vec_1)
   {
     addvec.push_back(number + vec_2[count]);
-    assert(addvec[count] == vec_1[count] + vec_2[count]);
+    assert(addvec[count] == (unsigned)(vec_1[count] + vec_2[count]));
     ++count;
   }
 
@@ -175,6 +175,14 @@ noexcept
   assert(strings.size() == vec.size());
 
   return strings;
+}
+
+std::string vector3_to_string(const Vector3 &vec)
+noexcept
+{
+  return "[" + std::to_string(vec.x) +
+         "][" + std::to_string(vec.y) +
+         "][" + std::to_string(vec.z) + "]";
 }
 
 std::vector <std::string> vector3_to_strings(const Vector3 &vec)
