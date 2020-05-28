@@ -75,7 +75,7 @@ noexcept
   if (level <= 2)
   {
     const int dist
-    { 3 };
+    { 5 };
 
     if ((abs(x) - dist) % (2*dist) == 0 ||
         (abs(y) - dist) % (2*dist) == 0 ||

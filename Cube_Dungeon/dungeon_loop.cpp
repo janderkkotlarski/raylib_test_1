@@ -454,7 +454,16 @@ noexcept
 
   display_string("Pos: " , vector3_to_string(m_position), x, y, size);
 
+  y += 30;
 
+  const std::string collide_pos
+  {
+    "[" + std::to_string(m_direction_shift[0]) +
+    "][" + std::to_string(m_direction_shift[1]) +
+    "][" + std::to_string(m_direction_shift[2]) + "]"
+  };
+
+  display_string("Col: " , collide_pos, x, y, size);
 }
 
 void dungeon_loop::coord_transform(const std::vector <int> &counters,
