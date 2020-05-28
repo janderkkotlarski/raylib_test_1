@@ -49,7 +49,7 @@ void dungeon_loop::player_init()
 noexcept
 {
   if (m_level <= 2)
-  { m_start_posit = (Vector3){ 1.0f, 0.0f, 0.0f }; }
+  { m_start_posit = (Vector3){ 2.0f, 0.0f, 0.0f }; }
 
   if (m_level >= 3)
   { m_start_posit = (Vector3){ 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f }; }
@@ -69,7 +69,7 @@ noexcept
 
   if (m_level >= 3)
   {
-    m_dungeon_radius = 5 + 2*m_level;
+    m_dungeon_radius = 6 + 2*m_level;
     m_wall_perc = 40 + m_level;
   }
 
@@ -94,21 +94,27 @@ noexcept
   {
     case action::forward:
       m_position = Vector3Add(m_position, Vector3Scale(m_directions[0], m_velocity));
+      m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::backward:
       m_position = Vector3Subtract(m_position, Vector3Scale(m_directions[0], m_velocity));
+      m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::right:
       m_position = Vector3Add(m_position, Vector3Scale(m_directions[1], m_velocity));
+      m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::left:
       m_position = Vector3Subtract(m_position, Vector3Scale(m_directions[1], m_velocity));
+      m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::up:
       m_position = Vector3Add(m_position, Vector3Scale(m_directions[2], m_velocity));
+      m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::down:
       m_position = Vector3Subtract(m_position, Vector3Scale(m_directions[2], m_velocity));
+      m_hale_scale -= GetFrameTime()/m_period;
       break;
 
     case action::rotate_right:
@@ -225,6 +231,8 @@ noexcept
       if (m_act == direct2action(directs, dir))
       {
         m_collide_type = m_type_volume[posit[0]][posit[1]][posit[2]];
+
+        m_direction_shift = posit;
 
         if(type_collision(m_collide_type))
         { m_act = action::none; }
@@ -522,11 +530,12 @@ noexcept
           {
             if (index != 42)
             {    
-              if ((m_act == action::inhale ||
+              if (((m_act == action::inhale ||
                    m_act == action::exhale) &&
                   counters[0] == (int)m_directions[0].x &&
                   counters[1] == (int)m_directions[0].y &&
-                  counters[2] == (int)m_directions[0].z)
+                  counters[2] == (int)m_directions[0].z) ||
+                  (m_collide_type == cube_type::ruby && true))
               { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_hale_scale); }
               else
               { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], 1.0f); }

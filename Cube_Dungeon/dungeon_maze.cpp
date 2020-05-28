@@ -75,7 +75,7 @@ noexcept
   if (level <= 2)
   {
     const int dist
-    { 2 };
+    { 3 };
 
     if ((abs(x) - dist) % (2*dist) == 0 ||
         (abs(y) - dist) % (2*dist) == 0 ||
@@ -197,9 +197,14 @@ noexcept
 {
   if (level <= 2)
   {
-    type_volume[dungeon_radius - 1]
-               [dungeon_radius]
-               [dungeon_radius] = cube_type::next;
+    type_volume[dungeon_radius - 2]
+               [dungeon_radius - 2]
+               [dungeon_radius - 2] = cube_type::next;
+
+    plus_3d(type_volume, cube_type::ruby,
+            dungeon_radius,
+            dungeon_radius,
+            dungeon_radius);
   }
 
   if (level >= 3)

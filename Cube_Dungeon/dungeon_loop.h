@@ -34,9 +34,6 @@ private:
   const int m_screen_height
   { 800 };
 
-  action m_act
-  { action::none };
-
   const float m_period
   { 0.5f };
 
@@ -174,8 +171,14 @@ private:
 
   std::vector <std::vector <std::vector <cube_type>>> m_type_volume;
 
+  action m_act
+  { action::none };
+
   cube_type m_collide_type
   { cube_type::none };
+
+  std::vector <int> m_direction_shift
+  { 0, 0, 0 };
 
   float m_screen_opacity
   { 0.0f };

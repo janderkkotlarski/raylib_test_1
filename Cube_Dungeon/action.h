@@ -19,7 +19,8 @@ enum class action
   roll_right,
   roll_left,
   inhale,
-  exhale
+  exhale,
+  catalyze
 };
 
 action direct2action(const std::vector <std::vector <int>> &directs,
