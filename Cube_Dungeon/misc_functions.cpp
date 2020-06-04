@@ -122,9 +122,9 @@ noexcept
   if (str.size() > 0)
   {
     std::string info_string
-    { message };
+    { str };
 
-    info_string += str;
+    info_string += message;
 
     const char *info_array
     { info_string.c_str() };

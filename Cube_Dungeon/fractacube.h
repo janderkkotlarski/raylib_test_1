@@ -131,7 +131,7 @@ private:
   { m_division - 1 };
 
   const float m_scale
-  { 1.0f };
+  { 0.7f };
 
   cube_type m_type
   { cube_type::none };
@@ -139,7 +139,7 @@ private:
   const float m_multiplier;
 
   const float m_dims_mult
-  { 1.0f };
+  { 0.7f };
 
   const Vector3 m_cube_dims;
 

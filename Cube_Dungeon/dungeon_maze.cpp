@@ -72,7 +72,10 @@ void level_filler(cube_type &c_type,
                   const int z)
 noexcept
 {
-  if (level <= 2)
+  if (level == 1)
+  { c_type = cube_type::ruby; }
+
+  if (level == 2)
   {
     const int dist
     { 5 };

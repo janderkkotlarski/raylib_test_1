@@ -464,6 +464,15 @@ noexcept
   };
 
   display_string("Col: " , collide_pos, x, y, size);
+
+  y += 30;
+
+  if (m_act == action::none)
+  { display_string("No " , "thing!", x, y, size); }
+
+  y += 30;
+
+  display_string("Scale: " , std::to_string(m_hale_scale), x, y, size);
 }
 
 void dungeon_loop::coord_transform(const std::vector <int> &counters,
