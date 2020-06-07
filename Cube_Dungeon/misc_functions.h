@@ -8,6 +8,12 @@
 
 #include "cube_type.h"
 
+std::vector <float> vector_int2float(const std::vector <int> &vec_int)
+noexcept;
+
+std::vector <float> negate_float_vector(const std::vector <float> &vec)
+noexcept;
+
 std::vector <int> negate_int_vector(const std::vector <int> &vec)
 noexcept;
 
@@ -86,43 +92,39 @@ noexcept;
 std::vector <float> color2profile(const Color &color)
 noexcept;
 
-std::vector <std::string> int_vector_to_strings(const std::vector <int> &vec)
+std::vector <std::string> int_vector2strings(const std::vector <int> &vec)
 noexcept;
 
-std::string vector3_to_string(const Vector3 &vec)
+std::string vector2string(const std::vector <float> &vec)
 noexcept;
 
-std::vector <std::string> vector3_to_strings(const Vector3 &vec)
+std::vector <std::string> vector2strings(const std::vector <float> &vec)
 noexcept;
 
-Vector3 add_vector3(const Vector3 &vec_1,
-                    const Vector3 &vec_2)
-noexcept;
+std::vector <float> add_vector(const std::vector <float> &vec_1,
+                               const std::vector <float> &vec_2);
 
-Vector3 sub_vector3(const Vector3 &vec_1,
-                    const Vector3 &vec_2)
-noexcept;
+std::vector <float> sub_vector(const std::vector <float> &vec_1,
+                               const std::vector <float> &vec_2);
 
-Vector3 multiply_vector3(const Vector3 &vec_1,
-                         const float mult)
-noexcept;
+std::vector <float> multiply_vector(const std::vector <float> &vec_1,
+                                    const float mult);
 
 void vector2array_float(const std::vector <float> &vec,
                         float (&arr)[4]);
 
-void rotate_first_second(Vector3 &first,
-                         Vector3 &second,
-                         const float theta)
-noexcept;
+void rotate_first_second(std::vector <float> &first,
+                         std::vector <float> &second,
+                         const float theta);
 
 void key_bindings(Camera &camera,
-                  Vector3 &position,
-                  Vector3 &forward,
-                  Vector3 &backward,
-                  Vector3 &rightward,
-                  Vector3 &leftward,
-                  Vector3 &upward,
-                  Vector3 &downward,
+                  std::vector <float> &position,
+                  std::vector <float> &forward,
+                  std::vector <float> &backward,
+                  std::vector <float> &rightward,
+                  std::vector <float> &leftward,
+                  std::vector <float> &upward,
+                  std::vector <float> &downward,
                   const float velocity,
                   const float theta)
 noexcept;
@@ -131,7 +133,7 @@ void wrapper(float &dim,
              const float wrap)
 noexcept;
 
-void wrapping(Vector3 &position,
+void wrapping(std::vector <float> &position,
               const float wrap)
 noexcept;
 
@@ -140,7 +142,7 @@ float randist(std::random_device &rand,
               const float dist_max)
 noexcept;
 
-Vector3 ranpos(std::random_device &rand,
+std::vector <float> ranpos(std::random_device &rand,
                        const float dist_min,
                        const float dist_max)
 noexcept;
@@ -149,22 +151,22 @@ unsigned char dimming(const float mult,
                       unsigned char channel)
 noexcept;
 
-Color dimmer(const Vector3 &difference,
+Color dimmer(const std::vector <float> &difference,
                      Color &cube_color,
                      const float decay,
                      const float multiplier)
 noexcept;
 
-bool display_selector(const Vector3 &position,
-                      const Vector3 &cube_position,
-                      const Vector3 &forward,
+bool display_selector(const std::vector <float> &position,
+                      const std::vector <float> &cube_position,
+                      const std::vector <float> &forward,
                       const float cam_field,
                       const float multiplier)
 noexcept;
 
-bool display_selector(const Vector3 &position,
-                      const Vector3 &cube_position,
-                      const Vector3 &forward,
+bool display_selector(const std::vector <float> &position,
+                      const std::vector <float> &cube_position,
+                      const std::vector <float> &forward,
                       const float cam_angle,
                       const float sight,
                       const float multiplier)

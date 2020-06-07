@@ -6,12 +6,12 @@
 #include <raylib.h>
 
 #include "cube_type.h"
-#include "vec_3_int.h"
+#include "misc_functions.h"
 
 class fractacube
 {
 private:
-  vec_3_int m_pos_int
+  std::vector <int> m_pos_int
   { 0, 0, 0};
 
   const std::vector <std::vector <std::vector <bool>>> m_pattern
@@ -141,7 +141,7 @@ private:
   const float m_dims_mult
   { 0.7f };
 
-  const Vector3 m_cube_dims;
+  const std::vector <float> m_cube_dims;
 
 public:
   fractacube(const float multiplier)
@@ -152,11 +152,11 @@ public:
              const float multiplier)
   noexcept;
 
-  Vector3 get_position()
+  std::vector <float> get_position()
   const noexcept
-  { return m_pos_int.get_Vector3(); }
+  { return vector_int2float(m_pos_int); }
 
-  Vector3 get_cube_dims()
+  std::vector <float> get_cube_dims()
   const noexcept
   { return m_cube_dims; }
 

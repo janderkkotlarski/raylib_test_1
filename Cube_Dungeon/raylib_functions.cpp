@@ -1,6 +1,23 @@
 #include "raylib_functions.h"
 
+#include <iostream>
+
 #include "cube_type.h"
+
+Vector3 vector2vector3 (const std::vector <float> &vec)
+{
+  if (vec.size() != 3)
+  {
+    std::cerr << "Vector size is not 3!";
+    throw 7;
+  }
+
+  return Vector3{ vec[0], vec[1], vec[2] };
+}
+
+std::vector <float> vector3_2vector (const Vector3 &vec3)
+noexcept
+{ return { vec3.x, vec3.y, vec3.z }; }
 
 void fog_ambient(Shader &fog_shader,
                  const std::vector <float> &ambient_profile)
@@ -35,7 +52,7 @@ noexcept
 }
 
 void fog_refresh(Shader &fog_shader,
-                 const Vector3 &position,
+                 const std::vector <float> &position,
                  const std::vector <float> &ambient_profile,
                  const int fog_density_loc,
                  const float fog_density)
@@ -44,12 +61,12 @@ noexcept
   fog_ambient(fog_shader, ambient_profile);
 
   SetShaderValue(fog_shader, fog_density_loc, &fog_density, UNIFORM_FLOAT);
-  SetShaderValue(fog_shader, fog_shader.locs[LOC_VECTOR_VIEW], &position.x, UNIFORM_VEC3);  
+  SetShaderValue(fog_shader, fog_shader.locs[LOC_VECTOR_VIEW], &position[0], UNIFORM_VEC3);
 }
 
 void refresh_fogs(std::vector <Model> &cube_models,
                   std::vector <Shader> &fog_shaders,
-                  const Vector3 &position,
+                  const std::vector <float> &position,
                   const std::vector <float> &spectral_profile,
                   const std::vector <float> &chromatic_profile,
                   const float candy_factor,
@@ -78,7 +95,7 @@ noexcept
 
 void refresh_darks(std::vector <Model> &cube_models,
                   std::vector <Shader> &fog_shaders,
-                  const Vector3 &position,
+                  const std::vector <float> &position,
                   const std::vector <float> &dark_profile,
                   const int fog_density_loc,
                   const float fog_density)
@@ -99,7 +116,7 @@ noexcept
 void init_cubes_images_fogs(std::vector <Model> &cube_models,
                             std::vector <Image> &face_images,
                             std::vector <Shader> &fog_shaders,
-                            const Vector3 &position,
+                            const std::vector <float> &position,
                             std::vector <float> &ambient_profile,
                             const fractacube &f_cube,
                             const std::string &file_name,
@@ -126,9 +143,9 @@ noexcept
 
       ImageRotateCW(&face_images[count]);
 
-      cube_models.push_back(LoadModelFromMesh(GenMeshCube(f_cube.get_cube_dims().x,
-                                                          f_cube.get_cube_dims().y,
-                                                          f_cube.get_cube_dims().z)));
+      cube_models.push_back(LoadModelFromMesh(GenMeshCube(f_cube.get_cube_dims()[0],
+                                                          f_cube.get_cube_dims()[1],
+                                                          f_cube.get_cube_dims()[2])));
 
       cube_models[count].materials[0].maps[MAP_DIFFUSE].texture = LoadTextureFromImage(face_images[count]);
 

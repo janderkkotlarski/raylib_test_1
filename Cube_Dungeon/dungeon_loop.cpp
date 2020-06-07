@@ -26,17 +26,17 @@ noexcept
 std::vector <int> dungeon_loop::pos_intifier()
 noexcept
 {
-  return { int(round(m_position.x/m_multiplier)),
-           int(round(m_position.y/m_multiplier)),
-           int(round(m_position.z/m_multiplier)) } ;
+  return { int(round(m_position[0]/m_multiplier)),
+           int(round(m_position[1]/m_multiplier)),
+           int(round(m_position[2]/m_multiplier)) } ;
 }
 
 void dungeon_loop::camera_init(Camera &camera)
 noexcept
 {
   camera_position(camera); // Camera position
-  camera.target = Vector3Add(m_position, m_directions[0]); // Vector3Add(camera.position, forward);      // Camera looking at point
-  camera.up = m_directions[2];          // Camera up vector (rotation towards target)
+  camera.target = vector2vector3(vector_add(m_position, m_directions[0])); // std::vector <float>Add(camera.position, forward);      // Camera looking at point
+  camera.up = vector2vector3(m_directions[2]);          // Camera up vector (rotation towards target)
   camera.fovy = m_cam_angle;                                // Camera field-of-view Y
   camera.type = CAMERA_PERSPECTIVE; // Camera mode type
 
@@ -49,14 +49,14 @@ void dungeon_loop::player_init()
 noexcept
 {
   if (m_level <= 2)
-  { m_start_posit = (Vector3){ 2.0f, 0.0f, 0.0f }; }
+  { m_start_posit = (std::vector <float>){ 2.0f, 0.0f, 0.0f }; }
 
   if (m_level >= 3)
-  { m_start_posit = (Vector3){ 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f }; }
+  { m_start_posit = (std::vector <float>){ 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f }; }
 
   m_directions = m_start_directs;
 
-  m_position = Vector3Scale(m_start_posit, m_multiplier);
+  m_position = vector_scale(m_start_posit, m_multiplier);
 }
 
 void dungeon_loop::level_init()
@@ -93,27 +93,27 @@ noexcept
   switch (m_act)
   {
     case action::forward:
-      m_position = Vector3Add(m_position, Vector3Scale(m_directions[0], m_velocity));
+      m_position = vector_add(m_position, vector_scale(m_directions[0], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::backward:
-      m_position = Vector3Subtract(m_position, Vector3Scale(m_directions[0], m_velocity));
+      m_position = vector_subtract(m_position, vector_scale(m_directions[0], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::right:
-      m_position = Vector3Add(m_position, Vector3Scale(m_directions[1], m_velocity));
+      m_position = vector_add(m_position, vector_scale(m_directions[1], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::left:
-      m_position = Vector3Subtract(m_position, Vector3Scale(m_directions[1], m_velocity));
+      m_position = vector_subtract(m_position, vector_scale(m_directions[1], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::up:
-      m_position = Vector3Add(m_position, Vector3Scale(m_directions[2], m_velocity));
+      m_position = vector_add(m_position, vector_scale(m_directions[2], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::down:
-      m_position = Vector3Subtract(m_position, Vector3Scale(m_directions[2], m_velocity));
+      m_position = vector_subtract(m_position, vector_scale(m_directions[2], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
 
@@ -193,13 +193,12 @@ noexcept
 {
   std::vector <std::vector <int>> directs;
 
-  for (const Vector3 &direction: m_directions)
+  for (const std::vector <float> &direction: m_directions)
   {
     std::vector <int> direct;
 
-    direct.push_back(int(round(direction.x)));
-    direct.push_back(int(round(direction.y)));
-    direct.push_back(int(round(direction.z)));
+    for (const float num: direction)
+    { direct.push_back(int(round(num))); }
 
     directs.push_back(direct);
   }
@@ -244,14 +243,16 @@ noexcept
 void dungeon_loop::play_actions(std::vector <Sound> &track_samples)
 noexcept
 {
-  m_cube_dungeon_pos = { coordinator(m_position.x),
-                         coordinator(m_position.y),
-                         coordinator(m_position.z) };
+  m_cube_dungeon_pos = { coordinator(m_position[0]),
+                         coordinator(m_position[1]),
+                         coordinator(m_position[2]) };
+
+
 
   if (m_cube_dungeon_pos ==
-      (std::vector <int>){ coordinator(m_multiplier*m_start_posit.x),
-                           coordinator(m_multiplier*m_start_posit.y),
-                           coordinator(m_multiplier*m_start_posit.z) })
+      std::vector <int>{ coordinator(m_multiplier*m_start_posit[0]),
+                         coordinator(m_multiplier*m_start_posit[1]),
+                         coordinator(m_multiplier*m_start_posit[2]) })
 
   { m_collide_type = cube_type::none; }
 
@@ -264,9 +265,14 @@ noexcept
     {
       collide();
 
-      m_dungeon_index[0] = unsigned(round(m_position.x/m_multiplier + m_directions[0].x) + m_dungeon_radius);
-      m_dungeon_index[1] = unsigned(round(m_position.y/m_multiplier + m_directions[0].y) + m_dungeon_radius);
-      m_dungeon_index[2] = unsigned(round(m_position.z/m_multiplier + m_directions[0].z) + m_dungeon_radius);
+      unsigned count
+      { 0 };
+
+      for (unsigned &num: m_dungeon_index)
+      {
+        num = unsigned(round(m_position[count]/m_multiplier + m_directions[0][count]) + m_dungeon_radius);
+        ++count;
+      }
 
       if (m_act == action::inhale &&
           (m_internal_type != cube_type::none ||
@@ -328,23 +334,26 @@ noexcept
 
     if (m_time >= m_period)
     {      
-      m_position.x = m_multiplier*round(m_position.x/m_multiplier);
-      m_position.y = m_multiplier*round(m_position.y/m_multiplier);
-      m_position.z = m_multiplier*round(m_position.z/m_multiplier);
+      for (float &num: m_position)
+      { num = m_multiplier*round(num/m_multiplier); }
 
-      for (Vector3 &direction: m_directions)
-      {
-        direction.x = round(direction.x);
-        direction.y = round(direction.y);
-        direction.z = round(direction.z);
+      for (std::vector <float> &direction: m_directions)
+      {        
+        for (float &num: direction)
+        { num = round(num); }
       }
 
       if (m_act == action::inhale &&
           m_internal_type == cube_type::none)
       {
-        m_dungeon_index[0] = unsigned(round(m_position.x/m_multiplier + m_directions[0].x) + m_dungeon_radius);
-        m_dungeon_index[1] = unsigned(round(m_position.y/m_multiplier + m_directions[0].y) + m_dungeon_radius);
-        m_dungeon_index[2] = unsigned(round(m_position.z/m_multiplier + m_directions[0].z) + m_dungeon_radius);
+        unsigned count
+        { 0 };
+
+        for (unsigned &num: m_dungeon_index)
+        {
+          num = unsigned(round(m_position[count]/m_multiplier + m_directions[0][count]) + m_dungeon_radius);
+          ++count;
+        }
 
         m_internal_type =  m_type_volume[m_dungeon_index[0]]
                                         [m_dungeon_index[1]]
@@ -429,8 +438,8 @@ noexcept
   wrapping(m_position, m_wrap);
 
   camera_position(camera);
-  camera.target = Vector3Add(m_position, m_directions[0]);
-  camera.up = m_directions[2];
+  camera.target = vector2vector3(vector_add(m_position, m_directions[0]));
+  camera.up = vector2vector3(m_directions[2]);
   camera.fovy = m_cam_angle;
 }
 
@@ -452,7 +461,7 @@ noexcept
 
   y += 30;
 
-  display_string("Pos: " , vector3_to_string(m_position), x, y, size);
+  display_string("Pos: " , vector2string(m_position), x, y, size);
 
   y += 30;
 
@@ -471,6 +480,16 @@ noexcept
   { display_string("No " , "thing!", x, y, size); }
 
   y += 30;
+
+  display_string("Scale: " , std::to_string(m_hale_scale), x, y, size);
+
+  y += 30;
+
+  std::vector <float> direction
+  { action2direction(m_directions, m_act) };
+
+  const std::string direction_string
+  { vector2string(direction) };
 
   display_string("Scale: " , std::to_string(m_hale_scale), x, y, size);
 }
@@ -548,16 +567,16 @@ noexcept
           { type2index(c_type) };
 
           if (display_selector(m_position,
-                               Vector3Scale(m_fracta_cube.get_position(), m_multiplier),
+                               vector_scale(m_fracta_cube.get_position(), m_multiplier),
                                m_directions[0], m_cam_field, m_multiplier))
           {
             if (index != 42)
             {    
               if (((m_act == action::inhale ||
                    m_act == action::exhale) &&
-                  counters[0] == (int)m_directions[0].x &&
-                  counters[1] == (int)m_directions[0].y &&
-                  counters[2] == (int)m_directions[0].z) ||
+                  counters[0] == (int)m_directions[0][0] &&
+                  counters[1] == (int)m_directions[0][1] &&
+                  counters[2] == (int)m_directions[0][2]) ||
                   (m_collide_type == cube_type::ruby &&
                    m_dungeon_index == m_direction_shift))
               { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_hale_scale); }
@@ -705,9 +724,9 @@ void dungeon_loop::run_window()
                          m_fracta_cube, file_name, file_type, m_dark_density_loc, m_fog_density, true);
 
   Model c_model
-  { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims().x,
-                                  m_fracta_cube.get_cube_dims().y,
-                                  m_fracta_cube.get_cube_dims().z)) };
+  { LoadModelFromMesh(GenMeshCube(m_fracta_cube.get_cube_dims()[0],
+                                  m_fracta_cube.get_cube_dims()[1],
+                                  m_fracta_cube.get_cube_dims()[2])) };
 
   c_model.materials[0].maps[MAP_DIFFUSE].texture = LoadTexture("cube_face_0.png");
 

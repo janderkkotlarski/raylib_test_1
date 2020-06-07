@@ -41,8 +41,7 @@ SOURCES += \
         main.cpp \
         misc_functions.cpp \
         raylib_functions.cpp \
-        synchrogear.cpp \
-        vec_3_int.cpp
+        synchrogear.cpp
 
 HEADERS += \
   action.h \
@@ -53,5 +52,4 @@ HEADERS += \
   keybindings.h \
   misc_functions.h \
   raylib_functions.h \
-  synchrogear.h \
-  vec_3_int.h
+  synchrogear.h

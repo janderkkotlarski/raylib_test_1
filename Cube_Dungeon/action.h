@@ -27,4 +27,8 @@ action direct2action(const std::vector <std::vector <int>> &directs,
                      const std::vector <int> &direct)
 noexcept;
 
+std::vector <float> action2direction(const std::vector <std::vector <float>> &directs,
+                                     const action &act)
+noexcept;
+
 #endif // ACTION_H

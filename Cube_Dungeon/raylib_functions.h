@@ -15,6 +15,11 @@
   #define GLSL_VERSION            330
 #endif
 
+Vector3 vector2vector3 (const std::vector <float> &vec);
+
+std::vector <float> vector3_2vector (const Vector3 &vec3)
+noexcept;
+
 void fog_ambient(Shader &fog_shader,
                  const std::vector <float> &ambient_profile);
 
@@ -25,7 +30,7 @@ void fog_init(Shader &fog_shader,
 noexcept;
 
 void fog_refresh(Shader &fog_shader,
-                 const Vector3 &position,
+                 const std::vector <float> &position,
                  const std::vector <float> &ambient_profile,
                  const int fog_density_loc,
                  const float fog_density)
@@ -33,7 +38,7 @@ noexcept;
 
 void refresh_fogs(std::vector <Model> &cube_models,
                   std::vector <Shader> &fog_shaders,
-                  const Vector3 &position,
+                  const std::vector <float> &position,
                   const std::vector<float> &spectral_profile,
                   const std::vector<float> &chromatic_profile,
                   const float candy_factor,
@@ -43,7 +48,7 @@ void refresh_fogs(std::vector <Model> &cube_models,
 
 void refresh_darks(std::vector <Model> &cube_models,
                   std::vector <Shader> &fog_shaders,
-                  const Vector3 &position,
+                  const std::vector <float> &position,
                   const std::vector <float> &dark_profile,
                   const int fog_density_loc,
                   const float fog_density)
@@ -52,7 +57,7 @@ noexcept;
 void init_cubes_images_fogs(std::vector <Model> &cube_models,
                             std::vector <Image> &face_images,
                             std::vector <Shader> &fog_shaders,
-                            const Vector3 &position,
+                            const std::vector <float> &position,
                             std::vector<float> &ambient_profile,
                             const fractacube &f_cube,
                             const std::string &file_name,

@@ -61,7 +61,7 @@ private:
   float m_theta
   { m_angle*GetFrameTime() };
 
-  const std::vector <Vector3> m_start_directs
+  const std::vector <std::vector <float>> m_start_directs
   { {1.0f, 0.0f, 0.0f},
     {0.0f, -1.0f, 0.0f},
     {0.0f, 0.0f, 1.0f} };
@@ -87,14 +87,14 @@ private:
   int m_wall_perc
   { 40 };
 
-  std::vector <Vector3> m_directions
+  std::vector <std::vector <float>> m_directions
   { m_start_directs };
 
-  Vector3 m_start_posit
+  std::vector <float> m_start_posit
   { 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
 
-  Vector3 m_position
-  { Vector3Scale(m_start_posit, m_multiplier) };
+  std::vector <float> m_position
+  { multiply_vector(m_start_posit, m_multiplier) };
 
   std::vector <int> m_pos_int
   { pos_intifier() };
@@ -257,7 +257,7 @@ private:
 
   void camera_position(Camera &camera)
   noexcept
-  { camera.position = Vector3Subtract(m_position, Vector3Scale(m_directions[0], 0.25f*m_multiplier)); }
+  { camera.position = vector_subtract(m_position, vector_scale(m_directions[0], 0.25f*m_multiplier)); }
 
   std::vector <int> pos_intifier()
   noexcept;

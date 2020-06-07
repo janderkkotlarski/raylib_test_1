@@ -10,7 +10,7 @@
 fractacube::fractacube(const float multiplier)
 noexcept
   : m_multiplier(multiplier),
-    m_cube_dims(Vector3Scale((Vector3){ 1.0f, 1.0f, 1.0f }, m_multiplier*m_scale/(float)m_division))
+    m_cube_dims(vector_scale(std::vector <float>{ 1.0f, 1.0f, 1.0f }, m_multiplier*m_scale/(float)m_division))
 {
   assert(m_scale >= 0.49f &&
          m_scale <= 1.11f);
@@ -22,8 +22,8 @@ fractacube::fractacube(const int x, const int y, const int z,
                        const cube_type c_type,
                        const float multiplier)
 noexcept
-  : m_pos_int(x, y, z), m_type(c_type), m_multiplier(multiplier),
-    m_cube_dims(Vector3Scale((Vector3){ 1.0f, 1.0f, 1.0f }, m_multiplier*m_scale/(float)m_division))
+  : m_pos_int(std::vector <int>{x, y, z}), m_type(c_type), m_multiplier(multiplier),
+    m_cube_dims((vector_scale(std::vector <float>{ 1.0f, 1.0f, 1.0f }, m_multiplier*m_scale/(float)m_division))
 {
   assert(m_scale >= 0.49f &&
          m_scale <= 1.01f);
@@ -35,7 +35,7 @@ void fractacube::set_pos_type(const int x, const int y, const int z,
                               const cube_type c_type)
 noexcept
 {
-  m_pos_int = vec_3_int{x, y, z};
+  m_pos_int = std::vector <int>{x, y, z};
   m_type = c_type;
 }
 
@@ -57,13 +57,16 @@ noexcept
           const float factor
           { m_multiplier/float(m_division) };
 
-          Vector3 sub_pos
+          std::vector <float> sub_pos
           { factor*repos(count_x, extra),
             factor*repos(count_y, extra),
             factor*repos(count_z, extra) };
 
-          Vector3 cube_pos
-          { Vector3Add(sub_pos, Vector3Scale(m_pos_int.get_Vector3(), m_multiplier)) };
+          const std::vector pos_float
+          { }
+
+          std::vector <float> cube_pos
+          { (vector_add(sub_pos, std::vector <float>Scale(m_pos_int.get_std::vector <float>(), m_multiplier)) };
 
           const Color setback_color
           { 0, 0, 0, 63 };
@@ -73,7 +76,7 @@ noexcept
           else
           {
             // DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color);
-            DrawModel(cube_model, cube_pos, hale_scale, Color{255, 255, 255, 63 });
+            DrawModel(cube_model, cube_pos, hale_scale, Color{ 255, 255, 255, 63 });
             DrawModel(cube_model_dark, cube_pos, hale_scale, WHITE);
           }
         }
