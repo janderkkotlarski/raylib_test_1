@@ -13,6 +13,7 @@
 dungeon_loop::dungeon_loop()
 noexcept
   :  m_type_volume(), m_fracta_cube(m_multiplier), m_int_vectors()
+/// Set up the loop
 {
   assert(m_multiplier > 0.0f);
   assert(m_directions.size() == 3);
@@ -24,10 +25,12 @@ noexcept
 
 void dungeon_loop::camera_position(Camera &camera)
 noexcept
+/// Hang the camera in the right position.
 { camera.position = vector2vector3(vector_subtract(m_position, vector_scale(m_directions[0], 0.25f*m_multiplier))); }
 
 std::vector <int> dungeon_loop::pos_intifier()
 noexcept
+/// Turn the position into ints for good quantization.
 {
   return { int(round(m_position[0]/m_multiplier)),
            int(round(m_position[1]/m_multiplier)),
@@ -36,6 +39,7 @@ noexcept
 
 void dungeon_loop::camera_init(Camera &camera)
 noexcept
+/// Initialize the camera.
 {
   camera_position(camera); // Camera position
   camera.target = vector2vector3(vector_add(m_position, m_directions[0])); // std::vector <float>Add(camera.position, forward);      // Camera looking at point
@@ -50,6 +54,7 @@ noexcept
 
 void dungeon_loop::player_init()
 noexcept
+/// Initialize all things pertaining to the player.
 {
   if (m_level <= 2)
   { m_start_posit = (std::vector <float>){ 2.0f, 0.0f, 0.0f }; }
@@ -64,6 +69,7 @@ noexcept
 
 void dungeon_loop::level_init()
 noexcept
+/// Level initialization.
 {  
   m_loop = true;
 
@@ -90,8 +96,9 @@ noexcept
   player_init();
 }
 
-void dungeon_loop::movetate()
+void dungeon_loop::perform_action()
 noexcept
+/// Choose what to based on the current action.
 {
   switch (m_act)
   {
@@ -437,7 +444,7 @@ noexcept
 
   chromatic_shift(m_chromatic_profile, m_delta_time);
 
-  movetate();
+  perform_action();
   wrapping(m_position, m_wrap);
 
   camera_position(camera);

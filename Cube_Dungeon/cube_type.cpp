@@ -54,6 +54,7 @@ noexcept
 
 cube_type index2type(const unsigned index)
 noexcept
+/// Assign cube type to an index number.
 {
   switch (index)
   {
@@ -100,6 +101,7 @@ noexcept
 
 bool type_collision(const cube_type c_type)
 noexcept
+/// Determine when a collision takes place.
 {
   if (c_type == cube_type::concrete ||
       c_type == cube_type::alabaster ||
@@ -116,6 +118,7 @@ noexcept
 bool type2profile(const cube_type c_type,
                   std::vector <float> &profile)
 noexcept
+/// Determine the color profile for the given cube type.
 {
   if (profile.size() == 4)
   {
@@ -146,7 +149,6 @@ noexcept
         return true;
         break;
     }
-
   }
 
   return false;
@@ -158,6 +160,7 @@ bool type2proflex (const cube_type c_type,
                    const std::vector <float> &chromatic_profile,
                    const float candy_factor)
 noexcept
+/// Determine bthe varying color profile for a given cube type.
 {
   if (profile.size() == 4)
   {
@@ -199,6 +202,7 @@ noexcept
 void scale_profile(std::vector <float> &profile,
                    const float scale)
 noexcept
+/// Multiply each color part by the given scalar.
 {
   for (float &part: profile)
   { part *= scale; }
@@ -208,6 +212,7 @@ noexcept
 
 bool transit(const cube_type &transit_type)
 noexcept
+/// Determine whether a transition scene is needed.
 {
   if (transit_type == cube_type::next ||
       transit_type == cube_type::setback)

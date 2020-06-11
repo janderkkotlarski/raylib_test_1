@@ -277,7 +277,7 @@ private:
   unsigned dungeon_warp(const int coord)
   noexcept;
 
-  void movetate()
+  void perform_action()
   noexcept;
 
   int coordinator(const float pos)
