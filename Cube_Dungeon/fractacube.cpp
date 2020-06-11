@@ -6,6 +6,7 @@
 #include <raymath.h>
 
 #include "misc_functions.h"
+#include "raylib_functions.h"
 
 fractacube::fractacube(const float multiplier)
 noexcept
@@ -23,7 +24,7 @@ fractacube::fractacube(const int x, const int y, const int z,
                        const float multiplier)
 noexcept
   : m_pos_int(std::vector <int>{x, y, z}), m_type(c_type), m_multiplier(multiplier),
-    m_cube_dims((vector_scale(std::vector <float>{ 1.0f, 1.0f, 1.0f }, m_multiplier*m_scale/(float)m_division))
+    m_cube_dims(vector_scale(std::vector <float>{ 1.0f, 1.0f, 1.0f }, m_multiplier*m_scale/(float)m_division))
 {
   assert(m_scale >= 0.49f &&
          m_scale <= 1.01f);
@@ -62,22 +63,21 @@ noexcept
             factor*repos(count_y, extra),
             factor*repos(count_z, extra) };
 
-          const std::vector pos_float
-          { }
+          const std::vector <float> pos_float;
 
           std::vector <float> cube_pos
-          { (vector_add(sub_pos, std::vector <float>Scale(m_pos_int.get_std::vector <float>(), m_multiplier)) };
+          { vector_add(sub_pos,vector_scale(vector_int2float(m_pos_int), m_multiplier)) };
 
           const Color setback_color
           { 0, 0, 0, 63 };
 
           if (m_type == cube_type::setback)
-          { DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, setback_color); }
+          { DrawCube(vector2vector3(cube_pos), m_cube_dims[0], m_cube_dims[1], m_cube_dims[2], setback_color); }
           else
           {
             // DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color);
-            DrawModel(cube_model, cube_pos, hale_scale, Color{ 255, 255, 255, 63 });
-            DrawModel(cube_model_dark, cube_pos, hale_scale, WHITE);
+            DrawModel(cube_model, vector2vector3(cube_pos), hale_scale, Color{ 255, 255, 255, 63 });
+            DrawModel(cube_model_dark, vector2vector3(cube_pos), hale_scale, WHITE);
           }
         }
       }

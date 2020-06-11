@@ -9,7 +9,6 @@
 
 #include "keybindings.h"
 #include "dungeon_maze.h"
-#include "raylib_functions.h"
 
 dungeon_loop::dungeon_loop()
 noexcept
@@ -22,6 +21,10 @@ noexcept
 
   dungeon_init(m_type_volume, m_max_dungeon_radius);
 }
+
+void dungeon_loop::camera_position(Camera &camera)
+noexcept
+{ camera.position = vector2vector3(vector_subtract(m_position, vector_scale(m_directions[0], 0.25f*m_multiplier))); }
 
 std::vector <int> dungeon_loop::pos_intifier()
 noexcept

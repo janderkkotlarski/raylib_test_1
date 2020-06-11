@@ -310,6 +310,70 @@ std::vector <float> vector_scale(const std::vector <float> &vec_1,
   return vec_2;
 }
 
+float vector_dot_product(const std::vector <float> &vec_1,
+                         const std::vector <float> &vec_2)
+{
+  if (vec_1.size() == 0 ||
+      vec_2.size() == 0)
+  {
+    std::cerr << "One vector has size 0!" << std::endl;
+
+    throw 4;
+  }
+
+  if (vec_1.size() != vec_2.size())
+  {
+    std::cerr << "Vectors have different sizes!" << std::endl;
+
+    throw 5;
+  }
+
+  unsigned count
+  { 0 };
+
+  float product
+  { 0.0f };
+
+  for (const float num: vec_1)
+  {
+    product += num*vec_2[count];
+    ++count;
+  }
+
+  return product;
+}
+
+float vector_length(const std::vector <float> &vec)
+noexcept
+{
+  float length
+  { sqrt(vector_dot_product(vec, vec)) };
+
+  return length;
+}
+
+std::vector <float> vector_normalized(const std::vector <float> &vec)
+noexcept
+{
+  const float length
+  { vector_length(vec) };
+
+  std::vector <float> vec_2
+  { vec };
+
+  if (length > 0.0f)
+  {
+    for (float &num: vec_2)
+    { num /= length; }
+  }
+
+  return vec_2;
+}
+
+void vector_normalize(std::vector <float> &vec)
+noexcept
+{ vec = vector_normalized(vec); }
+
 void color2profile(const Color &color,
                    std::vector <float> &profile)
 noexcept
@@ -690,7 +754,7 @@ noexcept
   const std::vector <float> difference
   { vector_subtract(cube_position, position) };
 
-  return (vector_dot_product(vector_normalize(difference), forward) > cam_field ||
+  return (vector_dot_product(vector_normalized(difference), forward) > cam_field ||
           vector_dot_product(difference, difference) <= 4.0f*multiplier*multiplier);
 }
 
@@ -705,7 +769,7 @@ noexcept
   const std::vector <float> difference
   { vector_subtract(cube_position, position) };
 
-  return ((vector_dot_product(vector_normalize(difference), forward) > cam_field &&
+  return ((vector_dot_product(vector_normalized(difference), forward) > cam_field &&
            vector_dot_product(difference, difference) <= sight*sight) ||
            vector_dot_product(difference, difference) <= 4.0f*multiplier*multiplier);
 }

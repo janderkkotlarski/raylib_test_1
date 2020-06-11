@@ -257,8 +257,7 @@ private:
   /// functions
 
   void camera_position(Camera &camera)
-  noexcept
-  { camera.position = vector2vector3(vector_subtract(m_position, vector_scale(m_directions[0], 0.25f*m_multiplier))); }
+  noexcept;
 
   std::vector <int> pos_intifier()
   noexcept;
