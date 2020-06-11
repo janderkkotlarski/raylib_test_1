@@ -36,7 +36,7 @@ private:
   { 800 };
 
   const float m_period
-  { 2.0f };
+  { 0.5f };
 
   float m_time
   { 0.0f };

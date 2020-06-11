@@ -162,6 +162,7 @@ noexcept
 
 int dungeon_loop::dungeon_wrap(const int coord)
 noexcept
+/// When a coordinate falls outside the scope, bring it back on the other side.
 {
   int index = coord;
 
@@ -182,6 +183,7 @@ noexcept
 
 unsigned dungeon_loop::dungeon_warp(const int coord)
 noexcept
+/// When a coordinate falls outside the scope, bring it back on the other side.
 {
   unsigned index = coord;
 
@@ -196,10 +198,12 @@ noexcept
 
 int dungeon_loop::coordinator(const float pos)
 noexcept
+/// Determine the int coordinate from the float position
 { return int(round(pos/m_multiplier)) + m_dungeon_radius; }
 
 std::vector <std::vector <int>> dungeon_loop::director()
 noexcept
+/// Returns the initial directions of movement.
 {
   std::vector <std::vector <int>> directs;
 
@@ -220,13 +224,17 @@ noexcept
 
 void dungeon_loop::collide()
 noexcept
+/// Determine whether an action results in a collision and thus results in no action taken.
 {
   std::vector <std::vector <int>> directs
   { director() };
+  // Load forward, right and up directions
 
   for (const std::vector <int> &direct: directs)
+  // Look at each of these orthogonal three directions
   {   
     for (int sign{ 1 }; sign >= -1; sign -=2)
+    // Parse positive and negative
     {
       const std::vector <int> dir
       { scale_int_vector(direct, sign) };
