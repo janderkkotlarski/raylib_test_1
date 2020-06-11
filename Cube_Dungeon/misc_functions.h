@@ -101,14 +101,14 @@ noexcept;
 std::vector <std::string> vector2strings(const std::vector <float> &vec)
 noexcept;
 
-std::vector <float> add_vector(const std::vector <float> &vec_1,
+std::vector <float> vector_add(const std::vector <float> &vec_1,
                                const std::vector <float> &vec_2);
 
-std::vector <float> sub_vector(const std::vector <float> &vec_1,
-                               const std::vector <float> &vec_2);
+std::vector <float> vector_subtract(const std::vector <float> &vec_1,
+                                     const std::vector <float> &vec_2);
 
-std::vector <float> multiply_vector(const std::vector <float> &vec_1,
-                                    const float mult);
+std::vector <float> vector_scale(const std::vector <float> &vec_1,
+                                 const float scale);
 
 void vector2array_float(const std::vector <float> &vec,
                         float (&arr)[4]);

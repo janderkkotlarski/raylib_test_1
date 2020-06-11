@@ -9,6 +9,7 @@
 #include <rlights.h>
 
 #include "misc_functions.h"
+#include "raylib_functions.h"
 #include "fractacube.h"
 #include "action.h"
 #include "synchrogear.h"
@@ -94,7 +95,7 @@ private:
   { 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
 
   std::vector <float> m_position
-  { multiply_vector(m_start_posit, m_multiplier) };
+  { vector_scale(m_start_posit, m_multiplier) };
 
   std::vector <int> m_pos_int
   { pos_intifier() };
@@ -257,7 +258,7 @@ private:
 
   void camera_position(Camera &camera)
   noexcept
-  { camera.position = vector_subtract(m_position, vector_scale(m_directions[0], 0.25f*m_multiplier)); }
+  { camera.position = vector2vector3(vector_subtract(m_position, vector_scale(m_directions[0], 0.25f*m_multiplier))); }
 
   std::vector <int> pos_intifier()
   noexcept;

@@ -230,7 +230,7 @@ noexcept
   return strings;
 }
 
-std::vector <float> add_vector(const std::vector <float> &vec_1,
+std::vector <float> vector_add(const std::vector <float> &vec_1,
                                const std::vector <float> &vec_2)
 {
   if (vec_1.size() == 0)
@@ -261,8 +261,39 @@ std::vector <float> add_vector(const std::vector <float> &vec_1,
   return vec_3;
 }
 
-std::vector <float> multiply_vector(const std::vector <float> &vec_1,
-                                    const float mult)
+std::vector <float> vector_subtract(const std::vector <float> &vec_1,
+                                     const std::vector <float> &vec_2)
+{
+  if (vec_1.size() == 0)
+  {
+    std::cerr << "Vector has no size!" << std::endl;
+
+    throw 6;
+  }
+
+  if (vec_1.size() != vec_2.size())
+  {
+    std::cerr << "Vectors have different sizes!" << std::endl;
+
+    throw 7;
+  }
+
+  std::vector <float> vec_3;
+
+  unsigned count
+  { 0 };
+
+  for (const float num: vec_1)
+  {
+    vec_3.push_back(num - vec_2[count]);
+    ++count;
+  }
+
+  return vec_3;
+}
+
+std::vector <float> vector_scale(const std::vector <float> &vec_1,
+                                 const float scale)
 {
   if (vec_1.size() == 0)
   {
@@ -274,7 +305,7 @@ std::vector <float> multiply_vector(const std::vector <float> &vec_1,
   std::vector <float> vec_2;
 
   for (const float num: vec_1)
-  { vec_2.push_back(num*mult); }
+  { vec_2.push_back(num*scale); }
 
   return vec_2;
 }
