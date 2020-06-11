@@ -4,6 +4,8 @@
 #include <vector>
 
 enum class action
+/// Actions to take when certain consitions are met
+/// As longas an action is taken, no other action should be taken
 {
   none,
   forward,

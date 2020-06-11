@@ -8,10 +8,31 @@
 
 #include "cube_type.h"
 
-std::vector <float> vector_int2float(const std::vector <int> &vec_int)
+std::vector <float> vector_negate(const std::vector <float> &vec)
 noexcept;
 
-std::vector <float> negate_float_vector(const std::vector <float> &vec)
+std::vector <float> vector_add(const std::vector <float> &vec_1,
+                               const std::vector <float> &vec_2);
+
+std::vector <float> vector_subtract(const std::vector <float> &vec_1,
+                                     const std::vector <float> &vec_2);
+
+std::vector <float> vector_scale(const std::vector <float> &vec_1,
+                                 const float scale);
+
+float vector_dot_product(const std::vector <float> &vec_1,
+                         const std::vector <float> &vec_2);
+
+float vector_length(const std::vector <float> &vec)
+noexcept;
+
+std::vector <float> vector_normalized(const std::vector <float> &vec)
+noexcept;
+
+void vector_normalize(std::vector <float> &vec)
+noexcept;
+
+std::vector <float> vector_int2float(const std::vector <int> &vec_int)
 noexcept;
 
 std::vector <int> negate_int_vector(const std::vector <int> &vec)
@@ -101,26 +122,7 @@ noexcept;
 std::vector <std::string> vector2strings(const std::vector <float> &vec)
 noexcept;
 
-std::vector <float> vector_add(const std::vector <float> &vec_1,
-                               const std::vector <float> &vec_2);
 
-std::vector <float> vector_subtract(const std::vector <float> &vec_1,
-                                     const std::vector <float> &vec_2);
-
-std::vector <float> vector_scale(const std::vector <float> &vec_1,
-                                 const float scale);
-
-float vector_dot_product(const std::vector <float> &vec_1,
-                         const std::vector <float> &vec_2);
-
-float vector_length(const std::vector <float> &vec)
-noexcept;
-
-std::vector <float> vector_normalized(const std::vector <float> &vec)
-noexcept;
-
-void vector_normalize(std::vector <float> &vec)
-noexcept;
 
 void vector2array_float(const std::vector <float> &vec,
                         float (&arr)[4]);

@@ -5,6 +5,7 @@
 action direct2action(const std::vector <std::vector <int>> &directs,
                      const std::vector <int> &direct)
 noexcept
+/// Assign an movement action to a certain direction
 {
   if (direct == directs[0])
   { return action::forward; }
@@ -27,21 +28,22 @@ noexcept
 std::vector <float> action2direction(const std::vector <std::vector <float>> &directs,
                                      const action &act)
 noexcept
+/// Assign a direction to a certain movement action
 {
   if (act == action::forward)
   { return directs[0]; }
   if (act == action::backward)
-  { return negate_float_vector(directs[0]); }
+  { return vector_negate(directs[0]); }
 
   if (act == action::right)
   { return directs[1]; }
   if (act == action::left)
-  { return negate_float_vector(directs[1]); }
+  { return vector_negate(directs[1]); }
 
   if (act == action::up)
   { return directs[2]; }
   if (act == action::down)
-  { return negate_float_vector(directs[2]); }
+  { return vector_negate(directs[2]); }
 
   return {0.0f, 0.0f, 0.0f};
 }

@@ -6,6 +6,7 @@
 #include "misc_functions.h"
 
 unsigned type2index(const cube_type c_type)
+/// Assign an index number to a cube type.
 noexcept
 {
   switch (c_type)

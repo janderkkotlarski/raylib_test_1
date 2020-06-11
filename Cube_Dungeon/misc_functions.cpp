@@ -6,18 +6,7 @@
 
 #include <raymath.h>
 
-std::vector <float> vector_int2float(const std::vector <int> &vec_int)
-noexcept
-{
-  std::vector <float> vec_float;
-
-  for (int num: vec_int)
-  { vec_float.push_back(num); }
-
-  return vec_float;
-}
-
-std::vector <float> negate_float_vector(const std::vector <float> &vec)
+std::vector <float> vector_negate(const std::vector <float> &vec)
 noexcept
 {
   std::vector <float> invec;
@@ -36,6 +25,176 @@ noexcept
 
   return invec;
 }
+
+std::vector <float> vector_add(const std::vector <float> &vec_1,
+                               const std::vector <float> &vec_2)
+{
+  if (vec_1.size() == 0)
+  {
+    std::cerr << "Vector has no size!" << std::endl;
+
+    throw 6;
+  }
+
+  if (vec_1.size() != vec_2.size())
+  {
+    std::cerr << "Vectors have different sizes!" << std::endl;
+
+    throw 7;
+  }
+
+  std::vector <float> vec_3;
+
+  unsigned count
+  { 0 };
+
+  for (const float num: vec_1)
+  {
+    vec_3.push_back(num + vec_2[count]);
+    ++count;
+  }
+
+  return vec_3;
+}
+
+std::vector <float> vector_subtract(const std::vector <float> &vec_1,
+                                     const std::vector <float> &vec_2)
+{
+  if (vec_1.size() == 0)
+  {
+    std::cerr << "Vector has no size!" << std::endl;
+
+    throw 6;
+  }
+
+  if (vec_1.size() != vec_2.size())
+  {
+    std::cerr << "Vectors have different sizes!" << std::endl;
+
+    throw 7;
+  }
+
+  std::vector <float> vec_3;
+
+  unsigned count
+  { 0 };
+
+  for (const float num: vec_1)
+  {
+    vec_3.push_back(num - vec_2[count]);
+    ++count;
+  }
+
+  return vec_3;
+}
+
+std::vector <float> vector_scale(const std::vector <float> &vec_1,
+                                 const float scale)
+{
+  if (vec_1.size() == 0)
+  {
+    std::cerr << "Vector has size 0!";
+
+    throw 1;
+  }
+
+  std::vector <float> vec_2;
+
+  for (const float num: vec_1)
+  { vec_2.push_back(num*scale); }
+
+  return vec_2;
+}
+
+float vector_dot_product(const std::vector <float> &vec_1,
+                         const std::vector <float> &vec_2)
+{
+  if (vec_1.size() == 0 ||
+      vec_2.size() == 0)
+  {
+    std::cerr << "One vector has size 0!" << std::endl;
+
+    throw 4;
+  }
+
+  if (vec_1.size() != vec_2.size())
+  {
+    std::cerr << "Vectors have different sizes!" << std::endl;
+
+    throw 5;
+  }
+
+  unsigned count
+  { 0 };
+
+  float product
+  { 0.0f };
+
+  for (const float num: vec_1)
+  {
+    product += num*vec_2[count];
+    ++count;
+  }
+
+  return product;
+}
+
+float vector_length(const std::vector <float> &vec)
+noexcept
+{
+  float length
+  { sqrt(vector_dot_product(vec, vec)) };
+
+  return length;
+}
+
+std::vector <float> vector_normalized(const std::vector <float> &vec)
+noexcept
+{
+  const float length
+  { vector_length(vec) };
+
+  std::vector <float> vec_2
+  { vec };
+
+  if (length > 0.0f)
+  {
+    for (float &num: vec_2)
+    { num /= length; }
+  }
+
+  return vec_2;
+}
+
+void vector_normalize(std::vector <float> &vec)
+noexcept
+{ vec = vector_normalized(vec); }
+
+void color2profile(const Color &color,
+                   std::vector <float> &profile)
+noexcept
+{
+  const float mult
+  { 1.0f };
+
+  profile[0] = mult*(float)color.r/255.0f;
+  profile[1] = mult*(float)color.g/255.0f;
+  profile[2] = mult*(float)color.b/255.0f;
+  profile[3] = mult*(float)color.a/255.0f;
+}
+
+std::vector <float> vector_int2float(const std::vector <int> &vec_int)
+noexcept
+{
+  std::vector <float> vec_float;
+
+  for (int num: vec_int)
+  { vec_float.push_back(num); }
+
+  return vec_float;
+}
+
+
 
 std::vector <int> negate_int_vector(const std::vector <int> &vec)
 noexcept
@@ -230,162 +389,7 @@ noexcept
   return strings;
 }
 
-std::vector <float> vector_add(const std::vector <float> &vec_1,
-                               const std::vector <float> &vec_2)
-{
-  if (vec_1.size() == 0)
-  {
-    std::cerr << "Vector has no size!" << std::endl;
 
-    throw 6;
-  }
-
-  if (vec_1.size() != vec_2.size())
-  {
-    std::cerr << "Vectors have different sizes!" << std::endl;
-
-    throw 7;
-  }
-
-  std::vector <float> vec_3;
-
-  unsigned count
-  { 0 };
-
-  for (const float num: vec_1)
-  {
-    vec_3.push_back(num + vec_2[count]);
-    ++count;
-  }
-
-  return vec_3;
-}
-
-std::vector <float> vector_subtract(const std::vector <float> &vec_1,
-                                     const std::vector <float> &vec_2)
-{
-  if (vec_1.size() == 0)
-  {
-    std::cerr << "Vector has no size!" << std::endl;
-
-    throw 6;
-  }
-
-  if (vec_1.size() != vec_2.size())
-  {
-    std::cerr << "Vectors have different sizes!" << std::endl;
-
-    throw 7;
-  }
-
-  std::vector <float> vec_3;
-
-  unsigned count
-  { 0 };
-
-  for (const float num: vec_1)
-  {
-    vec_3.push_back(num - vec_2[count]);
-    ++count;
-  }
-
-  return vec_3;
-}
-
-std::vector <float> vector_scale(const std::vector <float> &vec_1,
-                                 const float scale)
-{
-  if (vec_1.size() == 0)
-  {
-    std::cerr << "Vector has size 0!";
-
-    throw 1;
-  }
-
-  std::vector <float> vec_2;
-
-  for (const float num: vec_1)
-  { vec_2.push_back(num*scale); }
-
-  return vec_2;
-}
-
-float vector_dot_product(const std::vector <float> &vec_1,
-                         const std::vector <float> &vec_2)
-{
-  if (vec_1.size() == 0 ||
-      vec_2.size() == 0)
-  {
-    std::cerr << "One vector has size 0!" << std::endl;
-
-    throw 4;
-  }
-
-  if (vec_1.size() != vec_2.size())
-  {
-    std::cerr << "Vectors have different sizes!" << std::endl;
-
-    throw 5;
-  }
-
-  unsigned count
-  { 0 };
-
-  float product
-  { 0.0f };
-
-  for (const float num: vec_1)
-  {
-    product += num*vec_2[count];
-    ++count;
-  }
-
-  return product;
-}
-
-float vector_length(const std::vector <float> &vec)
-noexcept
-{
-  float length
-  { sqrt(vector_dot_product(vec, vec)) };
-
-  return length;
-}
-
-std::vector <float> vector_normalized(const std::vector <float> &vec)
-noexcept
-{
-  const float length
-  { vector_length(vec) };
-
-  std::vector <float> vec_2
-  { vec };
-
-  if (length > 0.0f)
-  {
-    for (float &num: vec_2)
-    { num /= length; }
-  }
-
-  return vec_2;
-}
-
-void vector_normalize(std::vector <float> &vec)
-noexcept
-{ vec = vector_normalized(vec); }
-
-void color2profile(const Color &color,
-                   std::vector <float> &profile)
-noexcept
-{
-  const float mult
-  { 1.0f };
-
-  profile[0] = mult*(float)color.r/255.0f;
-  profile[1] = mult*(float)color.g/255.0f;
-  profile[2] = mult*(float)color.b/255.0f;
-  profile[3] = mult*(float)color.a/255.0f;
-}
 
 std::vector <float> color2profile(const Color &color)
 noexcept
