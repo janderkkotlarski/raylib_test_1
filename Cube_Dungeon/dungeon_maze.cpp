@@ -204,10 +204,12 @@ noexcept
                [dungeon_radius - 2]
                [dungeon_radius - 2] = cube_type::next;
 
+    /*
     plus_3d(type_volume, cube_type::ruby,
             dungeon_radius,
             dungeon_radius,
             dungeon_radius);
+            */
   }
 
   if (level >= 3)
