@@ -509,7 +509,11 @@ noexcept
   const std::string direction_string
   { vector2string(direction) };
 
-  display_string("Scale: " , std::to_string(m_hale_scale), x, y, size);
+  display_string("Direction: " , direction_string, x, y, size);
+
+  y += 30;
+
+
 }
 
 void dungeon_loop::coord_transform(const std::vector <int> &counters,

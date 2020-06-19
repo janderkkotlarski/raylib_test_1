@@ -110,7 +110,7 @@ void scale_profile(std::vector <float> &profile,
                    const float scale)
 noexcept;
 
-bool transit(const cube_type &transit_type)
+bool transit(const cube_type transit_type)
 noexcept;
 
 #endif // CUBE_TYPE_H

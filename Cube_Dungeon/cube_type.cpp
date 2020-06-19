@@ -210,7 +210,7 @@ noexcept
   profile[3] = 1.0f;
 }
 
-bool transit(const cube_type &transit_type)
+bool transit(const cube_type transit_type)
 noexcept
 /// Determine whether a transition scene is needed.
 {
@@ -220,3 +220,5 @@ noexcept
 
   return false;
 }
+
+std::string type2string(const cube)
