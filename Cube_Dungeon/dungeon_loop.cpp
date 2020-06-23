@@ -272,7 +272,9 @@ noexcept
                          coordinator(m_multiplier*m_start_posit[1]),
                          coordinator(m_multiplier*m_start_posit[2]) })
 
-  { m_collide_type = cube_type::none; }
+  {
+    // m_collide_type = cube_type::none;
+  }
 
   if (m_act == action::none)
   {
