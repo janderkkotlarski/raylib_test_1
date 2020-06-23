@@ -2,6 +2,7 @@
 #define CUBE_TYPE_H
 
 #include <vector>
+#include <string>
 
 #include <raylib.h>
 
@@ -111,6 +112,9 @@ void scale_profile(std::vector <float> &profile,
 noexcept;
 
 bool transit(const cube_type transit_type)
+noexcept;
+
+std::string type2string(const cube_type c_type)
 noexcept;
 
 #endif // CUBE_TYPE_H

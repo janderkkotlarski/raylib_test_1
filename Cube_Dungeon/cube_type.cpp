@@ -221,4 +221,60 @@ noexcept
   return false;
 }
 
-std::string type2string(const cube)
+std::string type2string(const cube_type c_type)
+noexcept
+{
+  switch (c_type)
+  {
+    case cube_type::none:
+      return "none";
+      break;
+    case cube_type::concrete:
+      return "concrete";
+      break;
+    case cube_type::alabaster:
+      return "alabaster";
+      break;
+    case cube_type::invisible:
+      return "invisible";
+      break;
+    case cube_type::transparent:
+      return "transparent";
+      break;
+    case cube_type::next:
+      return "next";
+      break;
+    case cube_type::special:
+      return "special";
+      break;
+    case cube_type::previous:
+      return "previous";
+      break;
+    case cube_type::setback:
+      return "setback";
+      break;
+    case cube_type::catalyst:
+      return "catalyst";
+      break;
+    case cube_type::trigger:
+      return "trigger";
+      break;
+    case cube_type::miscellaneous:
+      return "miscellaneous";
+      break;
+    case cube_type::ruby:
+      return "ruby";
+      break;
+    case cube_type::citrine:
+      return "citrine";
+      break;
+    case cube_type::emerald:
+      return "emerald";
+      break;
+    case cube_type::sapphire:
+      return "sapphire";
+      break;
+  }
+
+  return "none";
+}

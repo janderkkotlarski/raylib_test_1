@@ -479,7 +479,7 @@ noexcept
 
   y += 30;
 
-  display_string("Pos: " , vector2string(m_position), x, y, size);
+  display_string("Pos: ", vector2string(m_position), x, y, size);
 
   y += 30;
 
@@ -490,16 +490,16 @@ noexcept
     "][" + std::to_string(m_direction_shift[2]) + "]"
   };
 
-  display_string("Col: " , collide_pos, x, y, size);
+  display_string("Col: ", collide_pos, x, y, size);
 
   y += 30;
 
   if (m_act == action::none)
-  { display_string("No " , "thing!", x, y, size); }
+  { display_string("No ", "thing!", x, y, size); }
 
   y += 30;
 
-  display_string("Scale: " , std::to_string(m_hale_scale), x, y, size);
+  display_string("Scale: ", std::to_string(m_hale_scale), x, y, size);
 
   y += 30;
 
@@ -509,11 +509,11 @@ noexcept
   const std::string direction_string
   { vector2string(direction) };
 
-  display_string("Direction: " , direction_string, x, y, size);
+  display_string("Direction: ", direction_string, x, y, size);
 
   y += 30;
 
-
+  display_string("Collide type: ",type2string(m_collide_type), x, y, size);
 }
 
 void dungeon_loop::coord_transform(const std::vector <int> &counters,
