@@ -385,6 +385,8 @@ noexcept
       }
 
       m_act = action::none;
+
+      m_collide_type = cube_type::none;
     }
   }
 }
