@@ -91,6 +91,9 @@ private:
   std::vector <std::vector <float>> m_directions
   { m_start_directs };
 
+  std::vector <float> m_movement
+  { 0.0f, 0.0f, 0.0f };
+
   std::vector <float> m_start_posit
   { 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
 

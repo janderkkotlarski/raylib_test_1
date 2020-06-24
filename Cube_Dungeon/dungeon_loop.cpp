@@ -100,30 +100,26 @@ void dungeon_loop::perform_action()
 noexcept
 /// Choose what to based on the current action.
 {
+  m_position = vector_add(m_position, vector_scale(m_movement, m_velocity));
+
   switch (m_act)
   {
     case action::forward:
-      m_position = vector_add(m_position, vector_scale(m_directions[0], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::backward:
-      m_position = vector_subtract(m_position, vector_scale(m_directions[0], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::right:
-      m_position = vector_add(m_position, vector_scale(m_directions[1], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::left:
-      m_position = vector_subtract(m_position, vector_scale(m_directions[1], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::up:
-      m_position = vector_add(m_position, vector_scale(m_directions[2], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
     case action::down:
-      m_position = vector_subtract(m_position, vector_scale(m_directions[2], m_velocity));
       m_hale_scale -= GetFrameTime()/m_period;
       break;
 
@@ -156,6 +152,9 @@ noexcept
 
     case action::none:
       m_hale_scale = 1.0f;
+      break;
+
+    case action::catalyze:
       break;
   }
 }
@@ -283,6 +282,8 @@ noexcept
 
     if (m_act != action::none)
     {
+      m_movement = action2direction(m_directions, m_act);
+
       collide();
 
       unsigned count
@@ -384,9 +385,16 @@ noexcept
                      [m_dungeon_index[2]] = cube_type::none;
       }
 
+      if (m_movement != std::vector <float> { 0.0f, 0.0f, 0.0f })
+      {
+
+      }
+
       m_act = action::none;
 
       m_collide_type = cube_type::none;
+
+      m_movement = { 0.0f, 0.0f, 0.0f };
     }
   }
 }
