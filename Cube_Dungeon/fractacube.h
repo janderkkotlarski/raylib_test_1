@@ -131,13 +131,13 @@ private:
   { m_division - 1 };
 
   const float m_scale
-  { 0.7f };
+  { 1.0f };
 
   cube_type m_type
   { cube_type::none };
 
   const float m_dims_mult
-  { 0.7f };
+  { 1.0f };
 
   const std::vector <float> m_cube_dims;
 

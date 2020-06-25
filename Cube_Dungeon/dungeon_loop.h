@@ -42,7 +42,7 @@ private:
   { 0.0f };
 
   float m_delta_time
-  { 1.0f };
+  { 0.5f };
 
   float m_hale_scale
   { 1.0f };

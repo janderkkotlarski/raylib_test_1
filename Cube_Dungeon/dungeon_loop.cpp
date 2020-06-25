@@ -377,7 +377,15 @@ noexcept
 
       if (m_movement != std::vector <float> { 0.0f, 0.0f, 0.0f })
       {
+        std::vector <int> moved_to
+        { vector_float2int(m_position) };
 
+        for (int &num: moved_to)
+        { num += m_dungeon_radius; }
+
+        m_type_volume[moved_to[0]]
+                     [moved_to[1]]
+                     [moved_to[2]] = cube_type::none;
       }
 
       m_act = action::none;
