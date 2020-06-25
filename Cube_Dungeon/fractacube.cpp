@@ -8,28 +8,22 @@
 #include "misc_functions.h"
 #include "raylib_functions.h"
 
-fractacube::fractacube(const float multiplier)
+fractacube::fractacube()
 noexcept
-  : m_multiplier(multiplier),
-    m_cube_dims(vector_scale(std::vector <float>{ 1.0f, 1.0f, 1.0f }, m_multiplier*m_scale/(float)m_division))
+  : m_cube_dims(vector_scale(std::vector <float>{ 1.0f, 1.0f, 1.0f }, m_scale/(float)m_division))
 {
   assert(m_scale >= 0.49f &&
          m_scale <= 1.11f);
-
-  assert(m_multiplier > 0.0f);
 }
 
 fractacube::fractacube(const int x, const int y, const int z,
-                       const cube_type c_type,
-                       const float multiplier)
+                       const cube_type c_type)
 noexcept
-  : m_pos_int(std::vector <int>{x, y, z}), m_type(c_type), m_multiplier(multiplier),
-    m_cube_dims(vector_scale(std::vector <float>{ 1.0f, 1.0f, 1.0f }, m_multiplier*m_scale/(float)m_division))
+  : m_pos_int(std::vector <int>{x, y, z}), m_type(c_type),
+    m_cube_dims(vector_scale(std::vector <float>{ 1.0f, 1.0f, 1.0f }, m_scale/(float)m_division))
 {
   assert(m_scale >= 0.49f &&
          m_scale <= 1.01f);
-
-  assert(m_multiplier > 0.0f);
 }
 
 void fractacube::set_pos_type(const int x, const int y, const int z,
@@ -56,7 +50,7 @@ noexcept
         if (m_pattern[count_x][count_y][count_z])
         {
           const float factor
-          { m_multiplier/float(m_division) };
+          { float(m_division) };
 
           std::vector <float> sub_pos
           { factor*repos(count_x, extra),
@@ -66,7 +60,7 @@ noexcept
           const std::vector <float> pos_float;
 
           std::vector <float> cube_pos
-          { vector_add(sub_pos,vector_scale(vector_int2float(m_pos_int), m_multiplier)) };
+          { vector_add(sub_pos, vector_int2float(m_pos_int)) };
 
           const Color setback_color
           { 0, 0, 0, 63 };

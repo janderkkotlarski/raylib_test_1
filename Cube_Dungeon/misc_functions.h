@@ -35,6 +35,9 @@ noexcept;
 std::vector <float> vector_int2float(const std::vector <int> &vec_int)
 noexcept;
 
+std::vector <int> vector_float2int(const std::vector <float> &vec_float)
+noexcept;
+
 std::vector <int> negate_int_vector(const std::vector <int> &vec)
 noexcept;
 
@@ -174,16 +177,14 @@ noexcept;
 bool display_selector(const std::vector <float> &position,
                       const std::vector <float> &cube_position,
                       const std::vector <float> &forward,
-                      const float cam_field,
-                      const float multiplier)
+                      const float cam_field)
 noexcept;
 
 bool display_selector(const std::vector <float> &position,
                       const std::vector <float> &cube_position,
                       const std::vector <float> &forward,
                       const float cam_angle,
-                      const float sight,
-                      const float multiplier)
+                      const float sight)
 noexcept;
 
 #endif // MISC_FUNCTIONS_H

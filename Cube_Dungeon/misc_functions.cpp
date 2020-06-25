@@ -188,13 +188,22 @@ noexcept
 {
   std::vector <float> vec_float;
 
-  for (int num: vec_int)
+  for (const int num: vec_int)
   { vec_float.push_back(num); }
 
   return vec_float;
 }
 
+std::vector <int> vector_float2int(const std::vector <float> &vec_float)
+noexcept
+{
+  std::vector <int> vec_int;
 
+  for (const float num: vec_float)
+  { vec_int.push_back(int(round(num))); }
+
+  return vec_int;
+}
 
 std::vector <int> negate_int_vector(const std::vector <int> &vec)
 noexcept
@@ -751,23 +760,21 @@ noexcept
 bool display_selector(const std::vector <float> &position,
                       const std::vector <float> &cube_position,
                       const std::vector <float> &forward,
-                      const float cam_field,
-                      const float multiplier)
+                      const float cam_field)
 noexcept
 {
   const std::vector <float> difference
   { vector_subtract(cube_position, position) };
 
   return (vector_dot_product(vector_normalized(difference), forward) > cam_field ||
-          vector_dot_product(difference, difference) <= 4.0f*multiplier*multiplier);
+          vector_dot_product(difference, difference) <= 4.0f);
 }
 
 bool display_selector(const std::vector <float> &position,
                       const std::vector <float> &cube_position,
                       const std::vector <float> &forward,
                       const float cam_field,
-                      const float sight,
-                      const float multiplier)
+                      const float sight)
 noexcept
 {
   const std::vector <float> difference
@@ -775,5 +782,5 @@ noexcept
 
   return ((vector_dot_product(vector_normalized(difference), forward) > cam_field &&
            vector_dot_product(difference, difference) <= sight*sight) ||
-           vector_dot_product(difference, difference) <= 4.0f*multiplier*multiplier);
+           vector_dot_product(difference, difference) <= 4.0f);
 }

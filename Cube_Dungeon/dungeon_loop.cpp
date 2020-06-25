@@ -12,10 +12,9 @@
 
 dungeon_loop::dungeon_loop()
 noexcept
-  :  m_type_volume(), m_fracta_cube(m_multiplier), m_int_vectors()
+  :  m_type_volume(), m_fracta_cube(), m_int_vectors()
 /// Set up the loop
 {
-  assert(m_multiplier > 0.0f);
   assert(m_directions.size() == 3);
 
   // acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
@@ -26,16 +25,7 @@ noexcept
 void dungeon_loop::camera_position(Camera &camera)
 noexcept
 /// Hang the camera in the right position.
-{ camera.position = vector2vector3(vector_subtract(m_position, vector_scale(m_directions[0], 0.25f*m_multiplier))); }
-
-std::vector <int> dungeon_loop::pos_intifier()
-noexcept
-/// Turn the position into ints for good quantization.
-{
-  return { int(round(m_position[0]/m_multiplier)),
-           int(round(m_position[1]/m_multiplier)),
-           int(round(m_position[2]/m_multiplier)) } ;
-}
+{ camera.position = vector2vector3(vector_subtract(m_position, vector_scale(m_directions[0], 0.25f))); }
 
 void dungeon_loop::camera_init(Camera &camera)
 noexcept
@@ -64,7 +54,7 @@ noexcept
 
   m_directions = m_start_directs;
 
-  m_position = vector_scale(m_start_posit, m_multiplier);
+  m_position = m_start_posit;
 }
 
 void dungeon_loop::level_init()
@@ -91,7 +81,7 @@ noexcept
   }
 
   m_dungeon_span = 2*m_dungeon_radius + 1;
-  m_wrap = m_multiplier*(m_dungeon_radius + 0.5f);
+  m_wrap = m_dungeon_radius + 0.5f;
 
   player_init();
 }
@@ -198,7 +188,7 @@ noexcept
 int dungeon_loop::coordinator(const float pos)
 noexcept
 /// Determine the int coordinate from the float position
-{ return int(round(pos/m_multiplier)) + m_dungeon_radius; }
+{ return int(round(pos)) + m_dungeon_radius; }
 
 std::vector <std::vector <int>> dungeon_loop::director()
 noexcept
@@ -267,9 +257,9 @@ noexcept
 
 
   if (m_cube_dungeon_pos ==
-      std::vector <int>{ coordinator(m_multiplier*m_start_posit[0]),
-                         coordinator(m_multiplier*m_start_posit[1]),
-                         coordinator(m_multiplier*m_start_posit[2]) })
+      std::vector <int>{ coordinator(m_start_posit[0]),
+                         coordinator(m_start_posit[1]),
+                         coordinator(m_start_posit[2]) })
 
   {
     // m_collide_type = cube_type::none;
@@ -291,7 +281,7 @@ noexcept
 
       for (unsigned &num: m_dungeon_index)
       {
-        num = unsigned(round(m_position[count]/m_multiplier + m_directions[0][count]) + m_dungeon_radius);
+        num = unsigned(round(m_position[count]/ + m_directions[0][count]) + m_dungeon_radius);
         ++count;
       }
 
@@ -356,7 +346,7 @@ noexcept
     if (m_time >= m_period)
     {      
       for (float &num: m_position)
-      { num = m_multiplier*round(num/m_multiplier); }
+      { num = round(num); }
 
       for (std::vector <float> &direction: m_directions)
       {        
@@ -372,7 +362,7 @@ noexcept
 
         for (unsigned &num: m_dungeon_index)
         {
-          num = unsigned(round(m_position[count]/m_multiplier + m_directions[0][count]) + m_dungeon_radius);
+          num = unsigned(round(m_position[count]/ + m_directions[0][count]) + m_dungeon_radius);
           ++count;
         }
 
@@ -557,7 +547,7 @@ void dungeon_loop::cube_drawing(std::vector <Model> &cube_models,
                                 Model &model)
 noexcept
 {
-  m_pos_int = pos_intifier();
+  m_pos_int = vector_float2int(m_position);
 
   unsigned index
   { 0 };
@@ -601,8 +591,8 @@ noexcept
           { type2index(c_type) };
 
           if (display_selector(m_position,
-                               vector_scale(m_fracta_cube.get_position(), m_multiplier),
-                               m_directions[0], m_cam_field, m_multiplier))
+                               m_fracta_cube.get_position(),
+                               m_directions[0], m_cam_field))
           {
             if (index != 42)
             {    

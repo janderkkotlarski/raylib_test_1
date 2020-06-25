@@ -136,20 +136,17 @@ private:
   cube_type m_type
   { cube_type::none };
 
-  const float m_multiplier;
-
   const float m_dims_mult
   { 0.7f };
 
   const std::vector <float> m_cube_dims;
 
 public:
-  fractacube(const float multiplier)
+  fractacube()
   noexcept;
 
   fractacube(const int x, const int y, const int z,
-             const cube_type c_type,
-             const float multiplier)
+             const cube_type c_type)
   noexcept;
 
   std::vector <float> get_position()

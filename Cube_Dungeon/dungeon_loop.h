@@ -44,14 +44,11 @@ private:
   float m_delta_time
   { 1.0f };
 
-  const float m_multiplier
-  { 100.0f };
-
   float m_hale_scale
   { 1.0f };
 
   const float m_speed
-  { 1.0f*m_multiplier/m_period };
+  { 1.0f*m_period };
 
   float m_velocity
   { m_speed*GetFrameTime() };
@@ -83,7 +80,7 @@ private:
   { 2*(unsigned)m_dungeon_radius + 1};
 
   float m_wrap
-  { m_multiplier*(m_dungeon_radius + 0.5f) };
+  { m_dungeon_radius + 0.5f };
 
   int m_wall_perc
   { 40 };
@@ -98,10 +95,10 @@ private:
   { 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
 
   std::vector <float> m_position
-  { vector_scale(m_start_posit, m_multiplier) };
+  { m_start_posit };
 
   std::vector <int> m_pos_int
-  { pos_intifier() };
+  { vector_float2int(m_position) };
 
   std::vector <int> m_coord_int
   { m_pos_int };
@@ -159,19 +156,19 @@ private:
   { 0.1f, 0.0f, 0.2f, 1.0f };
 
   const float m_fog_density
-  { 0.003f };
+  { 0.3f };
 
   const int m_horizon
   { 4 };
 
   const float m_sight
-  { float(m_horizon)*m_multiplier };
+  { float(m_horizon) };
 
   const float m_dist_min
-  { 3.0f*m_multiplier };
+  { 3.0f };
 
   const float m_dist_max
-  { 20.0f*m_multiplier };
+  { 20.0f };
 
   std::vector <std::vector <std::vector <cube_type>>> m_type_volume;
 
@@ -260,9 +257,6 @@ private:
   /// functions
 
   void camera_position(Camera &camera)
-  noexcept;
-
-  std::vector <int> pos_intifier()
   noexcept;
 
   void camera_init(Camera &camera)
