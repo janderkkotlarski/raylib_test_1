@@ -246,7 +246,7 @@ noexcept
   return scavec;
 }
 
-std::vector <unsigned> add_int_vector(const std::vector <int> &vec_1,
+std::vector <int> add_int_vector(const std::vector <int> &vec_1,
                                  const std::vector <int> &vec_2)
 {
   if (vec_1.size() != vec_2.size())
@@ -261,7 +261,7 @@ std::vector <unsigned> add_int_vector(const std::vector <int> &vec_1,
     throw -2;
   }
 
-  std::vector <unsigned> addvec;
+  std::vector <int> addvec;
 
   unsigned count
   { 0 };
@@ -269,7 +269,7 @@ std::vector <unsigned> add_int_vector(const std::vector <int> &vec_1,
   for (const int number: vec_1)
   {
     addvec.push_back(number + vec_2[count]);
-    assert(addvec[count] == (unsigned)(vec_1[count] + vec_2[count]));
+    assert(addvec[count] == (int)(vec_1[count] + vec_2[count]));
     ++count;
   }
 

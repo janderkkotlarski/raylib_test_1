@@ -274,6 +274,10 @@ noexcept
     {
       m_movement = action2direction(m_directions, m_act);
 
+      const std::vector <int> destination_posit
+      { add_int_vector(m_cube_dungeon_pos, vector_float2int(m_movement)) };
+      // { add_int_vector(m_cube_dungeon_pos, vector_float2int(m_movement)) };
+
       collide();
 
       unsigned count
@@ -362,7 +366,7 @@ noexcept
 
         for (unsigned &num: m_dungeon_index)
         {
-          num = unsigned(round(m_position[count]/ + m_directions[0][count]) + m_dungeon_radius);
+          num = unsigned(round(m_position[count] + m_directions[0][count]) + m_dungeon_radius);
           ++count;
         }
 

@@ -45,8 +45,8 @@ std::vector <int> scale_int_vector(const std::vector <int> &vec,
                                    const int scale)
 noexcept;
 
-std::vector <unsigned> add_int_vector(const std::vector <int> &vec_1,
-                                      const std::vector <int> &vec_2);
+std::vector <int> add_int_vector(const std::vector <int> &vec_1,
+                                 const std::vector <int> &vec_2);
 
 std::vector <int> sub_int_vector(const std::vector <int> &vec_1,
                                  const std::vector <int> &vec_2);
