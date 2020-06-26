@@ -106,7 +106,7 @@ private:
   std::vector <int> m_index_int
   { 0, 0, 0 };  
 
-  std::vector <unsigned> m_dungeon_index
+  std::vector <int> m_dungeon_index
   { 0, 0, 0 };
 
   const std::vector <int> m_cube_pos
@@ -178,7 +178,7 @@ private:
   cube_type m_collide_type
   { cube_type::none };
 
-  std::vector <unsigned> m_direction_shift
+  std::vector <int> m_direction_shift
   { 0, 0, 0 };
 
   float m_screen_opacity

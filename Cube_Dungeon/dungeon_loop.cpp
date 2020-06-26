@@ -228,10 +228,10 @@ noexcept
       const std::vector <int> dir
       { scale_int_vector(direct, sign) };
 
-      std::vector <unsigned> posit
+      std::vector <int> posit
       { add_int_vector(m_cube_dungeon_pos, dir) };
 
-      for (unsigned &part: posit)
+      for (int &part: posit)
       { part = dungeon_warp(part); }
 
       if (m_act == direct2action(directs, dir))
@@ -274,18 +274,28 @@ noexcept
     {
       m_movement = action2direction(m_directions, m_act);
 
-      const std::vector <int> destination_posit
+      std::vector <int> destination_posit
       { add_int_vector(m_cube_dungeon_pos, vector_float2int(m_movement)) };
+
+      for (int &part: destination_posit)
+      { part = dungeon_warp(part); }
       // { add_int_vector(m_cube_dungeon_pos, vector_float2int(m_movement)) };
 
-      collide();
+      if (type_collision(m_type_volume[destination_posit[0]]
+                                      [destination_posit[1]]
+                                      [destination_posit[2]]))
+      {
+        m_act = action::none;
+
+        m_movement = { 0.0f, 0.0f, 0.0f };
+      }
 
       unsigned count
       { 0 };
 
-      for (unsigned &num: m_dungeon_index)
+      for (int &num: m_dungeon_index)
       {
-        num = unsigned(round(m_position[count]/ + m_directions[0][count]) + m_dungeon_radius);
+        num = int(round(m_position[count]/ + m_directions[0][count]) + m_dungeon_radius);
         ++count;
       }
 
@@ -364,9 +374,9 @@ noexcept
         unsigned count
         { 0 };
 
-        for (unsigned &num: m_dungeon_index)
+        for (int &num: m_dungeon_index)
         {
-          num = unsigned(round(m_position[count] + m_directions[0][count]) + m_dungeon_radius);
+          num = int(round(m_position[count] + m_directions[0][count]) + m_dungeon_radius);
           ++count;
         }
 
