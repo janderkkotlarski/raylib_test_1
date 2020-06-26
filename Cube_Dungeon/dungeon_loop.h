@@ -36,7 +36,7 @@ private:
   { 800 };
 
   const float m_period
-  { 1.0f };
+  { 0.5f };
 
   float m_time
   { 0.0f };
@@ -48,7 +48,7 @@ private:
   { 1.0f };
 
   const float m_speed
-  { 1.0f*m_period };
+  { 1.0f/m_period };
 
   float m_velocity
   { m_speed*GetFrameTime() };
