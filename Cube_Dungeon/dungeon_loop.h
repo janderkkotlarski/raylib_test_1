@@ -106,9 +106,6 @@ private:
   std::vector <int> m_index_int
   { 0, 0, 0 };  
 
-  std::vector <int> m_dungeon_index
-  { 0, 0, 0 };
-
   const std::vector <int> m_cube_pos
   { 2, 0, 0 };
 

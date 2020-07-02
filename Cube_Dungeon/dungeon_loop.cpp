@@ -527,8 +527,7 @@ noexcept
 
   y += 30;
 
-  if (m_act == action::none)
-  { display_string("No ", "thing!", x, y, size); }
+  display_string("Action: ", action2string(m_act), x, y, size);
 
   y += 30;
 
