@@ -83,6 +83,8 @@ noexcept
   m_dungeon_span = 2*m_dungeon_radius + 1;
   m_wrap = m_dungeon_radius + 0.5f;
 
+  m_dungeon_middle = { m_dungeon_radius, m_dungeon_radius, m_dungeon_radius };
+
   player_init();
 }
 
@@ -211,59 +213,10 @@ noexcept
   return directs;
 }
 
-void dungeon_loop::collide()
-noexcept
-/// Determine whether an action results in a collision and thus results in no action taken.
-{
-  std::vector <std::vector <int>> directs
-  { director() };
-  // Load forward, right and up directions
-
-  for (const std::vector <int> &direct: directs)
-  // Look at each of these orthogonal three directions
-  {   
-    for (int sign{ 1 }; sign >= -1; sign -=2)
-    // Parse positive and negative
-    {
-      const std::vector <int> dir
-      { scale_int_vector(direct, sign) };
-
-      std::vector <int> posit
-      { add_int_vector(m_cube_dungeon_pos, dir) };
-
-      for (int &part: posit)
-      { part = dungeon_warp(part); }
-
-      if (m_act == direct2action(directs, dir))
-      {
-        m_collide_type = m_type_volume[posit[0]][posit[1]][posit[2]];
-
-        m_direction_shift = posit;
-
-        if(type_collision(m_collide_type))
-        { m_act = action::none; }
-      }
-    }
-  }
-}
-
 void dungeon_loop::play_actions(std::vector <Sound> &track_samples)
 noexcept
 {
-  m_cube_dungeon_pos = { coordinator(m_position[0]),
-                         coordinator(m_position[1]),
-                         coordinator(m_position[2]) };
-
-
-
-  if (m_cube_dungeon_pos ==
-      std::vector <int>{ coordinator(m_start_posit[0]),
-                         coordinator(m_start_posit[1]),
-                         coordinator(m_start_posit[2]) })
-
-  {
-    // m_collide_type = cube_type::none;
-  }
+  m_cube_dungeon_pos = vector_float2int(m_position);
 
   if (m_act == action::none)
   {
@@ -695,7 +648,6 @@ noexcept
     level_init();
     dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
     single_placements(m_type_volume, m_level, m_dungeon_radius);
-    // collide();
 
     while (m_loop)
     {

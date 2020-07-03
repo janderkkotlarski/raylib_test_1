@@ -121,15 +121,13 @@ private:
   unsigned m_cube_index
   { 0 };
 
-  std::vector <std::vector <int>> m_collides_pos
-  { m_pos_int, m_pos_int,
-    m_pos_int, m_pos_int,
-    m_pos_int, m_pos_int };
+  std::vector <int> m_dungeon_middle
+  { m_dungeon_radius,
+    m_dungeon_radius,
+    m_dungeon_radius };
 
   std::vector <int> m_cube_dungeon_pos
-  { m_cube_pos[0] + m_dungeon_radius,
-    m_cube_pos[1] + m_dungeon_radius,
-    m_cube_pos[2] + m_dungeon_radius };
+  { add_int_vector(m_pos_int, m_dungeon_middle) };
 
   const unsigned char m_light_intensity
   { 63 };
@@ -278,9 +276,6 @@ private:
   noexcept;
 
   std::vector <std::vector <int>> director()
-  noexcept;
-
-  void collide()
   noexcept;
 
   void play_actions(std::vector<Sound> &track_samples)
