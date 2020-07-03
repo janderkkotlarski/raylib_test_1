@@ -244,6 +244,12 @@ noexcept
         m_movement = { 0.0f, 0.0f, 0.0f };
       }
 
+      m_movemint = vector_float2int(m_movement);
+
+      m_destination = vector_add(m_position, m_movement);
+
+      m_destint = vector_float2int(m_destination);
+
       unsigned count
       { 0 };
 
@@ -370,6 +376,8 @@ noexcept
       m_collide_type = cube_type::none;
 
       m_movement = { 0.0f, 0.0f, 0.0f };
+
+      m_movemint = vector_float2int(m_movement);
     }
   }
 }

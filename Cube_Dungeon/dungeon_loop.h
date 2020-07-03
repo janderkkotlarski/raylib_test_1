@@ -91,6 +91,9 @@ private:
   std::vector <float> m_movement
   { 0.0f, 0.0f, 0.0f };
 
+  std::vector <int> m_movemint
+  { vector_float2int(m_movement) };
+
   std::vector <float> m_start_posit
   { 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
 
@@ -100,14 +103,17 @@ private:
   std::vector <int> m_pos_int
   { vector_float2int(m_position) };
 
+  std::vector <float> m_destination
+  { vector_add(m_position, m_movement) };
+
+  std::vector <int> m_destint
+  { vector_float2int(m_destination) };
+
   std::vector <int> m_coord_int
   { m_pos_int };
 
   std::vector <int> m_index_int
   { 0, 0, 0 };  
-
-  const std::vector <int> m_cube_pos
-  { 2, 0, 0 };
 
   cube_type m_internal_type
   { cube_type::none };
