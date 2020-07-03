@@ -76,11 +76,14 @@ private:
   int m_dungeon_radius
   { 6 };
 
-  unsigned m_dungeon_span
-  { 2*(unsigned)m_dungeon_radius + 1};
+  float m_float_radius
+  { (float)m_dungeon_radius };
+
+  int m_dungeon_span
+  { 2*m_dungeon_radius + 1};
 
   float m_wrap
-  { m_dungeon_radius + 0.5f };
+  { m_float_radius + 0.5f };
 
   int m_wall_perc
   { 40 };
@@ -95,7 +98,7 @@ private:
   { vector_float2int(m_movement) };
 
   std::vector <float> m_start_posit
-  { 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f };
+  { 1.0f, m_float_radius, m_float_radius };
 
   std::vector <float> m_position
   { m_start_posit };
@@ -270,9 +273,6 @@ private:
   noexcept;
 
   int dungeon_wrap(const int coord)
-  noexcept;
-
-  unsigned dungeon_warp(const int coord)
   noexcept;
 
   void perform_action()

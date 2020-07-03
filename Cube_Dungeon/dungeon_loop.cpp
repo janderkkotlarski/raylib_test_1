@@ -69,8 +69,13 @@ noexcept
   if (m_level >= 3)
   {
     m_dungeon_radius = 6 + 2*m_level;
+
     m_wall_perc = 40 + m_level;
   }
+  else
+  { m_dungeon_radius = 6; }
+
+  m_float_radius = (float)m_dungeon_radius;
 
   m_reset = false;
 
@@ -81,7 +86,7 @@ noexcept
   }
 
   m_dungeon_span = 2*m_dungeon_radius + 1;
-  m_wrap = m_dungeon_radius + 0.5f;
+  m_wrap = m_float_radius + 0.5f;
 
   m_dungeon_middle = { m_dungeon_radius, m_dungeon_radius, m_dungeon_radius };
 
@@ -157,32 +162,17 @@ noexcept
 {
   int index = coord;
 
-  while (index < -m_dungeon_radius)
+  while (index < 0)
   {
     // index += m_dungeon_span;
     index = 0;
   }
 
-  while (index > m_dungeon_radius)
+  while (index > 2*m_dungeon_radius + 1)
   {
     // index -= m_dungeon_span;
     index = 0;
   }
-
-  return index;
-}
-
-unsigned dungeon_loop::dungeon_warp(const int coord)
-noexcept
-/// When a coordinate falls outside the scope, bring it back on the other side.
-{
-  unsigned index = coord;
-
-  while (index < 0)
-  { index += m_dungeon_span; }
-
-  while (index >= m_dungeon_span)
-  { index -= m_dungeon_span; }
 
   return index;
 }
@@ -221,13 +211,12 @@ noexcept
 
   if (m_act == action::none)
   {
-    m_act = key_bind_actions();
+    key_bind_actions(m_act);
     gamepad_actions(m_act);
 
     if (m_act != action::none)
     {
       m_movement = action2direction(m_directions, m_act);
-
 
       m_destination = vector_add(m_position, m_movement);
 
@@ -238,7 +227,7 @@ noexcept
 
       if (type_collision(m_type_volume[m_destint[0]]
                                       [m_destint[1]]
-                                      [m_destint[2]]))
+                                      [m_destint[2]]) && false)
       {
         m_act = action::none;
 

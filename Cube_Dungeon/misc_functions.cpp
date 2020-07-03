@@ -681,9 +681,14 @@ void wrapper(float &dim,
              const float wrap)
 noexcept
 {
-  if (wrap > 0.0f &&
-      std::abs(dim) > wrap)
-  { dim -= 2.0f*wrap*dim/std::abs(dim); }
+  if (wrap > 0.0f)
+  {
+    if (dim < 0.0f)
+    { dim += 2.0f*wrap; }
+
+    if (dim > 2.0f*wrap)
+    { dim -= 2.0f*wrap; }
+  }
 }
 
 void wrapping(std::vector <float> &position,

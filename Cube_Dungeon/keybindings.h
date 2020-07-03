@@ -3,7 +3,7 @@
 
 #include "action.h"
 
-action key_bind_actions()
+void key_bind_actions(action &act)
 noexcept;
 
 void gamepad_actions(action &act)

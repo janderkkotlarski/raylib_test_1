@@ -2,12 +2,9 @@
 
 #include <raylib.h>
 
-action key_bind_actions()
+void key_bind_actions(action &act)
 noexcept
 {
-  action act
-  { action::none };
-
   if (IsKeyDown('W'))
   { act = action::forward; }
   if (IsKeyDown('S'))
@@ -36,8 +33,6 @@ noexcept
   { act = action::inhale; }
   if (IsKeyDown('T'))
   { act = action::exhale; }
-
-  return act;
 }
 
 void gamepad_actions(action &act)
