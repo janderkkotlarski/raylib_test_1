@@ -228,16 +228,17 @@ noexcept
     {
       m_movement = action2direction(m_directions, m_act);
 
-      std::vector <int> destination_posit
-      { add_int_vector(m_cube_dungeon_pos, vector_float2int(m_movement)) };
 
-      for (int &part: destination_posit)
-      { part = dungeon_warp(part); }
-      // { add_int_vector(m_cube_dungeon_pos, vector_float2int(m_movement)) };
+      m_destination = vector_add(m_position, m_movement);
 
-      if (type_collision(m_type_volume[destination_posit[0]]
-                                      [destination_posit[1]]
-                                      [destination_posit[2]]))
+      for (float &part: m_destination)
+      { part = dungeon_wrap(part); }
+
+      m_destint = vector_float2int(m_destination);
+
+      if (type_collision(m_type_volume[m_destint[0]]
+                                      [m_destint[1]]
+                                      [m_destint[2]]))
       {
         m_act = action::none;
 
@@ -247,6 +248,9 @@ noexcept
       m_movemint = vector_float2int(m_movement);
 
       m_destination = vector_add(m_position, m_movement);
+
+      for (float &part: m_destination)
+      { part = dungeon_wrap(part); }
 
       m_destint = vector_float2int(m_destination);
 
@@ -378,6 +382,13 @@ noexcept
       m_movement = { 0.0f, 0.0f, 0.0f };
 
       m_movemint = vector_float2int(m_movement);
+
+      m_destination = vector_add(m_position, m_movement);
+
+      for (float &part: m_destination)
+      { part = dungeon_wrap(part); }
+
+      m_destint = vector_float2int(m_destination);
     }
   }
 }
@@ -596,7 +607,7 @@ noexcept
                   counters[1] == (int)m_directions[0][1] &&
                   counters[2] == (int)m_directions[0][2]) ||
                   (m_collide_type == cube_type::ruby &&
-                   dungeon_index == m_direction_shift))
+                   dungeon_index == m_destint))
               { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_hale_scale); }
               else
               { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], 1.0f); }
