@@ -216,6 +216,7 @@ noexcept
 void dungeon_loop::play_actions(std::vector <Sound> &track_samples)
 noexcept
 {
+  
   m_cube_dungeon_pos = vector_float2int(m_position);
 
   if (m_act == action::none)
