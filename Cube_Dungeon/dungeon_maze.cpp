@@ -10,15 +10,15 @@ noexcept
 {
   assert(type_volume.size() == 0);
 
-  for(int count_x{ -max_dungeon_radius }; count_x <= max_dungeon_radius; ++count_x)
+  for(int count_x{ 0 }; count_x <= 2*max_dungeon_radius; ++count_x)
   {
     std::vector <std::vector <cube_type>> area;
 
-    for(int count_y{ -max_dungeon_radius }; count_y <= max_dungeon_radius; ++count_y)
+    for(int count_y{ 0 }; count_y <= 2*max_dungeon_radius; ++count_y)
     {
       std::vector <cube_type> line;
 
-      for(int count_z{ -max_dungeon_radius }; count_z <= max_dungeon_radius; ++count_z)
+      for(int count_z{ 0 }; count_z <= 2*max_dungeon_radius; ++count_z)
       { line.push_back(cube_type::none); }
 
       assert(line.size() == unsigned(2*max_dungeon_radius + 1));
@@ -40,24 +40,24 @@ noexcept
   srand (time(NULL));
 
   {
-    for(int x{ -dungeon_radius }; x <= dungeon_radius; ++x)
+    for(int x{ 0 }; x <= 2*dungeon_radius; ++x)
     {
       std::vector <std::vector <cube_type>> area;
 
-      for(int y{ -dungeon_radius }; y <= dungeon_radius; ++y)
+      for(int y{ 0 }; y <= 2*dungeon_radius; ++y)
       {
        std::vector <cube_type> line;
 
-        for(int z{ -dungeon_radius }; z <= dungeon_radius; ++z)
+        for(int z{ 0 }; z <= 2*dungeon_radius; ++z)
         {
           cube_type c_type
           { cube_type::none };
 
           level_filler(c_type, level, dungeon_radius, x, y, z);
 
-          type_volume[x + dungeon_radius]
-                     [y + dungeon_radius]
-                     [z + dungeon_radius] = c_type;
+          type_volume[x]
+                     [y]
+                     [z] = c_type;
         }
       }
     }
