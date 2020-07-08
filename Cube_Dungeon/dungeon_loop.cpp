@@ -165,13 +165,11 @@ noexcept
   while (index < 0)
   {
     index += m_dungeon_span;
-    index = 0;
   }
 
   while (index > 2*m_dungeon_radius)
   {
     index -= m_dungeon_span;
-    index = 0;
   }
 
   return index;
