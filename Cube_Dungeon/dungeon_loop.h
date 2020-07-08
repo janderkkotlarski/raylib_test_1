@@ -136,7 +136,7 @@ private:
     m_dungeon_radius };
 
   std::vector <int> m_cube_dungeon_pos
-  { add_int_vector(m_pos_int, m_dungeon_middle) };
+  { m_pos_int };
 
   const unsigned char m_light_intensity
   { 63 };

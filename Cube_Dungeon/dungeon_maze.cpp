@@ -80,23 +80,23 @@ noexcept
     const int dist
     { 5 };
 
-    if ((abs(x) - dist) % (2*dist) == 0 ||
-        (abs(y) - dist) % (2*dist) == 0 ||
-        (abs(z) - dist) % (2*dist) == 0)
+    if ((abs(x - dungeon_radius) - dist) % (2*dist) == 0 ||
+        (abs(y - dungeon_radius) - dist) % (2*dist) == 0 ||
+        (abs(z - dungeon_radius) - dist) % (2*dist) == 0)
     { c_type = cube_type::concrete; }
 
-    if (abs(x) % (2*dist) == 0 &&
-        abs(y) % (2*dist) == 0 &&
-        abs(z) % (2*dist) == 0)
+    if (abs(x - dungeon_radius) % (2*dist) == 0 &&
+        abs(y - dungeon_radius) % (2*dist) == 0 &&
+        abs(z - dungeon_radius) % (2*dist) == 0)
     { c_type = cube_type::catalyst; }
   }
 
   if (level >= 3)
-  { pillars(c_type, cube_type::concrete, x, y, z); }
+  { pillars(c_type, cube_type::concrete, dungeon_radius, x, y, z); }
 
   if (level >= 3 &&
       level < 20)
-  { random_wall(c_type, level, x, y, z); }
+  { random_wall(c_type, level, dungeon_radius, x, y, z); }
 
   outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
 }
@@ -109,30 +109,32 @@ void outer_wall(cube_type &c_type,
                 const int z)
 noexcept
 {
-  if ((abs(x) == dungeon_radius ||
-       abs(y) == dungeon_radius ||
-       abs(z) == dungeon_radius))
+  if ((abs(x - dungeon_radius) == dungeon_radius ||
+       abs(y - dungeon_radius) == dungeon_radius ||
+       abs(z - dungeon_radius) == dungeon_radius))
   { c_type = w_type; }
 }
 
 void pillars(cube_type &c_type,
              const cube_type w_type,
+             const int dungeon_radius,
              const int x,
              const int y,
              const int z)
 noexcept
 {
-  if ((abs(x) % 2 == 1 &&
-       abs(y) % 2 == 1) ||
-      (abs(x) % 2 == 1 &&
-       abs(z) % 2 == 1) ||
-      (abs(z) % 2 == 1 &&
-       abs(y) % 2 == 1))
+  if ((abs(x - dungeon_radius) % 2 == 1 &&
+       abs(y - dungeon_radius) % 2 == 1) ||
+      (abs(x - dungeon_radius) % 2 == 1 &&
+       abs(z - dungeon_radius) % 2 == 1) ||
+      (abs(z - dungeon_radius) % 2 == 1 &&
+       abs(y - dungeon_radius) % 2 == 1))
   { c_type = w_type; }
 }
 
 void random_wall(cube_type &c_type,
                  const int level,
+                 const int dungeon_radius,
                  const int x,
                  const int y,
                  const int z)
@@ -141,9 +143,9 @@ noexcept
   const cube_type w_type
   { wall_type(level) };
 
-  if (((abs(x) % 2 == 1 && abs(y) % 2 == 0 && abs(z) % 2 == 0) ||
-       (abs(y) % 2 == 1 && abs(z) % 2 == 0 && abs(x) % 2 == 0)||
-       (abs(z) % 2 == 1 && abs(x) % 2 == 0 && abs(y) % 2 == 0)) &&
+  if (((abs(x - dungeon_radius) % 2 == 1 && abs(y - dungeon_radius) % 2 == 0 && abs(z - dungeon_radius) % 2 == 0) ||
+       (abs(y - dungeon_radius) % 2 == 1 && abs(z - dungeon_radius) % 2 == 0 && abs(x - dungeon_radius) % 2 == 0)||
+       (abs(z - dungeon_radius) % 2 == 1 && abs(x - dungeon_radius) % 2 == 0 && abs(y - dungeon_radius) % 2 == 0)) &&
        rand() % 100 < wall_percentage(w_type, level))
   { c_type = w_type; }
 }
@@ -215,6 +217,7 @@ noexcept
   if (level >= 3)
   {
     plus_3d(type_volume, cube_type::none,
+            dungeon_radius,
             2*dungeon_radius - 2,
             dungeon_radius,
             dungeon_radius);
@@ -224,6 +227,7 @@ noexcept
                [dungeon_radius] = cube_type::next;
 
     plus_3d(type_volume, cube_type::none,
+            dungeon_radius,
             2,
             dungeon_radius,
             dungeon_radius);
@@ -232,6 +236,7 @@ noexcept
 
 void plus_3d(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const cube_type &c_type,
+             const int dungeon_radius,
              const int x,
              const int y,
              const int z)
@@ -239,9 +244,9 @@ noexcept
 {
   for (unsigned sign { 0 }; sign < 2; ++sign)
   {
-    type_volume[x - 1 + 2*sign][y][z] = c_type;
-    type_volume[x][y - 1 + 2*sign][z] = c_type;
-    type_volume[x][y][z - 1 + 2*sign] = c_type;
+    type_volume[x - 1 + 2*sign - dungeon_radius][y - dungeon_radius][z - dungeon_radius] = c_type;
+    type_volume[x - dungeon_radius][y - 1 + 2*sign - dungeon_radius][z - dungeon_radius] = c_type;
+    type_volume[x - dungeon_radius][y - dungeon_radius][z - 1 + 2*sign - dungeon_radius] = c_type;
   }
 }
 

@@ -47,10 +47,10 @@ noexcept
 /// Initialize all things pertaining to the player.
 {
   if (m_level <= 2)
-  { m_start_posit = (std::vector <float>){ 2.0f, 0.0f, 0.0f }; }
+  { m_start_posit = (std::vector <float>){ 2.0f + m_dungeon_radius, 0.0f + m_dungeon_radius, 0.0f + m_dungeon_radius }; }
 
   if (m_level >= 3)
-  { m_start_posit = (std::vector <float>){ 1.0f - (float)m_dungeon_radius, 0.0f, 0.0f }; }
+  { m_start_posit = (std::vector <float>){ 1.0f - m_dungeon_radius, 0.0f, 0.0f }; }
 
   m_directions = m_start_directs;
 
@@ -164,13 +164,13 @@ noexcept
 
   while (index < 0)
   {
-    // index += m_dungeon_span;
+    index += m_dungeon_span;
     index = 0;
   }
 
-  while (index > 2*m_dungeon_radius + 1)
+  while (index > 2*m_dungeon_radius)
   {
-    // index -= m_dungeon_span;
+    index -= m_dungeon_span;
     index = 0;
   }
 
@@ -180,7 +180,7 @@ noexcept
 int dungeon_loop::coordinator(const float pos)
 noexcept
 /// Determine the int coordinate from the float position
-{ return int(round(pos)) + m_dungeon_radius; }
+{ return int(round(pos)); }
 
 std::vector <std::vector <int>> dungeon_loop::director()
 noexcept
@@ -568,7 +568,7 @@ noexcept
         std::vector <int> dungeon_index;
 
         for (const int num: m_index_int)
-        { dungeon_index.push_back(num + m_dungeon_radius); }
+        { dungeon_index.push_back(num); }
 
         const cube_type c_type
         { m_type_volume[dungeon_index[0]]

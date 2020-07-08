@@ -33,6 +33,7 @@ noexcept;
 
 void pillars(cube_type &c_type,
              const cube_type w_type,
+             const int dungeon_radius,
              const int x,
              const int y,
              const int z)
@@ -40,6 +41,7 @@ noexcept;
 
 void random_wall(cube_type &c_type,
                  const int level,
+                 const int dungeon_radius,
                  const int x,
                  const int y,
                  const int z)
@@ -59,6 +61,7 @@ noexcept;
 
 void plus_3d(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const cube_type &c_type,
+             const int dungeon_radius,
              const int x,
              const int y,
              const int z)
