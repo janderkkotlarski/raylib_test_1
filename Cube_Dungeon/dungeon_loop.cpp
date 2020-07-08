@@ -250,7 +250,7 @@ noexcept
 
       for (const float num: m_position)
       {
-        dungeon_index.push_back(int(round(num + m_directions[0][count])) + m_dungeon_radius);
+        dungeon_index.push_back(int(round(num + m_directions[0][count])));
         ++count;
       }
 
@@ -333,13 +333,13 @@ noexcept
 
         for (const int num: m_position)
         {
-          dungeon_index.push_back(int(round(num + m_directions[0][count])) + m_dungeon_radius);
+          dungeon_index.push_back(int(round(num + m_directions[0][count])));
           ++count;
         }
 
-        m_internal_type =  m_type_volume[dungeon_index[0]]
-                                        [dungeon_index[1]]
-                                        [dungeon_index[2]];
+        m_internal_type = m_type_volume[dungeon_index[0]]
+                                       [dungeon_index[1]]
+                                       [dungeon_index[2]];
 
         m_type_volume[dungeon_index[0]]
                      [dungeon_index[1]]
@@ -350,9 +350,6 @@ noexcept
       {
         std::vector <int> moved_to
         { vector_float2int(m_position) };
-
-        for (int &num: moved_to)
-        { num += m_dungeon_radius; }
 
         if (m_type_volume[moved_to[0]]
                          [moved_to[1]]
