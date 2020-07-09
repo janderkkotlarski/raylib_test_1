@@ -47,10 +47,14 @@ noexcept
 /// Initialize all things pertaining to the player.
 {
   if (m_level <= 2)
-  { m_start_posit = (std::vector <float>){ 2.0f + m_dungeon_radius, 0.0f + m_dungeon_radius, 0.0f + m_dungeon_radius }; }
+  { m_start_posit = { 2.0f + 1.0f*m_dungeon_radius,
+                      0.0f + 1.0f*m_dungeon_radius,
+                      0.0f + 1.0f*m_dungeon_radius }; }
 
   if (m_level >= 3)
-  { m_start_posit = (std::vector <float>){ 1.0f - m_dungeon_radius, 0.0f, 0.0f }; }
+  { m_start_posit = { 1.0f,
+                      1.0f*m_dungeon_radius,
+                      1.0f*m_dungeon_radius }; }
 
   m_directions = m_start_directs;
 
@@ -227,7 +231,7 @@ noexcept
 
       if (type_collision(m_type_volume[m_destint[0]]
                                       [m_destint[1]]
-                                      [m_destint[2]]) && false)
+                                      [m_destint[2]]))
       {
         m_act = action::none;
 

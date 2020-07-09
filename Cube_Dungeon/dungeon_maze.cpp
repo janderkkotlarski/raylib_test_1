@@ -72,6 +72,8 @@ void level_filler(cube_type &c_type,
                   const int z)
 noexcept
 {
+  c_type = cube_type::none;
+
   if (level == 1)
   { c_type = cube_type::ruby; }
 
