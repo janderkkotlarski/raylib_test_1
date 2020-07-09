@@ -244,36 +244,39 @@ noexcept
       unsigned count
       { 0 };
 
-      std::vector <int> dungeon_index;
+      std::vector <int> hale_index;
 
       for (const float num: m_position)
       {
-        dungeon_index.push_back(int(round(num + m_directions[0][count])));
+        hale_index.push_back(int(round(num + m_directions[0][count])));
         ++count;
       }
 
+      for (int &num: hale_index)
+      { num = dungeon_wrap(num); }
+
       if (m_act == action::inhale &&
           (m_internal_type != cube_type::none ||
-           m_type_volume[dungeon_index[0]]
-                        [dungeon_index[1]]
-                        [dungeon_index[2]] == cube_type::concrete ||
-           m_type_volume[dungeon_index[0]]
-                        [dungeon_index[1]]
-                        [dungeon_index[2]] == cube_type::invisible))
+           m_type_volume[hale_index[0]]
+                        [hale_index[1]]
+                        [hale_index[2]] == cube_type::concrete ||
+           m_type_volume[hale_index[0]]
+                        [hale_index[1]]
+                        [hale_index[2]] == cube_type::invisible))
          { m_act = action::none; }
 
       if (m_act == action::exhale)
       {
         if (m_internal_type != cube_type::none &&
-            m_type_volume[dungeon_index[0]]
-                         [dungeon_index[1]]
-                         [dungeon_index[2]] == cube_type::none)
+            m_type_volume[hale_index[0]]
+                         [hale_index[1]]
+                         [hale_index[2]] == cube_type::none)
         {
           m_hale_scale = 0.0f;
 
-          m_type_volume[dungeon_index[0]]
-                       [dungeon_index[1]]
-                       [dungeon_index[2]] = m_internal_type;
+          m_type_volume[hale_index[0]]
+                       [hale_index[1]]
+                       [hale_index[2]] = m_internal_type;
 
           m_internal_type = cube_type::none;
         }
@@ -327,21 +330,24 @@ noexcept
         unsigned count
         { 0 };
 
-        std::vector <int> dungeon_index;
+        std::vector <int> hale_index;
 
         for (const int num: m_position)
         {
-          dungeon_index.push_back(int(round(num + m_directions[0][count])));
+          hale_index.push_back(int(round(num + m_directions[0][count])));
           ++count;
         }
 
-        m_internal_type = m_type_volume[dungeon_index[0]]
-                                       [dungeon_index[1]]
-                                       [dungeon_index[2]];
+        for (int &num: hale_index)
+        { num = dungeon_wrap(num); }
 
-        m_type_volume[dungeon_index[0]]
-                     [dungeon_index[1]]
-                     [dungeon_index[2]] = cube_type::none;
+        m_internal_type = m_type_volume[hale_index[0]]
+                                       [hale_index[1]]
+                                       [hale_index[2]];
+
+        m_type_volume[hale_index[0]]
+                     [hale_index[1]]
+                     [hale_index[2]] = cube_type::none;
       }
 
       if (m_movement != std::vector <float> { 0.0f, 0.0f, 0.0f })
