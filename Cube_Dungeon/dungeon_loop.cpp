@@ -229,11 +229,17 @@ noexcept
 
       m_destint = vector_float2int(m_destination);
 
+      m_collide_type = m_type_volume[m_destint[0]]
+                                    [m_destint[1]]
+                                    [m_destint[2]];
+
       if (type_collision(m_type_volume[m_destint[0]]
                                       [m_destint[1]]
                                       [m_destint[2]]))
       {
         m_act = action::none;
+
+        m_collide_type = cube_type::none;
 
         m_movement = { 0.0f, 0.0f, 0.0f };
       }
