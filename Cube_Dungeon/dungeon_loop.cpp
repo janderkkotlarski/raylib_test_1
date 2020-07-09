@@ -86,7 +86,7 @@ noexcept
   }
 
   m_dungeon_span = 2*m_dungeon_radius + 1;
-  m_wrap = m_float_radius + 0.5f;
+  m_wrap = m_float_radius;
 
   m_dungeon_middle = { m_dungeon_radius, m_dungeon_radius, m_dungeon_radius };
 

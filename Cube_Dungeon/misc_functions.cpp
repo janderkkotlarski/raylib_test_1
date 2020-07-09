@@ -683,11 +683,11 @@ noexcept
 {
   if (wrap > 0.0f)
   {
-    if (dim < 0.0f)
-    { dim += 2.0f*wrap; }
+    if (dim < -0.5f)
+    { dim += 2.0f*wrap + 1.0f; }
 
-    if (dim > 2.0f*wrap)
-    { dim -= 2.0f*wrap; }
+    if (dim > 2.0f*wrap + 0.5f )
+    { dim -= 2.0f*wrap + 1.0f; }
   }
 }
 
