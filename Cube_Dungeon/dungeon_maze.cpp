@@ -217,7 +217,6 @@ noexcept
   if (level >= 3)
   {
     plus_3d(type_volume, cube_type::none,
-            dungeon_radius,
             2*dungeon_radius - 2,
             dungeon_radius,
             dungeon_radius);
@@ -227,7 +226,6 @@ noexcept
                [dungeon_radius] = cube_type::next;
 
     plus_3d(type_volume, cube_type::none,
-            dungeon_radius,
             2,
             dungeon_radius,
             dungeon_radius);
@@ -236,7 +234,6 @@ noexcept
 
 void plus_3d(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const cube_type &c_type,
-             const int dungeon_radius,
              const int x,
              const int y,
              const int z)
@@ -244,9 +241,9 @@ noexcept
 {
   for (unsigned sign { 0 }; sign < 2; ++sign)
   {
-    type_volume[x - 1 + 2*sign - dungeon_radius][y - dungeon_radius][z - dungeon_radius] = c_type;
-    type_volume[x - dungeon_radius][y - 1 + 2*sign - dungeon_radius][z - dungeon_radius] = c_type;
-    type_volume[x - dungeon_radius][y - dungeon_radius][z - 1 + 2*sign - dungeon_radius] = c_type;
+    type_volume[x - 1 + 2*sign][y][z] = c_type;
+    type_volume[x][y - 1 + 2*sign][z] = c_type;
+    type_volume[x][y][z - 1 + 2*sign] = c_type;
   }
 }
 

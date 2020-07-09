@@ -61,7 +61,6 @@ noexcept;
 
 void plus_3d(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const cube_type &c_type,
-             const int dungeon_radius,
              const int x,
              const int y,
              const int z)

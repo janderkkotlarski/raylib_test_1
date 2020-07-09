@@ -66,6 +66,8 @@ noexcept
   if (!m_reset)
   { ++m_level; }
 
+  std::cout << m_level << std::endl;
+
   if (m_level >= 3)
   {
     m_dungeon_radius = 6 + 2*m_level;
@@ -656,8 +658,14 @@ noexcept
   while (m_game)
   {
     level_init();
+
+    std::cout << "Works 1!" << std::endl;
+
     dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
+    std::cout << "Works 2!" << std::endl;
     single_placements(m_type_volume, m_level, m_dungeon_radius);
+
+    std::cout << "Works 3!" << std::endl;
 
     while (m_loop)
     {
