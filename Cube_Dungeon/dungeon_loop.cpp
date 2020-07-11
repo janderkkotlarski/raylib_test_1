@@ -233,9 +233,7 @@ noexcept
                                     [m_destint[1]]
                                     [m_destint[2]];
 
-      if (type_collision(m_type_volume[m_destint[0]]
-                                      [m_destint[1]]
-                                      [m_destint[2]]))
+      if (type_collision(m_collide_type))
       {
         m_act = action::none;
 
@@ -267,28 +265,24 @@ noexcept
       for (int &num: hale_index)
       { num = dungeon_wrap(num); }
 
+      m_hale_type = m_type_volume[hale_index[0]]
+                                 [hale_index[1]]
+                                 [hale_index[2]];
+
       if (m_act == action::inhale &&
           (m_internal_type != cube_type::none ||
-           m_type_volume[hale_index[0]]
-                        [hale_index[1]]
-                        [hale_index[2]] == cube_type::concrete ||
-           m_type_volume[hale_index[0]]
-                        [hale_index[1]]
-                        [hale_index[2]] == cube_type::invisible))
+           m_hale_type == cube_type::concrete ||
+           m_hale_type == cube_type::invisible))
          { m_act = action::none; }
 
       if (m_act == action::exhale)
       {
         if (m_internal_type != cube_type::none &&
-            m_type_volume[hale_index[0]]
-                         [hale_index[1]]
-                         [hale_index[2]] == cube_type::none)
+            m_hale_type == cube_type::none)
         {
           m_hale_scale = 0.0f;
 
-          m_type_volume[hale_index[0]]
-                       [hale_index[1]]
-                       [hale_index[2]] = m_internal_type;
+          m_hale_type = m_internal_type;
 
           m_internal_type = cube_type::none;
         }
@@ -350,16 +344,16 @@ noexcept
           ++count;
         }
 
+        m_hale_type = m_type_volume[hale_index[0]]
+                                   [hale_index[1]]
+                                   [hale_index[2]];
+
         for (int &num: hale_index)
         { num = dungeon_wrap(num); }
 
-        m_internal_type = m_type_volume[hale_index[0]]
-                                       [hale_index[1]]
-                                       [hale_index[2]];
+        m_internal_type = m_hale_type;
 
-        m_type_volume[hale_index[0]]
-                     [hale_index[1]]
-                     [hale_index[2]] = cube_type::none;
+        m_hale_type = cube_type::none;
       }
 
       if (m_movement != std::vector <float> { 0.0f, 0.0f, 0.0f })
@@ -584,9 +578,9 @@ noexcept
         { dungeon_index.push_back(num); }
 
         const cube_type c_type
-        { m_type_volume[dungeon_index[0]]
-                       [dungeon_index[1]]
-                       [dungeon_index[2]] };
+        { m_type_volume[m_index_int[0]]
+                       [m_index_int[1]]
+                       [m_index_int[2]] };
 
         if (c_type != cube_type::none &&
             c_type != cube_type::invisible &&
@@ -609,7 +603,7 @@ noexcept
                   counters[1] == (int)m_directions[0][1] &&
                   counters[2] == (int)m_directions[0][2]) ||
                   (m_collide_type == cube_type::ruby &&
-                   dungeon_index == m_destint))
+                   m_index_int == m_destint))
               { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_hale_scale); }
               else
               { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], 1.0f); }

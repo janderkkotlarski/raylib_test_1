@@ -98,10 +98,18 @@ noexcept
 
   if (level >= 3 &&
       level < 20)
-  { random_wall(c_type, level, dungeon_radius, x, y, z); }
+  {
+    random_wall(c_type, level, dungeon_radius, x, y, z);
 
-  outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
+    outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
+  }
+  else
+  { outer_wall(c_type, cube_type::alabaster, dungeon_radius, x, y, z); }
+
+
 }
+
+
 
 void outer_wall(cube_type &c_type,
                 const cube_type w_type,
