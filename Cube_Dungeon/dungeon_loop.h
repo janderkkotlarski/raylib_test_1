@@ -94,9 +94,6 @@ private:
   std::vector <float> m_movement
   { 0.0f, 0.0f, 0.0f };
 
-  std::vector <int> m_movemint
-  { vector_float2int(m_movement) };
-
   std::vector <float> m_start_posit
   { 1.0f, m_float_radius, m_float_radius };
 
@@ -160,10 +157,10 @@ private:
   { 0.1f, 0.0f, 0.2f, 1.0f };
 
   const float m_fog_density
-  { 0.3f };
+  { 0.4f };
 
   const int m_horizon
-  { 4 };
+  { 3 };
 
   const float m_sight
   { float(m_horizon) };
@@ -227,7 +224,7 @@ private:
   { m_cam_angle_average - 0.0f*m_cam_angle_deviation };
 
   const float m_cam_field
-  { -0.001f };
+  { 0.1f };
 
   const bool m_synchro
   { false };

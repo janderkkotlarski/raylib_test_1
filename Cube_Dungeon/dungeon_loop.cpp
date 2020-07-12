@@ -242,8 +242,6 @@ noexcept
         m_movement = { 0.0f, 0.0f, 0.0f };
       }
 
-      m_movemint = vector_float2int(m_movement);
-
       m_destination = vector_add(m_position, m_movement);
 
       for (float &part: m_destination)
@@ -376,8 +374,6 @@ noexcept
       m_collide_type = cube_type::none;
 
       m_movement = { 0.0f, 0.0f, 0.0f };
-
-      m_movemint = vector_float2int(m_movement);
 
       m_destination = vector_add(m_position, m_movement);
 

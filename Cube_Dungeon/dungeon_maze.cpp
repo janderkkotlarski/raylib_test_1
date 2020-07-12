@@ -75,7 +75,9 @@ noexcept
   c_type = cube_type::none;
 
   if (level == 1)
-  { c_type = cube_type::ruby; }
+  {
+    // c_type = cube_type::ruby;
+  }
 
   if (level == 2)
   {
