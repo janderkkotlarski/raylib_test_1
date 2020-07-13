@@ -111,22 +111,22 @@ noexcept
   switch (m_act)
   {
     case action::forward:
-      m_hale_scale -= delta_scale;
+      m_cube_scale -= delta_scale;
       break;
     case action::backward:
-      m_hale_scale -= delta_scale;
+      m_cube_scale -= delta_scale;
       break;
     case action::right:
-      m_hale_scale -= delta_scale;
+      m_cube_scale -= delta_scale;
       break;
     case action::left:
-      m_hale_scale -= delta_scale;
+      m_cube_scale -= delta_scale;
       break;
     case action::up:
-      m_hale_scale -= delta_scale;
+      m_cube_scale -= delta_scale;
       break;
     case action::down:
-      m_hale_scale -= delta_scale;
+      m_cube_scale -= delta_scale;
       break;
 
     case action::rotate_right:
@@ -148,16 +148,20 @@ noexcept
       rotate_first_second(m_directions[1], m_directions[2], m_theta);
       break;
 
+    case action::hale:
+      m_cube_scale += m_hale_sign*delta_scale;
+      break;
+
     case action::inhale:
-      m_hale_scale -= delta_scale;
+      m_cube_scale -= delta_scale;
       break;
 
     case action::exhale:
-      m_hale_scale += delta_scale;
+      m_cube_scale += delta_scale;
       break;
 
     case action::none:
-      m_hale_scale = 1.0f;
+      m_cube_scale = 1.0f;
       break;
 
     case action::catalyze:
@@ -250,7 +254,7 @@ noexcept
         if (m_internal_type == cube_type::none &&
             (m_hale_type != cube_type::concrete ||
             m_hale_type != cube_type::invisible))
-        { }
+        {  }
       }
 
       if (m_act == action::inhale &&
@@ -274,7 +278,7 @@ noexcept
 
           m_internal_type = m_hale_type;
 
-          m_hale_scale = 0.0f;
+          m_cube_scale = 0.0f;
         }
       }
     }
@@ -490,7 +494,7 @@ noexcept
 
   y += 30;
 
-  display_string("Scale: ", std::to_string(m_hale_scale), x, y, size);
+  display_string("Scale: ", std::to_string(m_cube_scale), x, y, size);
 
   y += 30;
 
@@ -594,7 +598,7 @@ noexcept
                   counters[2] == (int)m_directions[0][2]) ||
                   (m_collide_type == cube_type::ruby &&
                    m_index_int == m_destint))
-              { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_hale_scale); }
+              { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_cube_scale); }
               else
               { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], 1.0f); }
             }
@@ -645,7 +649,6 @@ void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models, s
                              Model &model,
                              std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
                              Shader &shader,
-                             const int fog_density_loc,
                              std::vector <Sound> &track_samples)
 noexcept
 {
@@ -780,8 +783,7 @@ void dungeon_loop::run_window()
   camera_init(camera);
 
   game_loop(camera, cube_models, dark_models, c_model,
-            fog_shaders, dark_shaders, f_shader, fog_density_loc,
-            track_samples);
+            fog_shaders, dark_shaders, f_shader, track_samples);
 
   // UnloadShader(distortion);
 

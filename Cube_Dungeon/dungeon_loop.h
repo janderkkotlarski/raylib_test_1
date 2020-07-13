@@ -44,7 +44,7 @@ private:
   float m_delta_time
   { 0.5f };
 
-  float m_hale_scale
+  float m_cube_scale
   { 1.0f };
 
   const float m_speed
@@ -185,6 +185,9 @@ private:
   std::vector <int> m_hale_index
   { 0, 0, 0 };
 
+  int m_hale_sign
+  { -1 };
+
   std::vector <int> m_direction_shift
   { 0, 0, 0 };
 
@@ -324,7 +327,6 @@ private:
                  Model &model,
                  std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,
                  Shader &shader,
-                 const int fog_density_loc,
                  std::vector<Sound> &track_samples)
   noexcept;
 
