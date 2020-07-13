@@ -251,10 +251,36 @@ noexcept
 
       if (m_act == action::hale)
       {
+        if ((m_internal_type != cube_type::none &&
+            m_hale_type != cube_type::none) ||
+            (m_internal_type == cube_type::none &&
+            (m_hale_type == cube_type::concrete ||
+            m_hale_type == cube_type::invisible)))
+        { m_act = action::none; }
+      }
+
+      if (m_act == action::hale)
+      {
         if (m_internal_type == cube_type::none &&
-            (m_hale_type != cube_type::concrete ||
+            (m_hale_type != cube_type::concrete &&
             m_hale_type != cube_type::invisible))
-        {  }
+        { m_hale_sign = -1; }
+
+        if (m_internal_type != cube_type::none &&
+            m_hale_type == cube_type::none)
+        {
+          m_hale_sign = 1;
+
+          m_type_volume[m_hale_index[0]]
+                       [m_hale_index[1]]
+                       [m_hale_index[2]] = m_internal_type;
+
+          m_hale_type = cube_type::none;
+
+          m_internal_type = m_hale_type;
+
+          m_cube_scale = 0.0f;
+        }
       }
 
       if (m_act == action::inhale &&
@@ -326,8 +352,9 @@ noexcept
         { num = round(num); }
       }
 
-      if (m_act == action::inhale &&
-          m_internal_type == cube_type::none)
+      if ((m_act == action::inhale &&
+          m_internal_type == cube_type::none) ||
+          m_hale_sign == -1)
       {
         m_hale_type = m_type_volume[m_hale_index[0]]
                                    [m_hale_index[1]]
