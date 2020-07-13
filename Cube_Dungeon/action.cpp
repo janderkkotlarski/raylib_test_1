@@ -94,6 +94,9 @@ noexcept
     case action::roll_left:
       return "roll_left";
       break;
+    case action::hale:
+      return "hale";
+      break;
     case action::inhale:
       return "inhale";
       break;

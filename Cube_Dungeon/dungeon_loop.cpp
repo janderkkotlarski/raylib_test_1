@@ -105,25 +105,28 @@ noexcept
 {
   m_position = vector_add(m_position, vector_scale(m_movement, m_velocity));
 
+  const float delta_scale
+  { GetFrameTime()/m_period };
+
   switch (m_act)
   {
     case action::forward:
-      m_hale_scale -= GetFrameTime()/m_period;
+      m_hale_scale -= delta_scale;
       break;
     case action::backward:
-      m_hale_scale -= GetFrameTime()/m_period;
+      m_hale_scale -= delta_scale;
       break;
     case action::right:
-      m_hale_scale -= GetFrameTime()/m_period;
+      m_hale_scale -= delta_scale;
       break;
     case action::left:
-      m_hale_scale -= GetFrameTime()/m_period;
+      m_hale_scale -= delta_scale;
       break;
     case action::up:
-      m_hale_scale -= GetFrameTime()/m_period;
+      m_hale_scale -= delta_scale;
       break;
     case action::down:
-      m_hale_scale -= GetFrameTime()/m_period;
+      m_hale_scale -= delta_scale;
       break;
 
     case action::rotate_right:
@@ -146,11 +149,11 @@ noexcept
       break;
 
     case action::inhale:
-      m_hale_scale -= GetFrameTime()/m_period;
+      m_hale_scale -= delta_scale;
       break;
 
     case action::exhale:
-      m_hale_scale += GetFrameTime()/m_period;
+      m_hale_scale += delta_scale;
       break;
 
     case action::none:
@@ -242,6 +245,14 @@ noexcept
 
       m_destint = vector_float2int(m_destination);
 
+      if (m_act == action::hale)
+      {
+        if (m_internal_type == cube_type::none &&
+            (m_hale_type != cube_type::concrete ||
+            m_hale_type != cube_type::invisible))
+        { }
+      }
+
       if (m_act == action::inhale &&
           (m_internal_type != cube_type::none ||
            m_hale_type == cube_type::concrete ||
@@ -291,13 +302,9 @@ noexcept
   }
 }
 
-void dungeon_loop::play_actions(std::vector <Sound> &track_samples)
+void dungeon_loop::action_end()
 noexcept
 {
-  action_prep();
-
-  action_start(track_samples);
-
   m_delta_time = GetFrameTime();
 
   if (m_act != action::none)
@@ -305,12 +312,12 @@ noexcept
     m_time += m_delta_time;
 
     if (m_time >= m_period)
-    {      
+    {
       for (float &num: m_position)
       { num = round(num); }
 
       for (std::vector <float> &direction: m_directions)
-      {        
+      {
         for (float &num: direction)
         { num = round(num); }
       }
@@ -360,6 +367,16 @@ noexcept
       m_destint = vector_float2int(m_destination);
     }
   }
+}
+
+void dungeon_loop::play_actions(std::vector <Sound> &track_samples)
+noexcept
+{
+  action_prep();
+
+  action_start(track_samples);
+
+  action_end();
 }
 
 void dungeon_loop::other_actions()
