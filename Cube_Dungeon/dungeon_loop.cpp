@@ -181,33 +181,7 @@ noexcept
   return index;
 }
 
-int dungeon_loop::coordinator(const float pos)
-noexcept
-/// Determine the int coordinate from the float position
-{ return int(round(pos)); }
-
-std::vector <std::vector <int>> dungeon_loop::director()
-noexcept
-/// Returns the initial directions of movement.
-{
-  std::vector <std::vector <int>> directs;
-
-  for (const std::vector <float> &direction: m_directions)
-  {
-    std::vector <int> direct;
-
-    for (const float num: direction)
-    { direct.push_back(int(round(num))); }
-
-    directs.push_back(direct);
-  }
-
-  assert(directs.size() == m_directions.size());
-
-  return directs;
-}
-
-void dungeon_loop::play_actions(std::vector <Sound> &track_samples)
+void dungeon_loop::action_prep()
 noexcept
 {
   unsigned count
@@ -225,9 +199,13 @@ noexcept
   m_hale_type = m_type_volume[m_hale_index[0]]
                              [m_hale_index[1]]
                              [m_hale_index[2]];
-  
-  m_cube_dungeon_pos = vector_float2int(m_position);
 
+  m_cube_dungeon_pos = vector_float2int(m_position);
+}
+
+void dungeon_loop::action_start(std::vector <Sound> &track_samples)
+noexcept
+{
   if (m_act == action::none)
   {
     key_bind_actions(m_act);
@@ -311,6 +289,14 @@ noexcept
 
     m_time = 0.0f;
   }
+}
+
+void dungeon_loop::play_actions(std::vector <Sound> &track_samples)
+noexcept
+{
+  action_prep();
+
+  action_start(track_samples);
 
   m_delta_time = GetFrameTime();
 

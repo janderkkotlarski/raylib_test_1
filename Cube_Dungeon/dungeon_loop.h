@@ -281,10 +281,10 @@ private:
   void perform_action()
   noexcept;
 
-  int coordinator(const float pos)
+  void action_prep()
   noexcept;
 
-  std::vector <std::vector <int>> director()
+  void action_start(std::vector <Sound> &track_samples)
   noexcept;
 
   void play_actions(std::vector<Sound> &track_samples)
