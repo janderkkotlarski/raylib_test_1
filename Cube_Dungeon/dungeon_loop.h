@@ -182,6 +182,9 @@ private:
   cube_type m_hale_type
   { cube_type::none };
 
+  std::vector <int> m_hale_index
+  { 0, 0, 0 };
+
   std::vector <int> m_direction_shift
   { 0, 0, 0 };
 

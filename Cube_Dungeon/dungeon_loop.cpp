@@ -210,6 +210,21 @@ noexcept
 void dungeon_loop::play_actions(std::vector <Sound> &track_samples)
 noexcept
 {
+  unsigned count
+  { 0 };
+
+  for (const float num: m_position)
+  {
+    m_hale_index[count] = int(round(num + m_directions[0][count]));
+    ++count;
+  }
+
+  for (int &num: m_hale_index)
+  { num = dungeon_wrap(num); }
+
+  m_hale_type = m_type_volume[m_hale_index[0]]
+                             [m_hale_index[1]]
+                             [m_hale_index[2]];
   
   m_cube_dungeon_pos = vector_float2int(m_position);
 
@@ -249,24 +264,6 @@ noexcept
 
       m_destint = vector_float2int(m_destination);
 
-      unsigned count
-      { 0 };
-
-      std::vector <int> hale_index;
-
-      for (const float num: m_position)
-      {
-        hale_index.push_back(int(round(num + m_directions[0][count])));
-        ++count;
-      }
-
-      for (int &num: hale_index)
-      { num = dungeon_wrap(num); }
-
-      m_hale_type = m_type_volume[hale_index[0]]
-                                 [hale_index[1]]
-                                 [hale_index[2]];
-
       if (m_act == action::inhale &&
           (m_internal_type != cube_type::none ||
            m_hale_type == cube_type::concrete ||
@@ -275,17 +272,21 @@ noexcept
 
       if (m_act == action::exhale)
       {
-        if (m_internal_type != cube_type::none &&
-            m_hale_type == cube_type::none)
-        {
-          m_hale_scale = 0.0f;
-
-          m_hale_type = m_internal_type;
-
-          m_internal_type = cube_type::none;
-        }
-        else
+        if (m_internal_type == cube_type::none ||
+            m_hale_type != cube_type::none)
         { m_act = action::none; }
+        else
+        {
+          m_type_volume[m_hale_index[0]]
+                       [m_hale_index[1]]
+                       [m_hale_index[2]] = m_internal_type;
+
+          m_hale_type = cube_type::none;
+
+          m_internal_type = m_hale_type;
+
+          m_hale_scale = 0.0f;
+        }
       }
     }
 
@@ -331,31 +332,17 @@ noexcept
       if (m_act == action::inhale &&
           m_internal_type == cube_type::none)
       {
-        unsigned count
-        { 0 };
-
-        std::vector <int> hale_index;
-
-        for (const int num: m_position)
-        {
-          hale_index.push_back(int(round(num + m_directions[0][count])));
-          ++count;
-        }
-
-        for (int &num: hale_index)
-        { num = dungeon_wrap(num); }
-
-        m_hale_type = m_type_volume[hale_index[0]]
-                                   [hale_index[1]]
-                                   [hale_index[2]];        
+        m_hale_type = m_type_volume[m_hale_index[0]]
+                                   [m_hale_index[1]]
+                                   [m_hale_index[2]];
 
         m_internal_type = m_hale_type;
 
         m_hale_type = cube_type::none;
 
-        m_type_volume[hale_index[0]]
-                     [hale_index[1]]
-                     [hale_index[2]] = m_hale_type;
+        m_type_volume[m_hale_index[0]]
+                     [m_hale_index[1]]
+                     [m_hale_index[2]] = m_hale_type;
       }
 
       if (m_movement != std::vector <float> { 0.0f, 0.0f, 0.0f })
