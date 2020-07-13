@@ -342,16 +342,20 @@ noexcept
           ++count;
         }
 
-        m_hale_type = m_type_volume[hale_index[0]]
-                                   [hale_index[1]]
-                                   [hale_index[2]];
-
         for (int &num: hale_index)
         { num = dungeon_wrap(num); }
+
+        m_hale_type = m_type_volume[hale_index[0]]
+                                   [hale_index[1]]
+                                   [hale_index[2]];        
 
         m_internal_type = m_hale_type;
 
         m_hale_type = cube_type::none;
+
+        m_type_volume[hale_index[0]]
+                     [hale_index[1]]
+                     [hale_index[2]] = m_hale_type;
       }
 
       if (m_movement != std::vector <float> { 0.0f, 0.0f, 0.0f })
