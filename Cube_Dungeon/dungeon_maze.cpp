@@ -74,16 +74,36 @@ noexcept
 {
   c_type = cube_type::none;
 
-  if (level == 1)
+  if (level == 2)
   {
     c_type = cube_type::alabaster;
 
-    if (y == dungeon_radius &&
-        z == dungeon_radius)
+    const int spacing
+    { 4 };
+
+    const int rel_x
+    { abs(x - dungeon_radius) };
+
+    const int rel_y
+    { abs(y - dungeon_radius) };
+
+    const int rel_z
+    { abs(z - dungeon_radius) };
+
+    if (rel_x % spacing == 0 &&
+        rel_y % spacing == 0)
+    { c_type = cube_type::none; }
+
+    if (rel_x % spacing == 0 &&
+        rel_z % spacing == 0)
+    { c_type = cube_type::none; }
+
+    if (rel_z % spacing == 0 &&
+        rel_y % spacing == 0)
     { c_type = cube_type::none; }
   }
 
-  if (level == 2)
+  if (level == 1)
   {
     outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
 

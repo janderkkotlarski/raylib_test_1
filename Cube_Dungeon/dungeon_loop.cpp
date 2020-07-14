@@ -44,8 +44,13 @@ void dungeon_loop::player_init()
 noexcept
 /// Initialize all things pertaining to the player.
 {
-  if (m_level <= 2)
+  if (m_level == 1)
   { m_start_posit = { 2.0f + 1.0f*m_dungeon_radius,
+                      0.0f + 1.0f*m_dungeon_radius,
+                      0.0f + 1.0f*m_dungeon_radius }; }
+
+  if (m_level == 2)
+  { m_start_posit = { 0.0f + 1.0f*m_dungeon_radius,
                       0.0f + 1.0f*m_dungeon_radius,
                       0.0f + 1.0f*m_dungeon_radius }; }
 
