@@ -76,27 +76,23 @@ noexcept
 
   if (level == 1)
   {
-    // c_type = cube_type::ruby;
+    c_type = cube_type::alabaster;
+
+    if (y == dungeon_radius &&
+        z == dungeon_radius)
+    { c_type = cube_type::none; }
   }
 
   if (level == 2)
   {
-    const int dist
-    { 5 };
+    outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
 
-    if ((abs(x - dungeon_radius) - dist) % (2*dist) == 0 ||
-        (abs(y - dungeon_radius) - dist) % (2*dist) == 0 ||
-        (abs(z - dungeon_radius) - dist) % (2*dist) == 0)
-    { c_type = cube_type::concrete; }
-
-    if (abs(x - dungeon_radius) % (2*dist) == 0 &&
-        abs(y - dungeon_radius) % (2*dist) == 0 &&
-        abs(z - dungeon_radius) % (2*dist) == 0)
+    if (abs(x - dungeon_radius) == 0 &&
+        abs(y - dungeon_radius) == 0 &&
+        abs(z - dungeon_radius) == 0)
     { c_type = cube_type::catalyst; }
   }
 
-  if (level >= 3)
-  { pillars(c_type, cube_type::concrete, dungeon_radius, x, y, z); }
 
   if (level >= 3 &&
       level < 20)
@@ -104,11 +100,9 @@ noexcept
     random_wall(c_type, level, dungeon_radius, x, y, z);
 
     outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
+
+    pillars(c_type, cube_type::concrete, dungeon_radius, x, y, z);
   }
-  else
-  { outer_wall(c_type, cube_type::alabaster, dungeon_radius, x, y, z); }
-
-
 }
 
 
