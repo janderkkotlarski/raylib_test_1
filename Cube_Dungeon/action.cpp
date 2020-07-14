@@ -97,12 +97,6 @@ noexcept
     case action::hale:
       return "hale";
       break;
-    case action::inhale:
-      return "inhale";
-      break;
-    case action::exhale:
-      return "exhale";
-      break;
     case action::catalyze:
       return "catalyze";
       break;

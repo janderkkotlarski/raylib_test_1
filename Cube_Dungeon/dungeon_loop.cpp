@@ -12,12 +12,10 @@
 
 dungeon_loop::dungeon_loop()
 noexcept
-  :  m_type_volume(), m_fracta_cube(), m_int_vectors()
+  :  m_type_volume(), m_fracta_cube()
 /// Set up the loop
 {
   assert(m_directions.size() == 3);
-
-  // acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
 
   dungeon_init(m_type_volume, m_max_dungeon_radius);
 }
@@ -94,8 +92,6 @@ noexcept
   m_dungeon_span = 2*m_dungeon_radius + 1;
   m_wrap = m_float_radius;
 
-  m_dungeon_middle = { m_dungeon_radius, m_dungeon_radius, m_dungeon_radius };
-
   player_init();
 }
 
@@ -152,14 +148,6 @@ noexcept
       m_cube_scale += m_hale_sign*delta_scale;
       break;
 
-    case action::inhale:
-      m_cube_scale -= delta_scale;
-      break;
-
-    case action::exhale:
-      m_cube_scale += delta_scale;
-      break;
-
     case action::none:
       m_cube_scale = 1.0f;
       break;
@@ -207,7 +195,7 @@ noexcept
                              [m_hale_index[1]]
                              [m_hale_index[2]];
 
-  m_cube_dungeon_pos = vector_float2int(m_position);
+  m_pos_int = vector_float2int(m_position);
 }
 
 void dungeon_loop::action_start(std::vector <Sound> &track_samples)
@@ -242,20 +230,14 @@ noexcept
         m_movement = { 0.0f, 0.0f, 0.0f };
       }
 
-      m_destination = vector_add(m_position, m_movement);
-
-      for (float &part: m_destination)
-      { part = dungeon_wrap(part); }
-
-      m_destint = vector_float2int(m_destination);
-
       if (m_act == action::hale)
       {
         if ((m_internal_type != cube_type::none &&
             m_hale_type != cube_type::none) ||
             (m_internal_type == cube_type::none &&
             (m_hale_type == cube_type::concrete ||
-            m_hale_type == cube_type::invisible)))
+             m_hale_type == cube_type::invisible ||
+             m_hale_type == cube_type::none)))
         { m_act = action::none; }
       }
 
@@ -271,31 +253,6 @@ noexcept
         {
           m_hale_sign = 1;
 
-          m_type_volume[m_hale_index[0]]
-                       [m_hale_index[1]]
-                       [m_hale_index[2]] = m_internal_type;
-
-          m_hale_type = cube_type::none;
-
-          m_internal_type = m_hale_type;
-
-          m_cube_scale = 0.0f;
-        }
-      }
-
-      if (m_act == action::inhale &&
-          (m_internal_type != cube_type::none ||
-           m_hale_type == cube_type::concrete ||
-           m_hale_type == cube_type::invisible))
-         { m_act = action::none; }
-
-      if (m_act == action::exhale)
-      {
-        if (m_internal_type == cube_type::none ||
-            m_hale_type != cube_type::none)
-        { m_act = action::none; }
-        else
-        {
           m_type_volume[m_hale_index[0]]
                        [m_hale_index[1]]
                        [m_hale_index[2]] = m_internal_type;
@@ -352,9 +309,7 @@ noexcept
         { num = round(num); }
       }
 
-      if ((m_act == action::inhale &&
-          m_internal_type == cube_type::none) ||
-          m_hale_sign == -1)
+      if (m_hale_sign == -1)
       {
         m_hale_type = m_type_volume[m_hale_index[0]]
                                    [m_hale_index[1]]
@@ -367,6 +322,8 @@ noexcept
         m_type_volume[m_hale_index[0]]
                      [m_hale_index[1]]
                      [m_hale_index[2]] = m_hale_type;
+
+        m_hale_sign = 0;
       }
 
       if (m_movement != std::vector <float> { 0.0f, 0.0f, 0.0f })
@@ -389,13 +346,6 @@ noexcept
       m_collide_type = cube_type::none;
 
       m_movement = { 0.0f, 0.0f, 0.0f };
-
-      m_destination = vector_add(m_position, m_movement);
-
-      for (float &part: m_destination)
-      { part = dungeon_wrap(part); }
-
-      m_destint = vector_float2int(m_destination);
     }
   }
 }
@@ -430,19 +380,19 @@ noexcept
   }
 
   if (m_act == action::none &&
-      m_type_volume[m_cube_dungeon_pos[0]]
-                   [m_cube_dungeon_pos[1]]
-                   [m_cube_dungeon_pos[2]] == cube_type::next)
+      m_type_volume[m_pos_int[0]]
+                   [m_pos_int[1]]
+                   [m_pos_int[2]] == cube_type::next)
   { m_loop = false; }
 
   if (m_act == action::none &&
-      m_type_volume[m_cube_dungeon_pos[0]]
-                   [m_cube_dungeon_pos[1]]
-                   [m_cube_dungeon_pos[2]] == cube_type::setback)
+      m_type_volume[m_pos_int[0]]
+                   [m_pos_int[1]]
+                   [m_pos_int[2]] == cube_type::setback)
   {
-    m_type_volume[m_cube_dungeon_pos[0]]
-                 [m_cube_dungeon_pos[1]]
-                 [m_cube_dungeon_pos[2]] = cube_type::none;
+    m_type_volume[m_pos_int[0]]
+                 [m_pos_int[1]]
+                 [m_pos_int[2]] = cube_type::none;
 
     player_init();
   }  
@@ -481,7 +431,6 @@ noexcept
   camera_position(camera);
   camera.target = vector2vector3(vector_add(m_position, m_directions[0]));
   camera.up = vector2vector3(m_directions[2]);
-  camera.fovy = m_cam_angle;
 }
 
 void dungeon_loop::infos()
@@ -506,17 +455,6 @@ noexcept
 
   y += 30;
 
-  const std::string collide_pos
-  {
-    "[" + std::to_string(m_direction_shift[0]) +
-    "][" + std::to_string(m_direction_shift[1]) +
-    "][" + std::to_string(m_direction_shift[2]) + "]"
-  };
-
-  display_string("Col: ", collide_pos, x, y, size);
-
-  y += 30;
-
   display_string("Action: ", action2string(m_act), x, y, size);
 
   y += 30;
@@ -535,7 +473,7 @@ noexcept
 
   y += 30;
 
-  display_string("Collide type: ",type2string(m_collide_type), x, y, size);
+  display_string("Collide type: ", type2string(m_collide_type), x, y, size);
 }
 
 void dungeon_loop::coord_transform(const std::vector <int> &counters,
@@ -544,22 +482,6 @@ noexcept
 {
   m_coord_int[index] = m_pos_int[index] + counters[index];
   m_index_int[index] = dungeon_wrap(m_coord_int[index]);
-}
-
-void dungeon_loop::frame_update(std::vector <Model> &cube_models)
-noexcept
-{
-  ++m_frame;
-
-  if (m_frame >= m_frames)
-  {
-    m_frame = 0;
-
-    ++m_cube_index;
-
-    if (m_cube_index >= cube_models.size())
-    { m_cube_index = 0; }
-  }
 }
 
 void dungeon_loop::cube_drawing(std::vector <Model> &cube_models,
@@ -591,13 +513,6 @@ noexcept
       {
         coord_transform(counters, index);
 
-        const std::vector <int> dungeon_pos;
-
-        std::vector <int> dungeon_index;
-
-        for (const int num: m_index_int)
-        { dungeon_index.push_back(num); }
-
         const cube_type c_type
         { m_type_volume[m_index_int[0]]
                        [m_index_int[1]]
@@ -618,8 +533,7 @@ noexcept
           {
             if (index != 42)
             {    
-              if (((m_act == action::inhale ||
-                   m_act == action::exhale) &&
+              if (((m_act == action::hale) &&
                   counters[0] == (int)m_directions[0][0] &&
                   counters[1] == (int)m_directions[0][1] &&
                   counters[2] == (int)m_directions[0][2]) ||
@@ -666,10 +580,6 @@ noexcept
   candy_blink(m_candy_factor, m_delta_time, m_candy_up);
 
   dark_shift(m_cube_vein_profile, m_delta_time, m_dark_opacity, m_dark_up);
-
-  // acid_trip(m_cam_angle_average, m_cam_angle_deviation, m_cam_angle, m_dark_opacity);
-
-  // DrawRectangle(0, 0, m_screen_width, m_screen_height, m_dark_color);
 }
 
 void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models, std::vector <Model> &dark_models,
@@ -716,9 +626,6 @@ noexcept
         { cube_drawing(cube_models, dark_models, model); }
 
         EndMode3D();
-
-        if (m_test)
-        { infos(); }
 
         transition();
 

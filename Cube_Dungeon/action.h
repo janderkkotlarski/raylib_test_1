@@ -22,8 +22,6 @@ enum class action
   roll_right, // Barrel roll right
   roll_left, // Barrel roll left
   hale, // Inhale/exhale cube in/to front
-  inhale, // Inhale cube in front
-  exhale, // Exhale cube to front
   catalyze // Catalyze ingredients
 };
 

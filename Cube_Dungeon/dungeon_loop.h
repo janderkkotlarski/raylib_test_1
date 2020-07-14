@@ -42,7 +42,7 @@ private:
   { 0.0f };
 
   float m_delta_time
-  { 0.5f };
+  { GetFrameTime() };
 
   float m_cube_scale
   { 1.0f };
@@ -51,13 +51,13 @@ private:
   { 1.0f/m_period };
 
   float m_velocity
-  { m_speed*GetFrameTime() };
+  { m_speed*m_delta_time };
 
   const float m_angle
   { PI/(2.0f*m_period) };
 
   float m_theta
-  { m_angle*GetFrameTime() };
+  { m_angle*m_delta_time };
 
   const std::vector <std::vector <float>> m_start_directs
   { {1.0f, 0.0f, 0.0f},
@@ -83,7 +83,7 @@ private:
   { 2*m_dungeon_radius + 1};
 
   float m_wrap
-  { m_float_radius + 0.5f };
+  { m_float_radius };
 
   int m_wall_perc
   { 40 };
@@ -127,27 +127,13 @@ private:
   unsigned m_cube_index
   { 0 };
 
-  std::vector <int> m_dungeon_middle
-  { m_dungeon_radius,
-    m_dungeon_radius,
-    m_dungeon_radius };
-
-  std::vector <int> m_cube_dungeon_pos
-  { m_pos_int };
-
   const unsigned char m_light_intensity
   { 63 };
 
   std::vector <float> m_ambient_profile
   { 0.2f, 0.2f, 10.0f, 1.0f };
 
-  std::vector <float> m_rambient_profile
-  { 10.0f, 0.2f, 0.2f, 1.0f };
-
   int m_fog_density_loc
-  { 0 };
-
-  int m_frog_density_loc
   { 0 };
 
   int m_dark_density_loc
@@ -161,9 +147,6 @@ private:
 
   const int m_horizon
   { 3 };
-
-  const float m_sight
-  { float(m_horizon) };
 
   const float m_dist_min
   { 3.0f };
@@ -186,10 +169,7 @@ private:
   { 0, 0, 0 };
 
   int m_hale_sign
-  { -1 };
-
-  std::vector <int> m_direction_shift
-  { 0, 0, 0 };
+  { 0 };
 
   float m_screen_opacity
   { 0.0f };
@@ -208,26 +188,14 @@ private:
   bool m_candy_up
   { false };
 
-  std::vector <float> m_dark_profile
-  { 0.1f, 0.02f, 0.2f, 1.0f};
-
-  Color m_dark_color
-  { 15, 0, 31, 0 };
-
   float m_dark_opacity
   { 0.0f };
 
   bool m_dark_up
   { true };
 
-  const float m_cam_angle_average
+  const float m_cam_angle
   { 75.0f };
-
-  const float m_cam_angle_deviation
-  { 70.0f };
-
-  float m_cam_angle
-  { m_cam_angle_average - 0.0f*m_cam_angle_deviation };
 
   const float m_cam_field
   { 0.1f };
@@ -243,20 +211,6 @@ private:
 
   bool m_reset
   { false };
-
-  bool m_test
-  { false };
-
-  bool m_display_info
-  { false };
-
-  const bool m_simple
-  { false };
-
-  std::vector <std::vector <int>> m_int_vectors;
-
-  std::vector <int> m_int_dump
-  { 0, 0, 0 };
 
   const std::vector <std::vector <synchrogear>> m_music_tracks
   { music_tracks_generator() };
@@ -306,9 +260,6 @@ private:
   noexcept;
 
   void infos()
-  noexcept;
-
-  void frame_update(std::vector <Model> &cube_models)
   noexcept;
 
   void cube_drawing(std::vector<Model> &cube_models,
