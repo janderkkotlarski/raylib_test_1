@@ -598,13 +598,9 @@ noexcept
   {
     level_init();
 
-    std::cout << "Works 1!" << std::endl;
-
     dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
-    std::cout << "Works 2!" << std::endl;
-    single_placements(m_type_volume, m_level, m_dungeon_radius);
 
-    std::cout << "Works 3!" << std::endl;
+    single_placements(m_type_volume, m_level, m_dungeon_radius);
 
     while (m_loop)
     {
