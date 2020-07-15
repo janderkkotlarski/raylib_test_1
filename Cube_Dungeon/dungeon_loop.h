@@ -82,20 +82,17 @@ private:
   int m_dungeon_span
   { 2*m_dungeon_radius + 1};
 
-  float m_wrap
-  { m_float_radius };
-
-  int m_wall_perc
-  { 40 };
-
   std::vector <std::vector <float>> m_directions
   { m_start_directs };
 
   std::vector <float> m_movement
   { 0.0f, 0.0f, 0.0f };
 
+  std::vector <int> m_start_posint
+  { 1, m_dungeon_radius, m_dungeon_radius };
+
   std::vector <float> m_start_posit
-  { 1.0f, m_float_radius, m_float_radius };
+  { vector_int2float(m_start_posint) };
 
   std::vector <float> m_position
   { m_start_posit };
@@ -217,6 +214,9 @@ private:
 
   unsigned m_track_index
   { 0 };
+
+  const bool m_demo
+  { true };
 
   /// functions
 

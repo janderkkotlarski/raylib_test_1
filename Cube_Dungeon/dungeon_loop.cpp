@@ -44,22 +44,24 @@ void dungeon_loop::player_init()
 noexcept
 /// Initialize all things pertaining to the player.
 {
+  m_directions = m_start_directs;
+
   if (m_level == 1)
-  { m_start_posit = { 2.0f + 1.0f*m_dungeon_radius,
-                      0.0f + 1.0f*m_dungeon_radius,
-                      0.0f + 1.0f*m_dungeon_radius }; }
+  { m_start_posint = { m_dungeon_radius + 2,
+                       m_dungeon_radius,
+                       m_dungeon_radius }; }
 
   if (m_level == 2)
-  { m_start_posit = { 0.0f + 1.0f*m_dungeon_radius,
-                      0.0f + 1.0f*m_dungeon_radius,
-                      0.0f + 1.0f*m_dungeon_radius }; }
+  { m_start_posint = { m_dungeon_radius,
+                       m_dungeon_radius,
+                       m_dungeon_radius }; }
 
   if (m_level >= 3)
-  { m_start_posit = { 1.0f,
-                      1.0f*m_dungeon_radius,
-                      1.0f*m_dungeon_radius }; }
+  { m_start_posint = { 1,
+                       m_dungeon_radius,
+                       m_dungeon_radius }; }
 
-  m_directions = m_start_directs;
+  m_start_posit = vector_int2float(m_start_posint);
 
   m_position = m_start_posit;
 }
@@ -73,19 +75,6 @@ noexcept
   if (!m_reset)
   { ++m_level; }
 
-  std::cout << m_level << std::endl;
-
-  if (m_level >= 3)
-  {
-    m_dungeon_radius = 6 + 2*m_level;
-
-    m_wall_perc = 40 + m_level;
-  }
-  else
-  { m_dungeon_radius = 6; }
-
-  m_float_radius = (float)m_dungeon_radius;
-
   m_reset = false;
 
   if (m_level > m_end_level)
@@ -94,8 +83,16 @@ noexcept
     m_game = false;
   }
 
+  if (m_level >= 3)
+  {
+    m_dungeon_radius = 6 + 2*m_level;    
+  }
+  else
+  { m_dungeon_radius = 6; }
+
+  m_float_radius = (float)m_dungeon_radius;  
+
   m_dungeon_span = 2*m_dungeon_radius + 1;
-  m_wrap = m_float_radius;
 
   player_init();
 }
@@ -431,7 +428,7 @@ noexcept
   chromatic_shift(m_chromatic_profile, m_delta_time);
 
   perform_action();
-  wrapping(m_position, m_wrap);
+  wrapping(m_position, m_float_radius);
 
   camera_position(camera);
   camera.target = vector2vector3(vector_add(m_position, m_directions[0]));

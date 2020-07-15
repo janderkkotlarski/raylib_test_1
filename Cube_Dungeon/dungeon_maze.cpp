@@ -273,7 +273,7 @@ noexcept
   }
 }
 
-void cube_of_cubes(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+void block_of_cubes(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
                    const cube_type &c_type,
                    const unsigned x1, const unsigned x2,
                    const unsigned y1, const unsigned y2,
