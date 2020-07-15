@@ -9,6 +9,7 @@
 
 #include "keybindings.h"
 #include "dungeon_maze.h"
+#include "dungeon_level.h"
 
 dungeon_loop::dungeon_loop()
 noexcept
@@ -46,24 +47,7 @@ noexcept
 {
   m_directions = m_start_directs;
 
-  if (m_level == 1)
-  { m_start_posint = { m_dungeon_radius + 2,
-                       m_dungeon_radius,
-                       m_dungeon_radius }; }
-
-  if (m_level == 2)
-  { m_start_posint = { m_dungeon_radius,
-                       m_dungeon_radius,
-                       m_dungeon_radius }; }
-
-  if (m_level >= 3)
-  { m_start_posint = { 1,
-                       m_dungeon_radius,
-                       m_dungeon_radius }; }
-
-  m_start_posit = vector_int2float(m_start_posint);
-
-  m_position = m_start_posit;
+  m_position = vector_int2float(m_start_posint);
 }
 
 void dungeon_loop::level_init()
@@ -93,6 +77,8 @@ noexcept
   m_float_radius = (float)m_dungeon_radius;  
 
   m_dungeon_span = 2*m_dungeon_radius + 1;
+
+  levels(m_type_volume, m_level, m_dungeon_radius, m_start_posint);
 
   player_init();
 }
@@ -595,9 +581,9 @@ noexcept
   {
     level_init();
 
-    dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
+    // dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
 
-    single_placements(m_type_volume, m_level, m_dungeon_radius);
+    // single_placements(m_type_volume, m_level, m_dungeon_radius);
 
     while (m_loop)
     {

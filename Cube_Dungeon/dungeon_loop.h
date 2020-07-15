@@ -91,11 +91,8 @@ private:
   std::vector <int> m_start_posint
   { 1, m_dungeon_radius, m_dungeon_radius };
 
-  std::vector <float> m_start_posit
-  { vector_int2float(m_start_posint) };
-
   std::vector <float> m_position
-  { m_start_posit };
+  { vector_int2float(m_start_posint) };
 
   std::vector <int> m_pos_int
   { vector_float2int(m_position) };

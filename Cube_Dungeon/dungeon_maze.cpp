@@ -280,12 +280,17 @@ void block_of_cubes(std::vector< std::vector <std::vector <cube_type>>> &type_vo
                    const unsigned z1, const unsigned z2)
 noexcept
 {
-  for (unsigned index{ x1 }; index <= x2; ++index)
+  if (x1 <= x2 &&
+      y1 <= y2 &&
+      z1 <= z2)
   {
-    for (unsigned indey{ y1 }; indey <= y2; ++indey)
+    for (unsigned index{ x1 }; index <= x2; ++index)
     {
-      for (unsigned indez{ z1 }; indez <= z2; ++indez)
-      { type_volume[index][indey][indez] = c_type; }
+      for (unsigned indey{ y1 }; indey <= y2; ++indey)
+      {
+        for (unsigned indez{ z1 }; indez <= z2; ++indez)
+        { type_volume[index][indey][indez] = c_type; }
+      }
     }
   }
 }
