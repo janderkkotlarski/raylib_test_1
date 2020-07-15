@@ -41,15 +41,6 @@ noexcept
   SetTargetFPS(fps);
 }
 
-void dungeon_loop::player_init()
-noexcept
-/// Initialize all things pertaining to the player.
-{
-  m_directions = m_start_directs;
-
-  m_position = vector_int2float(m_start_posint);
-}
-
 void dungeon_loop::level_init()
 noexcept
 /// Level initialization.
@@ -67,20 +58,15 @@ noexcept
     m_game = false;
   }
 
-  if (m_level >= 3)
-  {
-    m_dungeon_radius = 6 + 2*m_level;    
-  }
-  else
-  { m_dungeon_radius = 6; }
+  levels(m_type_volume, m_level, m_dungeon_radius, m_start_posint);
 
   m_float_radius = (float)m_dungeon_radius;  
 
-  m_dungeon_span = 2*m_dungeon_radius + 1;
+  m_dungeon_span = 2*m_dungeon_radius + 1;  
 
-  levels(m_type_volume, m_level, m_dungeon_radius, m_start_posint);
+  m_directions = m_start_directs;
 
-  player_init();
+  m_position = vector_int2float(m_start_posint);
 }
 
 void dungeon_loop::perform_action()
@@ -381,8 +367,6 @@ noexcept
     m_type_volume[m_pos_int[0]]
                  [m_pos_int[1]]
                  [m_pos_int[2]] = cube_type::none;
-
-    player_init();
   }  
 }
 

@@ -223,9 +223,6 @@ private:
   void camera_init(Camera &camera)
   noexcept;
 
-  void player_init()
-  noexcept;
-
   void level_init()
   noexcept;
 
