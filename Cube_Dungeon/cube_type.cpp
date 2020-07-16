@@ -133,7 +133,7 @@ noexcept
         return true;
         break;
       case cube_type::previous:
-        profile = std::vector <float>{0.5f, 0.0f, 1.0f, 1.0f };
+        profile = std::vector <float>{0.25f, 0.0f, 0.5f, 1.0f };
         return true;
         break;
       case cube_type::catalyst:

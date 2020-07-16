@@ -73,8 +73,8 @@ noexcept
 
   block_of_cubes(type_volume, cube_type::none, 0, 2*radius, 2* radius - 1, 2*radius - 1, radius + 2, radius + 2);
 
-  type_volume[radius + 2][0][radius + 2] = cube_type::none;
-  type_volume[radius + 2][2*radius][radius + 2] = cube_type::none;
+  type_volume[radius - 2][0][radius + 2] = cube_type::none;
+  type_volume[radius - 2][2*radius][radius + 2] = cube_type::none;
 
   type_volume[radius][radius][radius] = cube_type::next;
 }
