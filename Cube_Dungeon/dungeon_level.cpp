@@ -117,13 +117,58 @@ noexcept
     }
   }
 
-  type_volume[radius - 2][radius + 1][radius] = cube_type::none;
+  for (int count_x{ -3 }; count_x <= 3; ++count_x)
+  {
+    const int x = 4*count_x + 2;
 
-  type_volume[radius - 2][radius - 1][radius] = cube_type::none;
+    const int x2 = 4*count_x;
 
-  type_volume[radius - 2][radius][radius + 1] = cube_type::none;
+    for (int count_y{ -3 }; count_y <= 3; ++count_y)
+    {
+      const int y = 4*count_y + 2;
 
-  type_volume[radius - 2][radius][radius - 1] = cube_type::none;
+      const int y2 = 4*count_y;
+
+      if (false)
+      {
+        block_of_cubes(type_volume, cube_type::none, 0, 2*radius,
+                                                     radius + x, radius + x,
+                                                     radius + y, radius + y);
+
+        block_of_cubes(type_volume, cube_type::none, radius + x, radius + x,
+                                                     0, 2*radius,
+                                                     radius + y, radius + y);
+
+        block_of_cubes(type_volume, cube_type::none, radius + x, radius + x,
+                                                     radius + y, radius + y,
+                                                     0, 2*radius);
+      }
+
+      if (abs(x2) != 3 &&
+          abs(y2) != 3)
+      {
+        block_of_cubes(type_volume, cube_type::none, 0, 2*radius,
+                                                     radius + x2, radius + x2,
+                                                     radius + y2, radius + y2);
+
+        block_of_cubes(type_volume, cube_type::none, radius + x2, radius + x2,
+                                                     0, 2*radius,
+                                                     radius + y2, radius + y2);
+
+        block_of_cubes(type_volume, cube_type::none, radius + x2, radius + x2,
+                                                     radius + y2, radius + y2,
+                                                     0, 2*radius);
+      }
+    }
+  }
+
+  type_volume[radius - 2][radius + 1][radius] = cube_type::alabaster;
+
+  type_volume[radius - 2][radius - 1][radius] = cube_type::alabaster;
+
+  type_volume[radius - 2][radius][radius + 1] = cube_type::alabaster;
+
+  type_volume[radius - 2][radius][radius - 1] = cube_type::alabaster;
 
   type_volume[radius + 1][radius][radius] = cube_type::previous;
 
