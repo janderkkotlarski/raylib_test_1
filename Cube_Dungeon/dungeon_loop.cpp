@@ -310,6 +310,15 @@ noexcept
                          [moved_to[2]] == cube_type::next)
         { m_loop = false; }
 
+        if (m_type_volume[moved_to[0]]
+                         [moved_to[1]]
+                         [moved_to[2]] == cube_type::previous)
+        {
+          m_loop = false;
+
+          m_level -= 2;
+        }
+
         m_type_volume[moved_to[0]]
                      [moved_to[1]]
                      [moved_to[2]] = cube_type::none;
@@ -352,12 +361,6 @@ noexcept
     m_game = false;
     m_act = action::none;
   }
-
-  if (m_act == action::none &&
-      m_type_volume[m_pos_int[0]]
-                   [m_pos_int[1]]
-                   [m_pos_int[2]] == cube_type::next)
-  { m_loop = false; }
 
   if (m_act == action::none &&
       m_type_volume[m_pos_int[0]]
@@ -629,9 +632,7 @@ void dungeon_loop::run_window()
   { ".png" };
 
   std::vector <Model> cube_models;
-
   std::vector <Image> face_images;
-
   std::vector <Shader> fog_shaders;
 
   init_cubes_images_fogs(cube_models, face_images, fog_shaders, m_position, m_ambient_profile,
@@ -640,9 +641,7 @@ void dungeon_loop::run_window()
   file_type = "_.png";
 
   std::vector <Model> dark_models;
-
   std::vector <Image> dark_images;
-
   std::vector <Shader> dark_shaders;
 
   init_cubes_images_fogs(dark_models, dark_images, dark_shaders, m_position, m_ambient_profile,

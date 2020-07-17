@@ -10,81 +10,68 @@ enum class cube_type
 /// Cube types that may be encountered in the levels.
 {
   none,
-  // absorbable, empty
-  // black
+  // Empty, not visible, not absorbable, not halable
+  // Transparent
 
   concrete,
-  // inabsorbable, inedible
-  // brick
-  // grey
+  // Wall, visible, not absorbable, not halable
+  // Grey
 
   alabaster,
-  // absorbable, inedible
-  // brick
-  // white
+  // Wall, visible, not absorbable, halable
+  // White
 
   invisible,
-  // inabsorbable, inedible
-  // brick
-  // black
+  // Wall, not visible, not absorbable, not halable
+  // Transparent
 
   transparent,
-  // absorbable, inedible
-  // brick
-  // black
+  // Wall, not visible, not absorbable, halable
+  // Transparent
 
   next,
-  // absorbable, edible, +100 points
-  // portal to next level
-  // repeatedly rotating from red to blue
+  // Exit, visible, absorbable, halable
+  // Spectral progression
 
   special,
-  // absorbable, edible, +500 points
-  // portal to a special level
-  // repeatedly spectrally rotating from blue to red
+  // Exit, visible, absorbable, halable
+  // Chromatic progression
 
   previous,
-  // absorbable, edible, -50 points
-  // portal to previous level
-  // purple
+  // Exit, visible, absorbable, halable
+  // Dark purple
 
   setback,
-  // absorbable, edible, -25 points
-  // transports back to the start
-  // superdark
+  // Transporter, barely visible, absorbable, halable
+  // Very dark nearly fully transparent
 
   catalyst,
-  // absorbable, inedible
-  // reacts with certain other squares
-  // teal
+  // Tool, visible, absorbable, halable
+  // Turquoise
 
   trigger,
-  // absorbable, inedible
-  // presence or nonpresence will change certain other squares
-  // orange
+  // Tool, visible, absorbable, halable
+  // Orange
 
   miscellaneous,
-  // a type for whatever purpose needed
+  // Any other type, (not) visible,(not) absorbable, (not) halable
+  // Any color
 
   ruby,
-  // absorbable, edible, +1 point
-  // candy
-  // red
+  // Point, visible, absorbable, halable
+  // Red
 
   citrine,
-  // absorbable, edible, +5 points
-  // candy
-  // yellow
+  // Point, visible, absorbable, halable
+  // Yellow
 
   emerald,
-  // absorbable, edible, +25 points
-  // candy
-  // green
+  // Point, visible, absorbable, halable
+  // Green
 
   sapphire
-  // absorbable, edible, +125 points
-  // candy
-  // blue
+  // Point, visible, absorbable, halable
+  // Blue
 };
 
 unsigned type2index(const cube_type c_type)

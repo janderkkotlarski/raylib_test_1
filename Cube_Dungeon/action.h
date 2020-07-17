@@ -22,7 +22,7 @@ enum class action
   roll_right, // Barrel roll right
   roll_left, // Barrel roll left
   hale, // Inhale/exhale cube in/to front
-  catalyze // Catalyze ingredients
+  catalyze // Catalyze ingredients, triggers automatically when right configuration is in place
 };
 
 action direct2action(const std::vector <std::vector <int>> &directs,
