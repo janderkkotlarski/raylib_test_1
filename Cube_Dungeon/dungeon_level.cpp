@@ -117,13 +117,13 @@ noexcept
     }
   }
 
-  for (int count_x{ -3 }; count_x <= 3; ++count_x)
+  for (int count_x{ -2 }; count_x <= 2; ++count_x)
   {
     const int x = 4*count_x + 2;
 
     const int x2 = 4*count_x;
 
-    for (int count_y{ -3 }; count_y <= 3; ++count_y)
+    for (int count_y{ -2 }; count_y <= 2; ++count_y)
     {
       const int y = 4*count_y + 2;
 
@@ -144,8 +144,6 @@ noexcept
                                                      0, 2*radius);
       }
 
-      if (abs(x2) != 3 &&
-          abs(y2) != 3)
       {
         block_of_cubes(type_volume, cube_type::none, 0, 2*radius,
                                                      radius + x2, radius + x2,
@@ -163,14 +161,19 @@ noexcept
   }
 
   type_volume[radius - 2][radius + 1][radius] = cube_type::alabaster;
-
   type_volume[radius - 2][radius - 1][radius] = cube_type::alabaster;
 
   type_volume[radius - 2][radius][radius + 1] = cube_type::alabaster;
-
   type_volume[radius - 2][radius][radius - 1] = cube_type::alabaster;
 
+  type_volume[radius - 1][radius][radius] = cube_type::concrete;
   type_volume[radius + 1][radius][radius] = cube_type::previous;
+
+  type_volume[radius][radius - 1][radius] = cube_type::concrete;
+  type_volume[radius][radius + 1][radius] = cube_type::concrete;
+
+  type_volume[radius][radius][radius - 1] = cube_type::concrete;
+  type_volume[radius][radius][radius + 1] = cube_type::concrete;
 
   type_volume[radius][radius][radius] = cube_type::next;
 }
