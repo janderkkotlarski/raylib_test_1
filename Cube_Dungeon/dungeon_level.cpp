@@ -22,6 +22,9 @@ noexcept
 
   if (level == 4)
   { level_4(type_volume, level, radius, start_posint); }
+
+  if (level == 5)
+  { level_5(type_volume, level, radius, start_posint); }
 }
 
 void level_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
@@ -90,35 +93,6 @@ noexcept
   start_posint = { radius + 2, radius, radius };
 
   block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 0, 2*radius);
-
-  block_of_cubes(type_volume, cube_type::none, radius + 2, 2*radius, radius, radius, radius, radius);
-
-  block_of_cubes(type_volume, cube_type::none, 0, radius - 2, radius, radius, radius, radius);
-
-  for (int count_x{ -2 }; count_x <= 3; ++count_x)
-  {
-    const int x = 4*count_x - 2;
-
-    for (int count_y{ -2 }; count_y <= 3; ++count_y)
-    {
-      const int y = 4*count_y - 2;
-
-      if (false)
-      {
-        block_of_cubes(type_volume, cube_type::none, 0, 2*radius,
-                                                     radius + x, radius + x,
-                                                     radius + y, radius + y);
-
-        block_of_cubes(type_volume, cube_type::none, radius + x, radius + x,
-                                                     0, 2*radius,
-                                                     radius + y, radius + y);
-
-        block_of_cubes(type_volume, cube_type::none, radius + x, radius + x,
-                                                     radius + y, radius + y,
-                                                     0, 2*radius);
-      }
-    }
-  }
 
   for (int count_x{ -3 }; count_x <= 2; ++count_x)
   {
@@ -237,6 +211,21 @@ noexcept
       { type_volume[radius + 7*count_x][radius + 7*count_y][radius + 7*count_z] = cube_type::previous; }
     }
   }
+}
+
+void level_5(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  assert(start_posint.size() == 3);
+
+  radius = 10;
+
+  start_posint = { radius + 2, radius, radius };
+
+  type_volume[radius + 1][radius][radius] = cube_type::previous;
+
+  type_volume[radius - 1][radius][radius] = cube_type::next;
 }
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
