@@ -103,32 +103,6 @@ noexcept
     {
       const int y = 4*count_y - 2;
 
-      block_of_cubes(type_volume, cube_type::none, 0, 2*radius,
-                                                   radius + x, radius + x,
-                                                   radius + y, radius + y);
-
-      block_of_cubes(type_volume, cube_type::none, radius + x, radius + x,
-                                                   0, 2*radius,
-                                                   radius + y, radius + y);
-
-      block_of_cubes(type_volume, cube_type::none, radius + x, radius + x,
-                                                   radius + y, radius + y,
-                                                   0, 2*radius);
-    }
-  }
-
-  for (int count_x{ -2 }; count_x <= 2; ++count_x)
-  {
-    const int x = 4*count_x + 2;
-
-    const int x2 = 4*count_x;
-
-    for (int count_y{ -2 }; count_y <= 2; ++count_y)
-    {
-      const int y = 4*count_y + 2;
-
-      const int y2 = 4*count_y;
-
       if (false)
       {
         block_of_cubes(type_volume, cube_type::none, 0, 2*radius,
@@ -143,7 +117,37 @@ noexcept
                                                      radius + y, radius + y,
                                                      0, 2*radius);
       }
+    }
+  }
 
+  for (int count_x{ -3 }; count_x <= 2; ++count_x)
+  {
+    const int x = 4*count_x + 2;
+
+    const int x2 = 4*count_x;
+
+    for (int count_y{ -3 }; count_y <= 2; ++count_y)
+    {
+      const int y = 4*count_y + 2;
+
+      const int y2 = 4*count_y;
+
+      {
+        block_of_cubes(type_volume, cube_type::none, 0, 2*radius,
+                                                     radius + x, radius + x,
+                                                     radius + y, radius + y);
+
+        block_of_cubes(type_volume, cube_type::none, radius + x, radius + x,
+                                                     0, 2*radius,
+                                                     radius + y, radius + y);
+
+        block_of_cubes(type_volume, cube_type::none, radius + x, radius + x,
+                                                     radius + y, radius + y,
+                                                     0, 2*radius);
+      }
+
+      if (abs(count_x) != 3 &&
+          abs(count_y) != 3)
       {
         block_of_cubes(type_volume, cube_type::none, 0, 2*radius,
                                                      radius + x2, radius + x2,
