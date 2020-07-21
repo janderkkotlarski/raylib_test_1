@@ -138,11 +138,35 @@ noexcept
     }
   }
 
-  type_volume[radius - 2][radius + 1][radius] = cube_type::alabaster;
   type_volume[radius - 2][radius - 1][radius] = cube_type::alabaster;
+  type_volume[radius - 2][radius + 1][radius] = cube_type::alabaster;
 
-  type_volume[radius - 2][radius][radius + 1] = cube_type::alabaster;
   type_volume[radius - 2][radius][radius - 1] = cube_type::alabaster;
+  type_volume[radius - 2][radius][radius + 1] = cube_type::alabaster;
+
+  type_volume[radius - 1][radius - 2][radius] = cube_type::alabaster;
+  type_volume[radius + 1][radius - 2][radius] = cube_type::alabaster;
+
+  type_volume[radius][radius - 2][radius - 1] = cube_type::alabaster;
+  type_volume[radius][radius - 2][radius + 1] = cube_type::alabaster;
+
+  type_volume[radius - 1][radius + 2][radius] = cube_type::alabaster;
+  type_volume[radius + 1][radius + 2][radius] = cube_type::alabaster;
+
+  type_volume[radius][radius + 2][radius - 1] = cube_type::alabaster;
+  type_volume[radius][radius + 2][radius + 1] = cube_type::alabaster;
+
+  type_volume[radius][radius - 1][radius - 2] = cube_type::alabaster;
+  type_volume[radius][radius + 1][radius - 2] = cube_type::alabaster;
+
+  type_volume[radius - 1][radius][radius - 2] = cube_type::alabaster;
+  type_volume[radius + 1][radius][radius - 2] = cube_type::alabaster;
+
+  type_volume[radius][radius - 1][radius + 2] = cube_type::alabaster;
+  type_volume[radius][radius + 1][radius + 2] = cube_type::alabaster;
+
+  type_volume[radius - 1][radius][radius + 2] = cube_type::alabaster;
+  type_volume[radius + 1][radius][radius + 2] = cube_type::alabaster;
 
   type_volume[radius - 1][radius][radius] = cube_type::concrete;
   type_volume[radius + 1][radius][radius] = cube_type::previous;
