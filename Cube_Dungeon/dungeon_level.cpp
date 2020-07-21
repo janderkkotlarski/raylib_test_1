@@ -247,9 +247,23 @@ noexcept
 
   start_posint = { radius + 2, radius, radius };
 
+  block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 0, 2*radius);
+
   type_volume[radius + 1][radius][radius] = cube_type::previous;
 
   type_volume[radius - 1][radius][radius] = cube_type::next;
+
+  block_of_cubes(type_volume, cube_type::none, radius + 2, 2*radius, radius, radius, radius, radius);
+
+  block_of_cubes(type_volume, cube_type::none, 0, radius - 3, radius, radius, radius, radius);
+
+  block_of_cubes(type_volume, cube_type::none, radius - 3, radius - 3, 0, 2*radius, radius, radius);
+
+  block_of_cubes(type_volume, cube_type::none, radius - 3, radius - 3, radius, radius, 0, 2*radius);
+
+  block_of_cubes(type_volume, cube_type::none, 2*radius - 1, 2*radius - 1, 1, 2*radius - 1, radius, radius);
+
+  block_of_cubes(type_volume, cube_type::none, 2*radius - 1, 2*radius - 1, radius, radius, 1, 2*radius - 1);
 }
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
