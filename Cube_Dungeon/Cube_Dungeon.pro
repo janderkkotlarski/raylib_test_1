@@ -41,6 +41,7 @@ SOURCES += \
         keybindings.cpp \
         main.cpp \
         misc_functions.cpp \
+        player_display.cpp \
         raylib_functions.cpp \
         synchrogear.cpp
 
@@ -53,5 +54,6 @@ HEADERS += \
   fractacube.h \
   keybindings.h \
   misc_functions.h \
+  player_display.h \
   raylib_functions.h \
   synchrogear.h
