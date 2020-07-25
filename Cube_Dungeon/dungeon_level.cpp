@@ -273,6 +273,12 @@ noexcept
 
   block_of_cubes(type_volume, cube_type::none, 2*radius - 1, 2*radius - 1, 1, 1,  1, radius - 1);
   block_of_cubes(type_volume, cube_type::none, 2*radius - 1, 2*radius - 1, 2*radius - 1, 2*radius - 1, radius + 1, 2*radius - 1);
+
+  block_of_cubes(type_volume, cube_type::none, 1, 2*radius - 1, 1, 1,  1, 1);
+  block_of_cubes(type_volume, cube_type::none, 1, 2*radius - 1, 2*radius - 1, 2*radius - 1,  2*radius - 1, 2*radius - 1);
+
+  block_of_cubes(type_volume, cube_type::none, 1, 2*radius - 1, 1, 1,  2*radius - 1, 2*radius - 1);
+  block_of_cubes(type_volume, cube_type::none, 1, 2*radius - 1, 2*radius - 1, 2*radius - 1,  1, 1);
 }
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
