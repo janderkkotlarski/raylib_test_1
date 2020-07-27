@@ -276,6 +276,11 @@ noexcept
   type_volume[2*radius - 1][radius][radius - 3] = cube_type::ruby;
   type_volume[2*radius - 1][radius][radius + 3] = cube_type::ruby;
 
+  type_volume[2*radius - 1][3][radius] = cube_type::ruby;
+  type_volume[2*radius - 1][2*radius - 3][radius] = cube_type::ruby;
+  type_volume[2*radius - 1][radius][3] = cube_type::ruby;
+  type_volume[2*radius - 1][radius][2*radius - 3] = cube_type::ruby;
+
   block_of_cubes(type_volume, cube_type::none, 2*radius - 1, 2*radius - 1, 1, 1,  1, radius - 1);
   block_of_cubes(type_volume, cube_type::none, 2*radius - 1, 2*radius - 1, 2*radius - 1, 2*radius - 1, radius + 1, 2*radius - 1);
 
