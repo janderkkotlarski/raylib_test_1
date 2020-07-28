@@ -366,11 +366,11 @@ noexcept
 
   start_posint = { radius + 2, radius, radius };
 
-  block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 0, 2*radius);
+  block_of_cubes(type_volume, cube_type::none, 0, 2*radius, 0, 2*radius, 0, 2*radius);
+
+  block_of_cubes(type_volume, cube_type::concrete, 1, 2*radius - 1, 1, 2*radius - 1, 1, 2*radius - 1);
 
   block_of_cubes(type_volume, cube_type::none, radius + 2, radius + 9, radius, radius, radius, radius);
-
-  type_volume[radius + 6][radius][radius] = cube_type::setback;
 
   block_of_cubes(type_volume, cube_type::none, radius + 9, radius + 9, radius, radius, radius, radius + 2);
   block_of_cubes(type_volume, cube_type::none, radius + 9, radius + 9, radius - 2, radius, radius + 2, radius + 2);
@@ -441,8 +441,35 @@ noexcept
   block_of_cubes(type_volume, cube_type::none, radius - 3, radius - 3, radius - 8, radius + 6, radius - 8, radius - 8);
 
   type_volume[radius - 4][radius + 8][radius - 8] = cube_type::alabaster;
-}
 
+  block_of_cubes(type_volume, cube_type::none, radius - 5, radius - 5, radius + 8, radius + 8, radius - 6, radius + 8);
+  block_of_cubes(type_volume, cube_type::none, radius - 5, radius - 5, radius - 8, radius + 8, radius + 8, radius + 8);
+  block_of_cubes(type_volume, cube_type::none, radius - 5, radius - 5, radius - 8, radius - 8, radius - 8, radius + 8);
+  block_of_cubes(type_volume, cube_type::none, radius - 5, radius - 5, radius - 8, radius + 8, radius - 8, radius - 8);
+
+  type_volume[radius - 6][radius + 8][radius - 6] = cube_type::alabaster;
+
+  block_of_cubes(type_volume, cube_type::none, radius - 7, radius - 7, radius + 8, radius + 8, radius - 6, radius + 8);
+  block_of_cubes(type_volume, cube_type::none, radius - 7, radius - 7, radius - 8, radius + 8, radius + 8, radius + 8);
+  block_of_cubes(type_volume, cube_type::none, radius - 7, radius - 7, radius - 8, radius - 8, radius - 8, radius + 8);
+  block_of_cubes(type_volume, cube_type::none, radius - 7, radius - 7, radius - 8, radius + 8, radius - 8, radius - 8);
+
+  type_volume[radius - 8][radius + 8][radius - 8] = cube_type::alabaster;
+
+  block_of_cubes(type_volume, cube_type::none, radius - 9, radius - 9, radius + 8, radius + 8, radius - 8, radius + 8);
+  block_of_cubes(type_volume, cube_type::none, radius - 9, radius - 9, radius - 8, radius + 8, radius + 8, radius + 8);
+  block_of_cubes(type_volume, cube_type::none, radius - 9, radius - 9, radius - 8, radius - 8, radius - 8, radius + 8);
+  block_of_cubes(type_volume, cube_type::none, radius - 9, radius - 9, radius - 8, radius + 6, radius - 8, radius - 8);
+
+  type_volume[radius - 9][radius + 6][radius - 7] = cube_type::none;
+
+  block_of_cubes(type_volume, cube_type::none, radius - 9, radius - 9, radius - 6, radius + 6, radius - 6, radius - 6);
+  block_of_cubes(type_volume, cube_type::none, radius - 9, radius - 9, radius - 6, radius - 6, radius - 6, radius + 6);
+  block_of_cubes(type_volume, cube_type::none, radius - 9, radius - 9, radius - 6, radius + 6, radius + 6, radius + 6);
+  block_of_cubes(type_volume, cube_type::none, radius - 9, radius - 9, radius + 6, radius + 6, radius - 4, radius + 6);
+
+  type_volume[radius - 9][radius + 6][radius - 7] = cube_type::none;
+}
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
             const int level, int &radius, std::vector<int> &start_posint)
