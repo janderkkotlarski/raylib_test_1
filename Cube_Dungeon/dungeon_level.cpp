@@ -30,6 +30,9 @@ noexcept
 
   if (level == 6)
   { level_6(type_volume, level, radius, start_posint); }
+
+  if (level == 7)
+  { level_7(type_volume, level, radius, start_posint); }
 }
 
 void level_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
@@ -353,6 +356,20 @@ noexcept
   type_volume[2*radius - 2][radius + 1][radius] = cube_type::none;
   type_volume[2*radius - 2][radius][radius - 1] = cube_type::none;
   type_volume[2*radius - 2][radius][radius + 1] = cube_type::none;
+}
+
+void level_7(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = 10;
+
+  start_posint = { radius + 2, radius, radius };
+
+  block_of_cubes(type_volume, cube_type::alabaster, 0, 2*radius, 0, 2*radius, 0, 2*radius);
+
+  block_of_cubes(type_volume, cube_type::none, radius + 2, 2*radius - 1, radius, radius, radius, radius);
+
 }
 
 

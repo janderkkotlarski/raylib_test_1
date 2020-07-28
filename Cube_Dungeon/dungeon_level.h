@@ -39,4 +39,8 @@ void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
             const int level, int &radius, std::vector<int> &start_posint)
 noexcept;
 
+void level_7(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept;
+
 #endif // DUNGEON_LEVEL_H
