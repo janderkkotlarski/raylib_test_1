@@ -101,28 +101,12 @@ noexcept
     if (rel_z % spacing == 0 &&
         rel_y % spacing == 0)
     { c_type = cube_type::none; }
-  }
-
-  if (level == 1)
-  {
-    outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
-
-    if (abs(x - dungeon_radius) == 0 &&
-        abs(y - dungeon_radius) == 0 &&
-        abs(z - dungeon_radius) == 0)
-    { c_type = cube_type::catalyst; }
-  }
-
-
-  if (level >= 3 &&
-      level < 20)
-  {
+  }  
     random_wall(c_type, level, dungeon_radius, x, y, z);
 
     outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
 
     pillars(c_type, cube_type::concrete, dungeon_radius, x, y, z);
-  }
 }
 
 

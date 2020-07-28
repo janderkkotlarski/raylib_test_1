@@ -71,7 +71,7 @@ private:
   { 10 };
 
   const int m_max_dungeon_radius
-  { 99 };
+  { 49 };
 
   int m_dungeon_radius
   { 6 };

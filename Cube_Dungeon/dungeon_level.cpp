@@ -9,6 +9,8 @@ void levels(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
             std::vector <int> &start_posint)
 noexcept
 {
+  assert(start_posint.size() == 3);
+
   block_of_cubes(type_volume, cube_type::none, 0, 2*radius, 0, 2*radius, 0, 2*radius);
 
   if (level == 1)
@@ -25,14 +27,15 @@ noexcept
 
   if (level == 5)
   { level_5(type_volume, level, radius, start_posint); }
+
+  if (level == 6)
+  { level_6(type_volume, level, radius, start_posint); }
 }
 
 void level_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
-  assert(start_posint.size() == 3);
-
   radius = 6;
 
   start_posint = { radius + 1, radius, radius };
@@ -50,8 +53,6 @@ void level_2(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
-  assert(start_posint.size() == 3);
-
   radius = 6;
 
   start_posint = { radius + 2, radius, radius };
@@ -86,8 +87,6 @@ void level_3(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
-  assert(start_posint.size() == 3);
-
   radius = 12;
 
   start_posint = { radius + 2, radius, radius };
@@ -241,8 +240,6 @@ void level_5(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
-  assert(start_posint.size() == 3);
-
   radius = 10;
 
   start_posint = { radius + 2, radius, radius };
@@ -332,6 +329,32 @@ noexcept
   type_volume[radius - 1][radius][radius - 1] = cube_type::alabaster;
   type_volume[radius - 1][radius][radius + 1] = cube_type::alabaster;
 }
+
+void level_6(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = 3*level;
+
+  dungeon_filler(type_volume, level, radius);
+
+  start_posint = { 2, radius, radius };
+
+  type_volume[1][radius][radius] = cube_type::previous;
+  type_volume[3][radius][radius] = cube_type::none;
+  type_volume[2][radius - 1][radius] = cube_type::none;
+  type_volume[2][radius + 1][radius] = cube_type::none;
+  type_volume[2][radius][radius - 1] = cube_type::none;
+  type_volume[2][radius][radius + 1] = cube_type::none;
+
+  type_volume[2*radius - 1][radius][radius] = cube_type::next;
+  type_volume[2*radius - 3][radius][radius] = cube_type::none;
+  type_volume[2*radius - 2][radius - 1][radius] = cube_type::none;
+  type_volume[2*radius - 2][radius + 1][radius] = cube_type::none;
+  type_volume[2*radius - 2][radius][radius - 1] = cube_type::none;
+  type_volume[2*radius - 2][radius][radius + 1] = cube_type::none;
+}
+
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
             const int level, int &radius, std::vector<int> &start_posint)
