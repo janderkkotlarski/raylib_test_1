@@ -368,6 +368,8 @@ noexcept
 
   block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 0, 2*radius);
 
+  type_volume[radius + 6][radius][radius] = cube_type::setback;
+
   block_of_cubes(type_volume, cube_type::none, radius + 2, radius + 9, radius, radius, radius, radius);
 
   block_of_cubes(type_volume, cube_type::none, radius + 9, radius + 9, radius, radius, radius, radius + 2);

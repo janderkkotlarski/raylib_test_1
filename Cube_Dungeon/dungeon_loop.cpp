@@ -319,6 +319,11 @@ noexcept
           m_level -= 2;
         }
 
+        if (m_type_volume[moved_to[0]]
+                         [moved_to[1]]
+                         [moved_to[2]] == cube_type::setback)
+        { m_position = vector_int2float(m_start_posint); }
+
         m_type_volume[moved_to[0]]
                      [moved_to[1]]
                      [moved_to[2]] = cube_type::none;
@@ -666,7 +671,7 @@ void dungeon_loop::run_window()
   { 1.0f, 1.0f, 1.0f, 1.0f };
 
   float ambient_profile[4]
-  { 0.0f, 1.0f, 1.0f, 1.0f };
+  { 1.0f, 1.0f, 1.0f, 1.0f };
 
   vector2array_float(ambi_profile, ambient_profile);
 

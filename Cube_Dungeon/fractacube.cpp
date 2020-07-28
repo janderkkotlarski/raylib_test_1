@@ -63,7 +63,7 @@ noexcept
           { vector_add(sub_pos, vector_int2float(m_pos_int)) };
 
           const Color setback_color
-          { 0, 0, 0, 63 };
+          { 0, 0, 0, 31 };
 
           if (m_type == cube_type::setback)
           { DrawCube(vector2vector3(cube_pos), m_cube_dims[0], m_cube_dims[1], m_cube_dims[2], setback_color); }
