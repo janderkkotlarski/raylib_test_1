@@ -524,6 +524,8 @@ noexcept
   block_of_cubes(type_volume, cube_type::none, radius + 7, radius + 7, radius - 6, radius + 6, radius + 6, radius + 6);
   block_of_cubes(type_volume, cube_type::none, radius + 7, radius + 7, radius + 6, radius + 6, radius - 4, radius + 6);
 
+  type_volume[radius + 8][radius + 6][radius - 6] = cube_type::none;
+
   type_volume[radius + 7][radius + 5][radius - 4] = cube_type::none;
 }
 
