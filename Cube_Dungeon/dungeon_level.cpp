@@ -527,6 +527,21 @@ noexcept
   type_volume[radius + 8][radius + 6][radius - 6] = cube_type::none;
 
   type_volume[radius + 7][radius + 5][radius - 4] = cube_type::none;
+
+  block_of_cubes(type_volume, cube_type::none, radius + 7, radius + 7, radius - 4, radius + 4, radius - 4, radius - 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 7, radius + 7, radius - 4, radius - 4, radius - 4, radius + 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 7, radius + 7, radius - 4, radius + 4, radius + 4, radius + 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 7, radius + 7, radius + 4, radius + 4, radius - 2, radius + 4);
+
+  type_volume[radius + 7][radius + 3][radius - 2] = cube_type::none;
+
+  block_of_cubes(type_volume, cube_type::none, radius + 7, radius + 7, radius - 2, radius + 2, radius - 2, radius - 2);
+  block_of_cubes(type_volume, cube_type::none, radius + 7, radius + 7, radius - 2, radius - 2, radius - 2, radius + 2);
+  block_of_cubes(type_volume, cube_type::none, radius + 7, radius + 7, radius - 2, radius + 2, radius + 2, radius + 2);
+  block_of_cubes(type_volume, cube_type::none, radius + 7, radius + 7, radius + 2, radius + 2, radius, radius + 2);
+
+  type_volume[radius + 6][radius + 2][radius] = cube_type::none;
+
 }
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
