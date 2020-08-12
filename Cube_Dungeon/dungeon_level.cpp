@@ -396,8 +396,7 @@ noexcept
   block_of_cubes(type_volume, cube_type::none, radius + 9, radius + 9, radius - 8, radius - 8, radius - 8, radius + 8);
   block_of_cubes(type_volume, cube_type::none, radius + 9, radius + 9, radius - 8, radius + 8, radius - 8, radius - 8);
 
-  block_of_cubes(type_volume, cube_type::none, radius + 9, radius + 9, radius + 8, radius + 8, radius - 6, radius +7);
-  type_volume[radius + 9][radius + 8][radius - 7] = cube_type::transparent;
+  block_of_cubes(type_volume, cube_type::transparent, radius + 9, radius + 9, radius + 8, radius + 8, radius - 7, radius + 7);
   type_volume[radius + 9][radius + 8][radius + 8] = cube_type::special;
 
   type_volume[radius + 8][radius + 8][radius - 8] = cube_type::alabaster;
