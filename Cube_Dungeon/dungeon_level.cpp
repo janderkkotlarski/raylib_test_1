@@ -545,10 +545,10 @@ noexcept
 
   type_volume[radius + 6][radius + 2][radius] = cube_type::none;
 
-  block_of_cubes(type_volume, cube_type::sapphire, radius + 5, radius + 5, radius - 4, radius + 4, radius - 4, radius - 4);
-  block_of_cubes(type_volume, cube_type::emerald, radius + 5, radius + 5, radius - 4, radius - 4, radius - 4, radius + 4);
-  block_of_cubes(type_volume, cube_type::citrine, radius + 5, radius + 5, radius - 4, radius + 4, radius + 4, radius + 4);
-  block_of_cubes(type_volume, cube_type::ruby, radius + 5, radius + 5, radius + 4, radius + 4, radius - 2, radius + 2);
+  block_of_cubes(type_volume, cube_type::none, radius + 5, radius + 5, radius - 4, radius + 4, radius - 4, radius - 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 5, radius + 5, radius - 4, radius - 4, radius - 4, radius + 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 5, radius + 5, radius - 4, radius + 4, radius + 4, radius + 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 5, radius + 5, radius + 4, radius + 4, radius - 4, radius + 2);
 
   type_volume[radius + 5][radius + 3][radius + 2] = cube_type::none;
 
@@ -556,6 +556,34 @@ noexcept
   block_of_cubes(type_volume, cube_type::none, radius + 5, radius + 5, radius - 2, radius - 2, radius - 2, radius + 2);
   block_of_cubes(type_volume, cube_type::none, radius + 5, radius + 5, radius - 2, radius + 2, radius + 2, radius + 2);
   block_of_cubes(type_volume, cube_type::none, radius + 5, radius + 5, radius + 2, radius + 2, radius - 2, radius);
+
+  type_volume[radius + 4][radius + 4][radius + 4] = cube_type::none;
+
+  block_of_cubes(type_volume, cube_type::none, radius + 3, radius + 3, radius - 4, radius + 4, radius - 4, radius - 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 3, radius + 3, radius - 4, radius - 4, radius - 4, radius + 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 3, radius + 3, radius - 4, radius + 4, radius + 4, radius + 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 3, radius + 3, radius + 4, radius + 4, radius - 4, radius + 2);
+
+  type_volume[radius + 3][radius + 3][radius + 2] = cube_type::none;
+
+  block_of_cubes(type_volume, cube_type::none, radius + 3, radius + 3, radius - 2, radius + 2, radius - 2, radius - 2);
+  block_of_cubes(type_volume, cube_type::none, radius + 3, radius + 3, radius - 2, radius - 2, radius - 2, radius + 2);
+  block_of_cubes(type_volume, cube_type::none, radius + 3, radius + 3, radius - 2, radius + 2, radius + 2, radius + 2);
+  block_of_cubes(type_volume, cube_type::none, radius + 3, radius + 3, radius + 2, radius + 2, radius - 2, radius);
+
+  type_volume[radius + 2][radius + 2][radius] = cube_type::none;
+
+  block_of_cubes(type_volume, cube_type::none, radius + 1, radius + 1, radius - 4, radius + 4, radius - 4, radius - 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 1, radius + 1, radius - 4, radius - 4, radius - 4, radius + 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 1, radius + 1, radius - 4, radius + 4, radius + 4, radius + 4);
+  block_of_cubes(type_volume, cube_type::none, radius + 1, radius + 1, radius + 4, radius + 4, radius - 2, radius + 4);
+
+  type_volume[radius + 3][radius + 1][radius - 2] = cube_type::none;
+
+  block_of_cubes(type_volume, cube_type::none, radius + 1, radius + 1, radius - 2, radius + 2, radius - 2, radius - 2);
+  block_of_cubes(type_volume, cube_type::none, radius + 1, radius + 1, radius - 2, radius - 2, radius - 2, radius + 2);
+  block_of_cubes(type_volume, cube_type::none, radius + 1, radius + 1, radius - 2, radius + 2, radius + 2, radius + 2);
+  block_of_cubes(type_volume, cube_type::none, radius + 1, radius + 1, radius + 2, radius + 2, radius + 2, radius);
 
 }
 
