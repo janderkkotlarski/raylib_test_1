@@ -517,7 +517,10 @@ noexcept
                   counters[0] == (int)m_directions[0][0] &&
                   counters[1] == (int)m_directions[0][1] &&
                   counters[2] == (int)m_directions[0][2]) ||
-                  (m_collide_type == cube_type::ruby &&
+                  ((m_collide_type == cube_type::ruby ||
+                    m_collide_type == cube_type::citrine ||
+                    m_collide_type == cube_type::emerald ||
+                    m_collide_type == cube_type::sapphire) &&
                    m_index_int == m_destint))
               { m_fracta_cube.display(cube_models[c_index], dark_models[c_index], m_cube_scale); }
               else
