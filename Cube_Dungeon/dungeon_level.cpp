@@ -591,6 +591,29 @@ noexcept
   block_of_cubes(type_volume, cube_type::alabaster, radius - 1, radius - 1, radius - 4, radius - 4, radius - 4, radius + 4);
   block_of_cubes(type_volume, cube_type::alabaster, radius - 1, radius - 1, radius - 4, radius + 4, radius + 4, radius + 4);
   block_of_cubes(type_volume, cube_type::alabaster, radius - 1, radius - 1, radius + 4, radius + 4, radius - 4, radius + 2);
+
+  type_volume[radius - 1][radius + 3][radius + 2] = cube_type::alabaster;
+
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 1, radius - 1, radius - 2, radius + 2, radius - 2, radius - 2);
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 1, radius - 1, radius - 2, radius - 2, radius - 2, radius + 2);
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 1, radius - 1, radius - 2, radius + 2, radius + 2, radius + 2);
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 1, radius - 1, radius + 2, radius + 2, radius - 2, radius);
+
+  type_volume[radius - 2][radius + 2][radius] = cube_type::alabaster;
+
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 3, radius - 3, radius - 4, radius + 2, radius - 4, radius - 4);
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 3, radius - 3, radius - 4, radius - 4, radius - 4, radius + 4);
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 3, radius - 3, radius - 4, radius + 4, radius + 4, radius + 4);
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 3, radius - 3, radius + 4, radius + 4, radius - 4, radius + 2);
+
+  type_volume[radius - 3][radius + 2][radius - 3] = cube_type::alabaster;
+
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 3, radius - 3, radius - 2, radius + 2, radius - 2, radius - 2);
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 3, radius - 3, radius - 2, radius - 2, radius - 2, radius + 2);
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 3, radius - 3, radius - 2, radius + 2, radius + 2, radius + 2);
+  block_of_cubes(type_volume, cube_type::alabaster, radius - 3, radius - 3, radius + 2, radius + 2, radius, radius + 2);
+
+
 }
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
