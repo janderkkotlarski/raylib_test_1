@@ -527,9 +527,26 @@ noexcept
   block_of_cubes(type_volume, cube_type::alabaster, radius + 7, radius + 7, radius - 6, radius + 6, radius + 6, radius + 6);
   block_of_cubes(type_volume, cube_type::alabaster, radius + 7, radius + 7, radius + 6, radius + 6, radius - 4, radius + 6);
 
-  type_volume[radius + 8][radius + 6][radius - 6] = cube_type::alabaster;
+  // type_volume[radius + 8][radius + 6][radius - 6] = cube_type::alabaster;
+
+
 
   type_volume[radius + 7][radius + 5][radius - 4] = cube_type::alabaster;
+
+  for (int count_y{ -2 }; count_y <= 2; ++count_y)
+  {
+    for (int count_z{ -2 }; count_z <= 2; ++count_z)
+    { block_of_cubes(type_volume, cube_type::alabaster,
+                     radius - 9, radius + 7,
+                     radius + 2*count_y, radius + 2*count_y,
+                     radius + 2*count_z, radius + 2*count_z); }
+  }
+
+  type_volume[radius - 9][radius + 5][radius - 4] = cube_type::alabaster;
+
+
+
+  /*
 
   block_of_cubes(type_volume, cube_type::alabaster, radius + 7, radius + 7, radius - 4, radius + 4, radius - 4, radius - 4);
   block_of_cubes(type_volume, cube_type::alabaster, radius + 7, radius + 7, radius - 4, radius - 4, radius - 4, radius + 4);
@@ -613,6 +630,7 @@ noexcept
   block_of_cubes(type_volume, cube_type::alabaster, radius - 3, radius - 3, radius - 2, radius + 2, radius + 2, radius + 2);
   block_of_cubes(type_volume, cube_type::alabaster, radius - 3, radius - 3, radius + 2, radius + 2, radius, radius + 2);
 
+  */
 
 }
 
@@ -620,3 +638,8 @@ void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
             const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 { level_1(type_volume, level, radius, start_posint); }
+
+void demo_2(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+            const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{ level_2(type_volume, level, radius, start_posint); }
