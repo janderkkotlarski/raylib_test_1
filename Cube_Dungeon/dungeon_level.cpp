@@ -554,7 +554,10 @@ noexcept
     }
   }
 
-
+  type_volume[radius - 9][radius - 1][radius] = cube_type::transparent;
+  type_volume[radius - 9][radius + 1][radius] = cube_type::transparent;
+  type_volume[radius - 9][radius][radius - 1] = cube_type::transparent;
+  type_volume[radius - 9][radius][radius + 1] = cube_type::transparent;
 
 
   /*
