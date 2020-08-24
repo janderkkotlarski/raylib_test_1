@@ -542,7 +542,18 @@ noexcept
                      radius + 2*count_z, radius + 2*count_z); }
   }
 
-  type_volume[radius - 9][radius + 5][radius - 4] = cube_type::alabaster;
+  for (int count_y{ -2 }; count_y < 2; ++count_y)
+  {
+    for (int count_z{ -2 }; count_z <= 2; ++count_z)
+    {
+      type_volume[radius + 7][radius + 1 + 2*count_y][radius + 2*count_z] = cube_type::concrete;
+      type_volume[radius + 7][radius + 2*count_z][radius + 1 + 2*count_y] = cube_type::concrete;
+
+      type_volume[radius - 9][radius + 1 + 2*count_y][radius + 2*count_z] = cube_type::concrete;
+      type_volume[radius - 9][radius + 2*count_z][radius + 1 + 2*count_y] = cube_type::concrete;
+    }
+  }
+
 
 
 
