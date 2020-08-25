@@ -535,15 +535,13 @@ noexcept
 
   for (int count_x{ -9 }; count_x <= 7; count_x += 2)
   {
-
-
-
+    block_of_cubes(type_volume, cube_type::emerald,
+                   radius + count_x, radius + count_x,
+                   radius - 5, radius + 5,
+                   radius - 5, radius + 5);
   }
 
-  block_of_cubes(type_volume, cube_type::emerald,
-                 radius - 9, radius + 7,
-                 radius - 5, radius + 5,
-                 radius - 5, radius + 5);
+
 
   block_of_cubes(type_volume, cube_type::citrine,
                  radius - 9, radius + 7,
