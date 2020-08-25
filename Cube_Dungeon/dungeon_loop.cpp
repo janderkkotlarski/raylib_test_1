@@ -357,6 +357,8 @@ noexcept
     m_loop = false;
     m_reset = true;
     m_act = action::none;
+
+    m_movement = { 0.0f, 0.0f, 0.0f };
   }
 
   if (WindowShouldClose() ||
@@ -365,6 +367,8 @@ noexcept
     m_loop = false;
     m_game = false;
     m_act = action::none;
+
+    m_movement = { 0.0f, 0.0f, 0.0f };
   }
 
   if (m_act == action::none &&
@@ -375,6 +379,8 @@ noexcept
     m_type_volume[m_pos_int[0]]
                  [m_pos_int[1]]
                  [m_pos_int[2]] = cube_type::none;
+
+    m_movement = { 0.0f, 0.0f, 0.0f };
   }  
 }
 
@@ -382,11 +388,21 @@ void dungeon_loop::test_cheats()
 noexcept
 {
   if (IsKeyReleased(KEY_RIGHT_BRACKET))
-  { m_loop = false; }
+  {
+    m_loop = false;
+
+    m_act = action::none;
+
+    m_movement = { 0.0f, 0.0f, 0.0f };
+  }
 
   if (IsKeyReleased(KEY_LEFT_BRACKET))
   {
     m_loop = false;
+
+    m_act = action::none;
+
+    m_movement = { 0.0f, 0.0f, 0.0f };
 
     m_level -= 2;
 
