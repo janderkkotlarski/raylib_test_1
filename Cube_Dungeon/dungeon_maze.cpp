@@ -206,26 +206,9 @@ noexcept
 }
 
 void single_placements(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
-                       const int level,
                        const int dungeon_radius)
 noexcept
 {
-  if (level <= 2)
-  {
-    type_volume[dungeon_radius - 2]
-               [dungeon_radius - 2]
-               [dungeon_radius - 2] = cube_type::next;
-
-
-    plus_3d(type_volume, cube_type::ruby,
-            dungeon_radius,
-            dungeon_radius,
-            dungeon_radius);
-
-  }
-
-  if (level >= 3)
-  {
     plus_3d(type_volume, cube_type::none,
             2*dungeon_radius - 2,
             dungeon_radius,
@@ -239,7 +222,10 @@ noexcept
             2,
             dungeon_radius,
             dungeon_radius);
-  }
+
+    type_volume[1]
+               [dungeon_radius]
+               [dungeon_radius] = cube_type::previous;
 }
 
 void plus_3d(std::vector< std::vector <std::vector <cube_type>>> &type_volume,

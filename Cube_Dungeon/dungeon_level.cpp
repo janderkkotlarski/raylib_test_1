@@ -13,26 +13,33 @@ noexcept
 
   block_of_cubes(type_volume, cube_type::none, 0, 2*radius, 0, 2*radius, 0, 2*radius);
 
-  if (level == 1)
-  { level_1(type_volume, level, radius, start_posint); }
-
-  if (level == 2)
-  { level_2(type_volume, level, radius, start_posint); }
-
-  if (level == 3)
-  { level_3(type_volume, level, radius, start_posint); }
-
-  if (level == 4)
-  { level_4(type_volume, level, radius, start_posint); }
-
-  if (level == 5)
-  { level_5(type_volume, level, radius, start_posint); }
-
-  if (level == 6)
-  { level_6(type_volume, level, radius, start_posint); }
-
-  if (level == 7)
-  { level_7(type_volume, level, radius, start_posint); }
+  switch (level)
+  {
+    case 1:
+      level_1(type_volume, level, radius, start_posint);
+      break;
+    case 2:
+      level_2(type_volume, level, radius, start_posint);
+      break;
+    case 3:
+      level_3(type_volume, level, radius, start_posint);
+      break;
+    case 4:
+      level_4(type_volume, level, radius, start_posint);
+      break;
+    case 51:
+      level_5(type_volume, level, radius, start_posint);
+      break;
+    case 6:
+      level_6(type_volume, level, radius, start_posint);
+      break;
+    case 7:
+      level_7(type_volume, level, radius, start_posint);
+      break;
+    case 8:
+      level_8(type_volume, level, radius, start_posint);
+      break;
+  }
 }
 
 void level_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
@@ -562,6 +569,19 @@ noexcept
                  radius + 2, radius + 9,
                  radius, radius,
                  radius, radius);
+}
+
+void level_8(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = 24;
+
+  start_posint = { 2, radius, radius };
+
+  dungeon_filler(type_volume, level, radius);
+
+  single_placements(type_volume, radius);
 }
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
