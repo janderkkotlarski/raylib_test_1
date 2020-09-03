@@ -27,7 +27,7 @@ noexcept
     case 4:
       level_4(type_volume, level, radius, start_posint);
       break;
-    case 51:
+    case 5:
       level_5(type_volume, level, radius, start_posint);
       break;
     case 6:
@@ -38,6 +38,9 @@ noexcept
       break;
     case 8:
       level_8(type_volume, level, radius, start_posint);
+      break;
+    case 9:
+      level_9(type_volume, level, radius, start_posint);
       break;
   }
 }
@@ -575,13 +578,50 @@ void level_8(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
-  radius = 24;
+  radius = 16;
 
   start_posint = { 2, radius, radius };
 
   dungeon_filler(type_volume, level, radius);
 
   single_placements(type_volume, radius);
+}
+
+void level_9(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = 10;
+
+  for (int x{ 0 }; x <= 2*radius; ++x)
+  {
+    for (int y{ 0 }; y <= 2*radius; ++y)
+    {
+      for (int z{ 0 }; z <= 2*radius; ++z)
+      {
+        if (rand() % 100 < 40)
+        { type_volume[x][y][z] = cube_type::concrete; }
+      }
+    }
+  }
+
+  type_volume[radius][radius][radius] = cube_type::none;
+
+  start_posint = { radius, radius, radius };
+
+  const int span
+  { 2*radius + 1 };
+
+  for (int x{ span - 1 }; x <= span + 1; ++x)
+  {
+    for (int y{ span - 1 }; y <= span + 1; ++y)
+    {
+      for (int z{ span - 1 }; z <= span + 1; ++z)
+      { type_volume[x % span][y % span][z % span] = cube_type::sapphire; }
+    }
+  }
+
+  type_volume[0][0][0] = cube_type::next;
 }
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,

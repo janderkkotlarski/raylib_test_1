@@ -165,17 +165,17 @@ noexcept
 {
   // return cube_type::none;
 
-  if (level <= 4)
+  if (level == 0)
   { return cube_type::alabaster; }
 
-  if (level >= 5 &&
-      level <= 8)
+  if (level >= 1 &&
+      level <= 12)
   { return cube_type::concrete; }
 
-  if (level == 9)
+  if (level == 13)
   { return cube_type::transparent; }
 
-  if (level >= 10)
+  if (level >= 14)
   { return cube_type::invisible; }
 
   return cube_type::none;
