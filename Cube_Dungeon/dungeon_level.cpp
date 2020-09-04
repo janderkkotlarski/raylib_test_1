@@ -724,7 +724,7 @@ void level_8(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
-  radius = 2*level;
+  radius = level;
 
   const int span
   { 2*radius + 1 };
