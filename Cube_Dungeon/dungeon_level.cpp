@@ -761,31 +761,7 @@ noexcept
 
   start_posint = { radius + 1, radius, radius };
 
-  const std::vector <int> twin_coord
-  { (rand() % (span - 2)) + 1,
-    (rand() % (span - 2)) + 1 };
-
-  const int one_pos
-  { rand() % 3 };
-
-  int twin
-  { 0 };
-
-  std::vector <int> next_pos;
-
-  for (int count{ 0 }; count < 3; ++count)
-  {
-    if (count == one_pos)
-    { next_pos.push_back(1); }
-    else if (twin < 2)
-    {
-      next_pos.push_back(twin_coord[twin]);
-
-      ++twin;
-    }
-  }
-
-  type_volume[next_pos[0]][next_pos[1]][next_pos[2]] = cube_type::next;
+  next_side(type_volume, span);
 }
 
 void level_9(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
