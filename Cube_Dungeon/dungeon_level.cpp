@@ -4,6 +4,48 @@
 
 #include "dungeon_maze.h"
 
+void next_scanner(const std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                  std::vector <int> &next_pos_int,
+                  const int radius)
+noexcept
+{
+  assert(next_pos_int.size() == 3);
+
+  next_pos_int = { -1, -1, -1 };
+
+  const int span
+  { 2*radius + 1 };
+
+  for (int x{ 0 }; x < span; ++x)
+  {
+    for (int y{ 0 }; y < span; ++y)
+    {
+      for (int z{ 0 }; z < span; ++z)
+      {
+        if (type_volume[x][y][z] == cube_type::next)
+        { next_pos_int = { x, y, z }; }
+      }
+    }
+  }
+}
+
+void level_wipe(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                const int radius)
+noexcept
+{
+  const int span
+  { 2*radius + 1 };
+
+  for (int x{ 0 }; x < span; ++x)
+  {
+    for (int y{ 0 }; y < span; ++y)
+    {
+      for (int z{ 0 }; z < span; ++z)
+      { type_volume[x][y][z] = cube_type::none; }
+    }
+  }
+}
+
 void levels(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
             const int level, int &radius,
             std::vector <int> &start_posint)
@@ -349,23 +391,11 @@ noexcept
 {
   radius = 3*level;
 
-  dungeon_filler(type_volume, level, radius);
-
   start_posint = { 2, radius, radius };
 
-  type_volume[1][radius][radius] = cube_type::previous;
-  type_volume[3][radius][radius] = cube_type::none;
-  type_volume[2][radius - 1][radius] = cube_type::none;
-  type_volume[2][radius + 1][radius] = cube_type::none;
-  type_volume[2][radius][radius - 1] = cube_type::none;
-  type_volume[2][radius][radius + 1] = cube_type::none;
+  dungeon_filler(type_volume, level, radius);
 
-  type_volume[2*radius - 1][radius][radius] = cube_type::next;
-  type_volume[2*radius - 3][radius][radius] = cube_type::none;
-  type_volume[2*radius - 2][radius - 1][radius] = cube_type::none;
-  type_volume[2*radius - 2][radius + 1][radius] = cube_type::none;
-  type_volume[2*radius - 2][radius][radius - 1] = cube_type::none;
-  type_volume[2*radius - 2][radius][radius + 1] = cube_type::none;
+  single_placements(type_volume, radius);
 }
 
 void level_7(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
@@ -578,20 +608,7 @@ void level_8(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
-  radius = 16;
-
-  start_posint = { 2, radius, radius };
-
-  dungeon_filler(type_volume, level, radius);
-
-  single_placements(type_volume, radius);
-}
-
-void level_9(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
-             const int level, int &radius, std::vector<int> &start_posint)
-noexcept
-{
-  radius = 10;
+  radius = 2*level;
 
   const int span
   { 2*radius + 1 };
@@ -602,26 +619,31 @@ noexcept
     {
       for (int z{ 0 }; z < span; ++z)
       {
-        const int percent
-        { rand() % 100 };
+        const int promille
+        { rand() % 1000 };
 
-        if (percent < 40)
+        if (promille < 400)
         { type_volume[x][y][z] = cube_type::concrete; }
-        else if (percent < 50)
+        else if (promille < 500)
         { type_volume[x][y][z] = cube_type::ruby; }
-        else if (percent < 55)
+        else if (promille < 525)
         { type_volume[x][y][z] = cube_type::citrine; }
-        else if (percent < 57)
+        else if (promille < 531)
         { type_volume[x][y][z] = cube_type::emerald; }
-        else if (percent < 58)
+        else if (promille < 533)
         { type_volume[x][y][z] = cube_type::sapphire; }
+        else if (promille < 550)
+        { type_volume[x][y][z] = cube_type::setback; }
+        else
+        { type_volume[x][y][z] = cube_type::none; }
       }
     }
   }
 
-  type_volume[radius][radius][radius] = cube_type::none;
+  type_volume[radius][radius][radius] = cube_type::previous;
+  type_volume[radius + 1][radius][radius] = cube_type::none;
 
-  start_posint = { radius, radius, radius };
+  start_posint = { radius + 1, radius, radius };
 
   const std::vector <int> twin_coord
   { (rand() % (span - 2)) + 1,
@@ -647,12 +669,55 @@ noexcept
     }
   }
 
-  for (int x{ -1 }; x <= 1; ++x)
+  type_volume[next_pos[0]][next_pos[1]][next_pos[2]] = cube_type::next;
+}
+
+void level_9(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = 2*level;
+
+  level_wipe(type_volume, radius);
+}
+
+void level_10(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = 2*level;
+
+  const int span
+  { 2*radius + 1 };
+
+  level_wipe(type_volume, radius);
+
+  start_posint = { radius + 1, radius, radius };
+
+  type_volume[radius][radius][radius] = cube_type::previous;
+  type_volume[radius + 1][radius][radius] = cube_type::none;
+
+  const std::vector <int> twin_coord
+  { (rand() % (span - 2)) + 1,
+    (rand() % (span - 2)) + 1 };
+
+  const int one_pos
+  { rand() % 3 };
+
+  int twin
+  { 0 };
+
+  std::vector <int> next_pos;
+
+  for (int count{ 0 }; count < 3; ++count)
   {
-    for (int y{ -1}; y <= 1; ++y)
+    if (count == one_pos)
+    { next_pos.push_back(1); }
+    else if (twin < 2)
     {
-      for (int z{ -1 }; z <= 1; ++z)
-      { type_volume[next_pos[0] + x][next_pos[1] + y][next_pos[2] + z] = cube_type::sapphire; }
+      next_pos.push_back(twin_coord[twin]);
+
+      ++twin;
     }
   }
 

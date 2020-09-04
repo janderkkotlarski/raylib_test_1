@@ -60,6 +60,8 @@ noexcept
 
   levels(m_type_volume, m_level, m_dungeon_radius, m_start_posint);
 
+  next_scanner(m_type_volume, m_next_pos_int, m_dungeon_radius);
+
   m_float_radius = (float)m_dungeon_radius;  
 
   m_dungeon_span = 2*m_dungeon_radius + 1;  
@@ -447,7 +449,11 @@ noexcept
 
   y += 30;
 
-  display_string("Pos: ", vector2string(m_position), x, y, size);
+  display_string("Pos: ", vector2string(m_pos_int), x, y, size);
+
+  y += 30;
+
+  display_string("Next: ", vector2string(m_next_pos_int), x, y, size);
 
   y += 30;
 
@@ -463,7 +469,7 @@ noexcept
   { action2direction(m_directions, m_act) };
 
   const std::string direction_string
-  { vector2string(direction) };
+  { vector2string( vector_float2int(direction)) };
 
   display_string("Direction: ", direction_string, x, y, size);
 

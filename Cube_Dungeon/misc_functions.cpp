@@ -387,6 +387,17 @@ noexcept
   return coords;
 }
 
+std::string vector2string(const std::vector <int> &vec)
+noexcept
+{
+  std::string coords;
+
+  for (const int num: vec)
+  { coords += "[" + std::to_string(num) + "]"; }
+
+  return coords;
+}
+
 std::vector <std::string> vector2strings(const std::vector <float> &vec)
 noexcept
 {

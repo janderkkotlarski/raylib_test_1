@@ -122,6 +122,9 @@ noexcept;
 std::string vector2string(const std::vector <float> &vec)
 noexcept;
 
+std::string vector2string(const std::vector <int> &vec)
+noexcept;
+
 std::vector <std::string> vector2strings(const std::vector <float> &vec)
 noexcept;
 

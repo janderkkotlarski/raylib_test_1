@@ -107,7 +107,10 @@ private:
   { m_pos_int };
 
   std::vector <int> m_index_int
-  { 0, 0, 0 };  
+  { 0, 0, 0 };
+
+  std::vector <int> m_next_pos_int
+  { -1, -1, -1 };
 
   cube_type m_internal_type
   { cube_type::none };

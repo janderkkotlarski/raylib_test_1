@@ -5,6 +5,15 @@
 
 #include "cube_type.h"
 
+void next_scanner(const std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                  std::vector <int> &next_pos_int,
+                  const int radius)
+noexcept;
+
+void level_wipe(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                const int radius)
+noexcept;
+
 void levels(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
             const int level, int &radius,
             std::vector <int> &start_posint)
@@ -35,10 +44,6 @@ void level_6(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept;
 
-void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
-            const int level, int &radius, std::vector<int> &start_posint)
-noexcept;
-
 void level_7(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept;
@@ -49,6 +54,16 @@ noexcept;
 
 void level_9(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
+noexcept;
+
+void level_10(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept;
+
+
+
+void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+            const int level, int &radius, std::vector<int> &start_posint)
 noexcept;
 
 #endif // DUNGEON_LEVEL_H
