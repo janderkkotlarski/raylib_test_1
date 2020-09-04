@@ -505,7 +505,7 @@ void level_6(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
-  radius = 3*level;
+  radius = 2*level;
 
   start_posint = { 2, radius, radius };
 
