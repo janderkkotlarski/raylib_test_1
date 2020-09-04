@@ -331,6 +331,13 @@ noexcept
                      [moved_to[2]] = cube_type::none;
       }
 
+      if (m_level == m_life_level)
+      {
+        m_pos_int = vector_float2int(m_position);
+
+        three_d_life(m_type_volume, m_pos_int, m_dungeon_radius);
+      }
+
       m_act = action::none;
 
       m_collide_type = cube_type::none;

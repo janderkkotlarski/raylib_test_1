@@ -46,11 +46,117 @@ noexcept
   }
 }
 
-void catalizer(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
-               const int radius)
+void next_side(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+               const int span)
 noexcept
 {
+  const std::vector <int> twin_coord
+  { (rand() % (span - 2)) + 1,
+    (rand() % (span - 2)) + 1 };
 
+  const int one_pos
+  { rand() % 3 };
+
+  int twin
+  { 0 };
+
+  std::vector <int> next_pos;
+
+  for (int count{ 0 }; count < 3; ++count)
+  {
+    if (count == one_pos)
+    { next_pos.push_back(1); }
+    else if (twin < 2)
+    {
+      next_pos.push_back(twin_coord[twin]);
+
+      ++twin;
+    }
+  }
+
+  type_volume[next_pos[0]][next_pos[1]][next_pos[2]] = cube_type::next;
+}
+
+void three_d_life(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                  const std::vector <int> &pos_int,
+                  const int radius)
+noexcept
+{
+  const int span
+  { 2*radius + 1 };
+
+  const std::vector< std::vector <std::vector <cube_type>>> old_type_volume
+  { type_volume };
+
+  for (int x{ 0 }; x < span; ++x)
+  {
+    for (int y{ 0 }; y < span; ++y)
+    {
+      for (int z{ 0 }; z < span; ++z)
+      {
+        int conc
+        { 0 };
+
+        int empty
+        { 0 };
+
+        for (int a{ -1 }; a < 2; ++a)
+        {
+          const int xa = ((x + a) % span < 0) ? (span - 1) : ((x + a) % span);
+
+          assert(xa >= 0);
+          assert(xa < span);
+
+          for (int b{ -1 }; b < 2; ++b)
+          {
+            const int yb = ((y + b) % span < 0) ? (span - 1) : ((y + b) % span);
+
+            assert(yb >= 0);
+            assert(yb < span);
+
+            for (int c{ -1 }; c < 2; ++c)
+            {
+              const int zc = ((z + c) % span < 0) ? (span - 1) : ((z + c) % span);
+
+              assert(zc >= 0);
+              assert(zc < span);
+
+              const cube_type old_type
+              { old_type_volume[xa][yb][zc] };
+
+              if (old_type == cube_type::concrete)
+              { ++conc; }
+
+              if (old_type == cube_type::none)
+              { ++empty; }
+            }
+          }
+        }
+
+        const cube_type old_type
+        { old_type_volume[x][y][z] };
+
+        cube_type new_type
+        { old_type };
+
+        if (old_type == cube_type::concrete)
+        {
+          if (conc % 2 == 1)
+          { new_type = cube_type::none; }
+        }
+
+        if (old_type == cube_type::none)
+        {
+          if (empty % 2 == 1)
+          { new_type = cube_type::concrete; }
+        }
+
+        type_volume[x][y][z] = new_type;
+      }
+    }
+  }
+
+  type_volume[pos_int[0]][pos_int[1]][pos_int[2]] = cube_type::none;
 }
 
 void levels(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
@@ -90,6 +196,9 @@ noexcept
       break;
     case 9:
       level_9(type_volume, level, radius, start_posint);
+      break;
+    case 10:
+      level_10(type_volume, level, radius, start_posint);
       break;
   }
 }
@@ -683,28 +792,7 @@ void level_9(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
-  radius = 2*level;
-
-  const int span
-  { 2*radius + 1 };
-
-  level_wipe(type_volume, radius);
-
-  start_posint = { radius + 2, radius, radius };
-
-  type_volume[radius + 1][radius][radius] = cube_type::previous;
-  type_volume[radius + 2][radius][radius] = cube_type::none;
-
-
-  type_volume[radius + 3][radius][radius] = cube_type::catalyst;
-
-}
-
-void level_10(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
-             const int level, int &radius, std::vector<int> &start_posint)
-noexcept
-{
-  radius = 2*level;
+  radius = level;
 
   const int span
   { 2*radius + 1 };
@@ -716,31 +804,44 @@ noexcept
   type_volume[radius][radius][radius] = cube_type::previous;
   type_volume[radius + 1][radius][radius] = cube_type::none;
 
-  const std::vector <int> twin_coord
-  { (rand() % (span - 2)) + 1,
-    (rand() % (span - 2)) + 1 };
+  next_side(type_volume, span);
+}
 
-  const int one_pos
-  { rand() % 3 };
+void level_10(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = level;
 
-  int twin
-  { 0 };
+  const int span
+  { 2*radius + 1 };
 
-  std::vector <int> next_pos;
-
-  for (int count{ 0 }; count < 3; ++count)
+  for (int x{ 0 }; x < span; ++x)
   {
-    if (count == one_pos)
-    { next_pos.push_back(1); }
-    else if (twin < 2)
+    for (int y{ 0 }; y < span; ++y)
     {
-      next_pos.push_back(twin_coord[twin]);
+      for (int z{ 0 }; z < span; ++z)
+      {
+        const int promille
+        { rand() % 1000 };
 
-      ++twin;
+        if (promille < 500)
+        { type_volume[x][y][z] = cube_type::concrete; }
+        else
+        { type_volume[x][y][z] = cube_type::none; }
+      }
     }
   }
 
-  type_volume[next_pos[0]][next_pos[1]][next_pos[2]] = cube_type::next;
+  start_posint = { radius + 1, radius, radius };
+
+  block_of_cubes(type_volume, cube_type::concrete, radius, radius + 3, radius - 1, radius + 1, radius - 1, radius + 1);
+
+  type_volume[radius][radius][radius] = cube_type::previous;
+  type_volume[radius + 1][radius][radius] = cube_type::none;
+  type_volume[radius + 2][radius][radius] = cube_type::none;
+
+  next_side(type_volume, span);
 }
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,

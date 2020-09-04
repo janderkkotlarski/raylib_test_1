@@ -14,18 +14,20 @@ void level_wipe(std::vector< std::vector <std::vector <cube_type>>> &type_volume
                 const int radius)
 noexcept;
 
-void catalizer(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
-               const int radius)
+void next_side(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+               const int span)
+noexcept;
+
+void three_d_life(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+                  const std::vector <int> &pos_int, const int radius)
 noexcept;
 
 void levels(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
-            const int level, int &radius,
-            std::vector <int> &start_posint)
+            const int level, int &radius, std::vector <int> &start_posint)
 noexcept;
 
 void level_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
-             const int level, int &radius,
-             std::vector <int> &start_posint)
+             const int level, int &radius, std::vector <int> &start_posint)
 noexcept;
 
 void level_2(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
