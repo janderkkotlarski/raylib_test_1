@@ -46,6 +46,13 @@ noexcept
   }
 }
 
+void catalizer(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+               const int radius)
+noexcept
+{
+
+}
+
 void levels(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
             const int level, int &radius,
             std::vector <int> &start_posint)
@@ -688,9 +695,9 @@ noexcept
   type_volume[radius + 1][radius][radius] = cube_type::previous;
   type_volume[radius + 2][radius][radius] = cube_type::none;
 
-  block_of_cubes(type_volume, cube_type::alabaster, radius + 3, 2*radius - 4, radius, radius, radius, radius);
 
-  block_of_cubes(type_volume, cube_type::alabaster, 2*radius - 4, 2*radius - 4, radius + 1, radius + 4, radius, radius);
+  type_volume[radius + 3][radius][radius] = cube_type::catalyst;
+
 }
 
 void level_10(std::vector< std::vector <std::vector <cube_type>>> &type_volume,

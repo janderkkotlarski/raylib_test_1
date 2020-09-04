@@ -14,6 +14,10 @@ void level_wipe(std::vector< std::vector <std::vector <cube_type>>> &type_volume
                 const int radius)
 noexcept;
 
+void catalizer(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+               const int radius)
+noexcept;
+
 void levels(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
             const int level, int &radius,
             std::vector <int> &start_posint)
