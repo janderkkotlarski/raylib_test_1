@@ -593,14 +593,28 @@ noexcept
 {
   radius = 10;
 
-  for (int x{ 0 }; x <= 2*radius; ++x)
+  const int span
+  { 2*radius + 1 };
+
+  for (int x{ 0 }; x < span; ++x)
   {
-    for (int y{ 0 }; y <= 2*radius; ++y)
+    for (int y{ 0 }; y < span; ++y)
     {
-      for (int z{ 0 }; z <= 2*radius; ++z)
+      for (int z{ 0 }; z < span; ++z)
       {
-        if (rand() % 100 < 40)
+        const int percent
+        { rand() % 100 };
+
+        if (percent < 40)
         { type_volume[x][y][z] = cube_type::concrete; }
+        else if (percent < 50)
+        { type_volume[x][y][z] = cube_type::ruby; }
+        else if (percent < 55)
+        { type_volume[x][y][z] = cube_type::citrine; }
+        else if (percent < 57)
+        { type_volume[x][y][z] = cube_type::emerald; }
+        else if (percent < 58)
+        { type_volume[x][y][z] = cube_type::sapphire; }
       }
     }
   }
@@ -609,19 +623,40 @@ noexcept
 
   start_posint = { radius, radius, radius };
 
-  const int span
-  { 2*radius + 1 };
+  const std::vector <int> twin_coord
+  { (rand() % (span - 2)) + 1,
+    (rand() % (span - 2)) + 1 };
 
-  for (int x{ span - 1 }; x <= span + 1; ++x)
+  const int one_pos
+  { rand() % 3 };
+
+  int twin
+  { 0 };
+
+  std::vector <int> next_pos;
+
+  for (int count{ 0 }; count < 3; ++count)
   {
-    for (int y{ span - 1 }; y <= span + 1; ++y)
+    if (count == one_pos)
+    { next_pos.push_back(1); }
+    else if (twin < 2)
     {
-      for (int z{ span - 1 }; z <= span + 1; ++z)
-      { type_volume[x % span][y % span][z % span] = cube_type::sapphire; }
+      next_pos.push_back(twin_coord[twin]);
+
+      ++twin;
     }
   }
 
-  type_volume[0][0][0] = cube_type::next;
+  for (int x{ -1 }; x <= 1; ++x)
+  {
+    for (int y{ -1}; y <= 1; ++y)
+    {
+      for (int z{ -1 }; z <= 1; ++z)
+      { type_volume[next_pos[0] + x][next_pos[1] + y][next_pos[2] + z] = cube_type::sapphire; }
+    }
+  }
+
+  type_volume[next_pos[0]][next_pos[1]][next_pos[2]] = cube_type::next;
 }
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
