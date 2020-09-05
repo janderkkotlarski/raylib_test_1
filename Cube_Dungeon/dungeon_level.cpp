@@ -817,8 +817,6 @@ noexcept
   const int span
   { 2*radius + 1 };
 
-  /*
-
   for (int x{ 0 }; x < span; ++x)
   {
     for (int y{ 0 }; y < span; ++y)
@@ -845,8 +843,6 @@ noexcept
   type_volume[radius + 2][radius][radius] = cube_type::none;
 
   next_side(type_volume, span);
-
-  */
 }
 
 void demo_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
