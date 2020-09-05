@@ -217,6 +217,15 @@ noexcept
   dungeon_filler(type_volume, level, radius);
 
   single_placements(type_volume, radius, level);
+
+  block_of_cubes(type_volume, cube_type::concrete, 1, 1, 0, 2*radius, 0, 2*radius);
+  block_of_cubes(type_volume, cube_type::concrete, 2*radius - 1, 2*radius - 1, 0, 2*radius, 0, 2*radius);
+
+  block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 1, 1, 0, 2*radius);
+  block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 2*radius - 1, 2*radius - 1, 0, 2*radius);
+
+  block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 1, 1);
+  block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 2*radius - 1, 2*radius - 1);
 }
 
 void level_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,

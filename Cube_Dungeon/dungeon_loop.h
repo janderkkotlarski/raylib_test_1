@@ -206,9 +206,6 @@ private:
   const float m_cam_field
   { 0.1f };
 
-  bool m_auto_bot
-  { false };
-
   const bool m_synchro
   { false };
 

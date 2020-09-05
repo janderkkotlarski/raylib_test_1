@@ -44,11 +44,8 @@ noexcept
 void dungeon_loop::level_init()
 noexcept
 /// Level initialization.
-{  
-  if (m_level == 0)
-  { m_auto_bot = true; }
-  else
-  { m_auto_bot = false; }
+{
+  m_max_time = 4.0f;
 
   m_loop = true;
 
@@ -190,17 +187,14 @@ noexcept
       key_bind_actions(m_act);
       gamepad_actions(m_act);
     }
-    else if (m_total_time > 4.0f)
+    else if (m_total_time > m_max_time)
     {
-      if (m_auto_bot)
-      {
-        m_act = action::forward;
+      m_act = action::forward;
 
-        const int turn_choice
-        { rand() % 32 };
+      const int turn_choice
+      { rand() % 32 };
 
-        choose_rotation(m_act, turn_choice);
-      }
+      choose_rotation(m_act, turn_choice);
     }
 
     if (m_act != action::none)
@@ -304,13 +298,17 @@ noexcept
   m_delta_time = GetFrameTime();
 
   if (m_level == 0 &&
-      m_total_time <= 0.5f)
+      m_total_time <= m_max_time)
   { m_total_time += m_delta_time; }
 
   if (m_act != action::none)
   {
     if (m_level == 0)
-    { m_auto_bot = !m_auto_bot; }
+    {
+      m_total_time = 0.0f;
+
+      m_max_time = 0.5f;
+    }
 
     m_time += m_delta_time;
 
