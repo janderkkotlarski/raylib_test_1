@@ -411,11 +411,17 @@ noexcept
     { m_level = 1; }
   }
 
-  if (WindowShouldClose() ||
+  if (IsKeyReleased(KEY_ESCAPE) ||
       IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_MIDDLE_LEFT))
   {
-    m_loop = false;
-    m_game = false;
+    if (m_level == 0)
+    { m_game = false; }
+    else
+    { m_reset = true; }
+
+    m_level = 0;
+
+    // m_loop = false;
     m_act = action::none;
 
     m_movement = { 0.0f, 0.0f, 0.0f };
