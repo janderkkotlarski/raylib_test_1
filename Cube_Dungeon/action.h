@@ -25,6 +25,11 @@ enum class action
   catalyze // Catalyze ingredients, triggers automatically when right configuration is in place
 };
 
+void choose_rotation(action &act,
+                     const int choice)
+
+noexcept;
+
 action direct2action(const std::vector <std::vector <int>> &directs,
                      const std::vector <int> &direct)
 noexcept;

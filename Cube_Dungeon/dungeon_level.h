@@ -26,6 +26,10 @@ void levels(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
             const int level, int &radius, std::vector <int> &start_posint)
 noexcept;
 
+void level_0(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept;
+
 void level_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector <int> &start_posint)
 noexcept;

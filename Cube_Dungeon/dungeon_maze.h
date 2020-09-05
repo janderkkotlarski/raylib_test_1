@@ -55,7 +55,7 @@ int wall_percentage(const cube_type c_type,
 noexcept;
 
 void single_placements(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
-                       const int dungeon_radius)
+                       const int dungeon_radius, const int level)
 noexcept;
 
 void plus_3d(std::vector< std::vector <std::vector <cube_type>>> &type_volume,

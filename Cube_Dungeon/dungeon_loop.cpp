@@ -45,9 +45,15 @@ void dungeon_loop::level_init()
 noexcept
 /// Level initialization.
 {  
+  if (m_level == 0)
+  { m_auto_bot = true; }
+  else
+  { m_auto_bot = false; }
+
   m_loop = true;
 
-  if (!m_reset)
+  if (!m_reset &&
+      m_level != 0)
   { ++m_level; }
 
   m_reset = false;
@@ -179,8 +185,23 @@ noexcept
 {
   if (m_act == action::none)
   {
-    key_bind_actions(m_act);
-    gamepad_actions(m_act);
+    if (m_level != 0)
+    {
+      key_bind_actions(m_act);
+      gamepad_actions(m_act);
+    }
+    else if (m_total_time > 4.0f)
+    {
+      if (m_auto_bot)
+      {
+        m_act = action::forward;
+
+        const int turn_choice
+        { rand() % 32 };
+
+        choose_rotation(m_act, turn_choice);
+      }
+    }
 
     if (m_act != action::none)
     {
@@ -199,11 +220,23 @@ noexcept
 
       if (type_collision(m_collide_type))
       {
-        m_act = action::none;
+        if (m_level != 0)
+        {
+          m_act = action::none;
 
-        m_collide_type = cube_type::none;
+          m_collide_type = cube_type::none;
 
-        m_movement = { 0.0f, 0.0f, 0.0f };
+          m_movement = { 0.0f, 0.0f, 0.0f };
+        }
+        else
+        {
+          const int turn_choice
+          { rand() % 4 };
+
+          choose_rotation(m_act, turn_choice);
+
+          m_movement = { 0.0f, 0.0f, 0.0f };
+        }
       }
 
       if (m_act == action::hale)
@@ -270,8 +303,15 @@ noexcept
 {
   m_delta_time = GetFrameTime();
 
+  if (m_level == 0 &&
+      m_total_time <= 0.5f)
+  { m_total_time += m_delta_time; }
+
   if (m_act != action::none)
   {
+    if (m_level == 0)
+    { m_auto_bot = !m_auto_bot; }
+
     m_time += m_delta_time;
 
     if (m_time >= m_period)
@@ -368,6 +408,9 @@ noexcept
     m_act = action::none;
 
     m_movement = { 0.0f, 0.0f, 0.0f };
+
+    if (m_level == 0)
+    { m_level = 1; }
   }
 
   if (WindowShouldClose() ||
@@ -604,10 +647,6 @@ noexcept
   while (m_game)
   {
     level_init();
-
-    // dungeon_filler(m_type_volume, m_level, m_dungeon_radius);
-
-    // single_placements(m_type_volume, m_level, m_dungeon_radius);
 
     while (m_loop)
     {

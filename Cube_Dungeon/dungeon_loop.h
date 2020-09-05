@@ -44,6 +44,12 @@ private:
   float m_delta_time
   { GetFrameTime() };
 
+  float m_total_time
+  { 0.0f };
+
+  float m_max_time
+  { 4.0f };
+
   float m_cube_scale
   { 1.0f };
 
@@ -199,6 +205,9 @@ private:
 
   const float m_cam_field
   { 0.1f };
+
+  bool m_auto_bot
+  { false };
 
   const bool m_synchro
   { false };

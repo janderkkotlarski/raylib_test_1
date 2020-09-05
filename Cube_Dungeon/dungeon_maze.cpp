@@ -74,39 +74,11 @@ noexcept
 {
   c_type = cube_type::none;
 
-  if (level == 2)
-  {
-    c_type = cube_type::alabaster;
+  random_wall(c_type, level, dungeon_radius, x, y, z);
 
-    const int spacing
-    { 4 };
+  outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
 
-    const int rel_x
-    { abs(x - dungeon_radius) };
-
-    const int rel_y
-    { abs(y - dungeon_radius) };
-
-    const int rel_z
-    { abs(z - dungeon_radius) };
-
-    if (rel_x % spacing == 0 &&
-        rel_y % spacing == 0)
-    { c_type = cube_type::none; }
-
-    if (rel_x % spacing == 0 &&
-        rel_z % spacing == 0)
-    { c_type = cube_type::none; }
-
-    if (rel_z % spacing == 0 &&
-        rel_y % spacing == 0)
-    { c_type = cube_type::none; }
-  }  
-    random_wall(c_type, level, dungeon_radius, x, y, z);
-
-    outer_wall(c_type, cube_type::concrete, dungeon_radius, x, y, z);
-
-    pillars(c_type, cube_type::concrete, dungeon_radius, x, y, z);
+  pillars(c_type, cube_type::concrete, dungeon_radius, x, y, z);
 }
 
 
@@ -163,12 +135,7 @@ noexcept
 cube_type wall_type(const int level)
 noexcept
 {
-  // return cube_type::none;
-
-  if (level == 0)
-  { return cube_type::alabaster; }
-
-  if (level >= 1 &&
+  if (level >= 0 &&
       level <= 12)
   { return cube_type::concrete; }
 
@@ -206,26 +173,31 @@ noexcept
 }
 
 void single_placements(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
-                       const int dungeon_radius)
+                       const int dungeon_radius, const int level)
 noexcept
 {
-    plus_3d(type_volume, cube_type::none,
-            2*dungeon_radius - 2,
-            dungeon_radius,
-            dungeon_radius);
 
-    type_volume[2*dungeon_radius - 1]
-               [dungeon_radius]
-               [dungeon_radius] = cube_type::next;
 
     plus_3d(type_volume, cube_type::none,
             2,
             dungeon_radius,
             dungeon_radius);
 
-    type_volume[1]
-               [dungeon_radius]
-               [dungeon_radius] = cube_type::previous;
+    if (level != 0)
+    {
+      plus_3d(type_volume, cube_type::none,
+              2*dungeon_radius - 2,
+              dungeon_radius,
+              dungeon_radius);
+
+      type_volume[2*dungeon_radius - 1]
+                 [dungeon_radius]
+                 [dungeon_radius] = cube_type::next;
+
+      type_volume[1]
+                 [dungeon_radius]
+                 [dungeon_radius] = cube_type::previous;
+    }
 }
 
 void plus_3d(std::vector< std::vector <std::vector <cube_type>>> &type_volume,

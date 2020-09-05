@@ -2,6 +2,28 @@
 
 #include "misc_functions.h"
 
+void choose_rotation(action &act,
+                     const int choice)
+
+noexcept
+{
+  switch (choice)
+  {
+    case 0:
+      act = action::rotate_up;
+      break;
+    case 1:
+      act = action::rotate_right;
+      break;
+    case 2:
+      act = action::rotate_down;
+      break;
+    case 3:
+      act = action::rotate_left;
+      break;
+  }
+}
+
 action direct2action(const std::vector <std::vector <int>> &directs,
                      const std::vector <int> &direct)
 noexcept

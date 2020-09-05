@@ -170,6 +170,9 @@ noexcept
 
   switch (level)
   {
+    case 0:
+      level_0(type_volume, level, radius, start_posint);
+      break;
     case 1:
       level_1(type_volume, level, radius, start_posint);
       break;
@@ -201,6 +204,19 @@ noexcept
       level_10(type_volume, level, radius, start_posint);
       break;
   }
+}
+
+void level_0(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = 10;
+
+  start_posint = { 2, radius, radius };
+
+  dungeon_filler(type_volume, level, radius);
+
+  single_placements(type_volume, radius, level);
 }
 
 void level_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
@@ -511,7 +527,7 @@ noexcept
 
   dungeon_filler(type_volume, level, radius);
 
-  single_placements(type_volume, radius);
+  single_placements(type_volume, radius, level);
 }
 
 void level_7(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
