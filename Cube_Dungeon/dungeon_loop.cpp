@@ -412,9 +412,9 @@ noexcept
   }
 
   if (IsKeyReleased(KEY_ESCAPE) ||
-      IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_MIDDLE_LEFT))
+      IsGamepadButtonReleased(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_MIDDLE_LEFT))
   {
-    if (m_level == -100)
+    if (m_level == 0)
     { m_game = false; }
     else
     { m_reset = true; }
