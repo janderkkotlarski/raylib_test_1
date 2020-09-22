@@ -428,6 +428,15 @@ noexcept
     m_movement = { 0.0f, 0.0f, 0.0f };
   }
 
+  if (WindowShouldClose())
+  {
+    m_game = false;
+    m_loop = false;
+    m_act = action::none;
+
+    m_movement = { 0.0f, 0.0f, 0.0f };
+  }
+
   if (m_act == action::none &&
       m_type_volume[m_pos_int[0]]
                    [m_pos_int[1]]
