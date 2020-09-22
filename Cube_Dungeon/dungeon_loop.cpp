@@ -509,37 +509,46 @@ noexcept
 
   y += 30;
 
-  display_string("FPS: ", std::to_string(GetFPS()), x, y, size);
+  if (m_display_fps)
+  {
+    display_string("FPS: ", std::to_string(GetFPS()), x, y, size);
 
-  y += 30;
+    y += 30;
+  }
 
-  display_string("Pos: ", vector2string(m_pos_int), x, y, size);
+  if (m_ez_mode || m_developer)
+  {
+    display_string("Pos: ", vector2string(m_pos_int), x, y, size);
 
-  y += 30;
+    y += 30;
+  }
 
-  display_string("Next: ", vector2string(m_next_pos_int), x, y, size);
+  if (m_developer)
+  {
+    display_string("Next: ", vector2string(m_next_pos_int), x, y, size);
 
-  y += 30;
+    y += 30;
 
-  display_string("Action: ", action2string(m_act), x, y, size);
+    display_string("Action: ", action2string(m_act), x, y, size);
 
-  y += 30;
+    y += 30;
 
-  display_string("Scale: ", std::to_string(m_cube_scale), x, y, size);
+    display_string("Scale: ", std::to_string(m_cube_scale), x, y, size);
 
-  y += 30;
+    y += 30;
 
-  std::vector <float> direction
-  { action2direction(m_directions, m_act) };
+    std::vector <float> direction
+    { action2direction(m_directions, m_act) };
 
-  const std::string direction_string
-  { vector2string( vector_float2int(direction)) };
+    const std::string direction_string
+    { vector2string( vector_float2int(direction)) };
 
-  display_string("Direction: ", direction_string, x, y, size);
+    display_string("Direction: ", direction_string, x, y, size);
 
-  y += 30;
+    y += 30;
 
-  display_string("Collide type: ", type2string(m_collide_type), x, y, size);
+    display_string("Collide type: ", type2string(m_collide_type), x, y, size);
+  }
 }
 
 void dungeon_loop::coord_transform(const std::vector <int> &counters,

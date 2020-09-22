@@ -227,6 +227,15 @@ private:
   const bool m_demo
   { true };
 
+  const bool m_display_fps
+  { true };
+
+  const bool m_ez_mode
+  { true };
+
+  const bool m_developer
+  { false };
+
   /// functions
 
   void camera_position(Camera &camera)
