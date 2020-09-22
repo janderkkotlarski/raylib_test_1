@@ -411,15 +411,16 @@ noexcept
     { m_level = 1; }
   }
 
-  if (IsKeyReleased(KEY_ESCAPE) ||
+  if (IsKeyReleased(KEY_DELETE) ||
       IsGamepadButtonReleased(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_MIDDLE_LEFT))
   {
     if (m_level == 0)
     { m_game = false; }
     else
-    { m_reset = true; }
-
-    m_level = 0;
+    {
+      m_reset = true;
+      m_level = 0;
+    }
 
     m_loop = false;
     m_act = action::none;
