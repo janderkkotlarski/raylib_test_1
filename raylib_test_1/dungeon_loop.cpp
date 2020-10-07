@@ -503,6 +503,9 @@ noexcept
 
   DrawRectangle(0, 0, m_screen_width, m_screen_height, m_dark_color);
 
+  DrawRectangle(0, 0, m_screen_width, m_screen_height, m_start_color);
+
+
   // m_chroma_color = profile2color(m_chromatic_profile, m_chromacity);
 
   // DrawRectangle(0, 0, m_screen_width, m_screen_height, m_chroma_color);
@@ -510,7 +513,6 @@ noexcept
 
 void dungeon_loop::game_loop(Camera &camera, std::vector <Model> &cube_models,
                              Model &cube_model, std::vector <Image> &images,
-                             Texture &texture,
                              Shader &fogger,
                              Light &light,
                              const int fog_density_loc)
@@ -552,7 +554,14 @@ noexcept
         frame_update(cube_models);
 
         if (m_level == 0)
-        { DrawRectangleRec(m_start_rect, m_start_color); }
+        {
+          DrawRectangleRec(m_start_rect, m_start_color);
+        }
+
+        DrawRectangleRec(m_start_rect, m_start_color);
+
+        DrawRectangle(0, 0, m_screen_width, m_screen_height, m_start_color);
+
 
         if (m_test)
         { infos(); }
@@ -645,7 +654,7 @@ void dungeon_loop::run_window()
   Camera3D camera;
   camera_init(camera);
 
-  game_loop(camera, cube_models, cube_model, images, texture, fogger, light, fog_density_loc);
+  game_loop(camera, cube_models, cube_model, images, fogger, light, fog_density_loc);
 
   // UnloadShader(distortion);
 

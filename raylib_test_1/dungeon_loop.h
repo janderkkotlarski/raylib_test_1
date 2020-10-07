@@ -44,7 +44,7 @@ private:
   { 0.0f, 0.0f, 1.0f*m_screen_width, 1.0f*m_screen_height };
 
   const Color m_start_color
-  { 0, 0, 0, 127 };
+  { 255, 0, 0, 255 };
 
   float m_time
   { 0.0f };
@@ -310,7 +310,6 @@ private:
 
   void game_loop(Camera &camera, std::vector<Model> &cube_models,
                  Model &cube_model, std::vector<Image> &images,
-                 Texture &texture,
                  Shader &fogger,
                  Light &light,
                  const int fog_density_loc)
