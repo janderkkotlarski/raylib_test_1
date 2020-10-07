@@ -40,6 +40,12 @@ private:
   const float m_period
   { 0.5f };
 
+  const Rectangle m_start_rect
+  { 0.0f, 0.0f, 1.0f*m_screen_width, 1.0f*m_screen_height };
+
+  const Color m_start_color
+  { 0, 0, 0, 127 };
+
   float m_time
   { 0.0f };
 

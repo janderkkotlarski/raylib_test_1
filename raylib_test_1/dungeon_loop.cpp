@@ -543,10 +543,16 @@ noexcept
 
         // BeginVrDrawing();
         BeginMode3D(camera);
+
         { cube_drawing(cube_model, cube_models); }
 
         EndMode3D();
         // EndVrDrawing();
+
+        frame_update(cube_models);
+
+        if (m_level == 0)
+        { DrawRectangleRec(m_start_rect, m_start_color); }
 
         if (m_test)
         { infos(); }
@@ -554,7 +560,6 @@ noexcept
         pos_direct_display();        
         transition();
 
-        frame_update(cube_models);
 
         infos();
       }
