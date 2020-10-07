@@ -697,6 +697,9 @@ noexcept
 
         EndMode3D();
 
+        if (m_level == 0)
+        { DrawRectangleRec(m_start_rect, m_start_color); }
+
         transition();
 
         infos();
