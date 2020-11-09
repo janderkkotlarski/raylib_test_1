@@ -155,7 +155,7 @@ private:
   { 0.1f, 0.0f, 0.2f, 1.0f };
 
   const float m_fog_density
-  { 0.45f };
+  { 0.6f };
 
   const int m_horizon
   { 3 };

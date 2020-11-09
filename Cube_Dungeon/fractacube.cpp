@@ -70,8 +70,9 @@ noexcept
           else
           {
             // DrawCube(cube_pos, m_cube_dims.x, m_cube_dims.y, m_cube_dims.z, cube_color);
-            DrawModel(cube_model, vector2vector3(cube_pos), hale_scale, Color{ 255, 255, 255, 63 });
+
             DrawModel(cube_model_dark, vector2vector3(cube_pos), hale_scale, WHITE);
+            DrawModel(cube_model, vector2vector3(cube_pos), hale_scale, Color{ 255, 255, 255, 63 });
           }
         }
       }
