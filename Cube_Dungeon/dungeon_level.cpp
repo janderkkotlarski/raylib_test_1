@@ -802,6 +802,9 @@ noexcept
 
   start_posint = { radius + 1, radius, radius };
 
+  for (int count{ 0 }; count < 12; ++count)
+  { type_volume[radius + 4][radius - 6 + count][radius] = index2type(count); }
+
   type_volume[radius][radius][radius] = cube_type::previous;
   type_volume[radius + 1][radius][radius] = cube_type::none;
 
