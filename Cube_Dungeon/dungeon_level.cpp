@@ -339,7 +339,7 @@ noexcept
 {
   radius = 6;
 
-  start_posint = { radius, radius, radius };
+  start_posint = { radius + 1, radius, radius };
 
   block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 0, 2*radius);
 
@@ -347,10 +347,93 @@ noexcept
 
   type_volume[1][1][1] = cube_type::next;
 
-  type_volume[radius - 1][radius][radius] = cube_type::previous;
+  type_volume[radius][radius][radius] = cube_type::previous;
 }
 
 void level_7(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = 6;
+
+  start_posint = { 2, radius, radius };
+
+  dungeon_filler(type_volume, level, radius);
+
+  single_placements(type_volume, radius, level);
+}
+
+void level_8(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = 6;
+
+  start_posint = { radius + 1, radius, radius };
+
+  block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 0, 2*radius);
+
+  block_of_cubes(type_volume, cube_type::none, 0, 2*radius, radius, radius, radius, radius);
+  block_of_cubes(type_volume, cube_type::none, radius, radius, 0, 2*radius, radius, radius);
+  block_of_cubes(type_volume, cube_type::none, radius, radius, radius, radius, 0, 2*radius);
+
+  block_of_cubes(type_volume, cube_type::none, radius - 1, radius + 1, radius - 1, radius + 1, radius - 1, radius + 1);
+
+  type_volume[radius][radius][radius] = cube_type::previous;
+}
+
+void level_9(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = 6;
+
+  start_posint = { 2, radius, radius };
+
+  block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 0, 2*radius);
+
+  block_of_cubes(type_volume, cube_type::none, 2, 2*radius - 1, radius, radius, radius, radius);
+
+  type_volume[0][radius][radius] = cube_type::next;
+  type_volume[1][radius][radius] = cube_type::previous;
+}
+
+void level_10(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+             const int level, int &radius, std::vector<int> &start_posint)
+noexcept
+{
+  radius = 6;
+
+  const int span
+  { 2*radius + 1 };
+
+  for (int x{ 0 }; x < span; ++x)
+  {
+    for (int y{ 0 }; y < span; ++y)
+    {
+      for (int z{ 0 }; z < span; ++z)
+      {
+        const int promille
+        { rand() % 1000 };
+
+        if (promille < 350)
+        { type_volume[x][y][z] = cube_type::concrete; }
+        else
+        { type_volume[x][y][z] = cube_type::none; }
+      }
+    }
+  }
+
+  start_posint = { radius + 1, radius, radius };
+
+  block_of_cubes(type_volume, cube_type::none, radius - 1, radius + 1, radius - 1, radius + 1, radius - 1, radius + 1);
+
+  type_volume[radius][radius][radius] = cube_type::previous;
+
+  next_side(type_volume, span);
+}
+
+void level_old_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
@@ -363,7 +446,7 @@ noexcept
   single_placements(type_volume, radius, level);
 }
 
-void level_hidden_1(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+void level_old_2(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
@@ -569,7 +652,7 @@ noexcept
                  radius, radius);
 }
 
-void level_8(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+void level_old_3(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
@@ -613,7 +696,7 @@ noexcept
   next_side(type_volume, span);
 }
 
-void level_9(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+void level_old_4(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
@@ -635,7 +718,7 @@ noexcept
   next_side(type_volume, span);
 }
 
-void level_10(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
+void level_old_5(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {

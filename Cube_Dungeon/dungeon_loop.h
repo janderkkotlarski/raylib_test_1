@@ -83,7 +83,7 @@ private:
   { 10 };
 
   const int m_life_level
-  { 10 };
+  { -100 };
 
   const int m_max_dungeon_radius
   { 49 };
