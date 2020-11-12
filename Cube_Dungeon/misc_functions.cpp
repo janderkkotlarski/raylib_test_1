@@ -585,10 +585,10 @@ void dark_shift(std::vector <float> &dark_profile,
 noexcept
 {
   const float delta
-  { 0.2f };
+  { 0.8f };
 
   const float max
-  { 0.35f };
+  { 1.4f };
 
   if (dark_up)
   { opacity += delta*delta_time; }

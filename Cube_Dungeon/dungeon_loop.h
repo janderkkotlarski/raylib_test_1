@@ -152,7 +152,7 @@ private:
   { 0 };
 
   std::vector <float> m_cube_vein_profile
-  { 0.1f, 0.0f, 0.2f, 1.0f };
+  { 0.5f, 0.0f, 1.0f, 1.0f };
 
   const float m_fog_density
   { 0.6f };
