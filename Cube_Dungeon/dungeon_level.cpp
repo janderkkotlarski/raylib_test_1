@@ -329,6 +329,13 @@ noexcept
   block_of_cubes(type_volume, cube_type::concrete, radius - 1, radius + 1, radius - 1, radius + 1, 2*radius , 2*radius);
   block_of_cubes(type_volume, cube_type::none, radius, radius, radius, radius, 0, 2*radius);
 
+  type_volume[radius - 1][radius][radius] = cube_type::alabaster;
+  type_volume[radius + 1][radius][radius] = cube_type::alabaster;
+  type_volume[radius][radius - 1][radius] = cube_type::alabaster;
+  type_volume[radius][radius + 1][radius] = cube_type::alabaster;
+  type_volume[radius][radius][radius - 1] = cube_type::alabaster;
+  type_volume[radius][radius][radius + 1] = cube_type::alabaster;
+
   type_volume[2*radius][2*radius][2*radius] = cube_type::next;
   type_volume[1][radius][radius] = cube_type::previous;
 }
