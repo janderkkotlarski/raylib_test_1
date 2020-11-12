@@ -74,6 +74,17 @@ noexcept
     }
   }
 
+  for (int count_x{ -1 }; count_x <= 1; ++count_x)
+  {
+    for (int count_y{ -1 }; count_y <= 1; ++count_y)
+    {
+      for (int count_z{ -1 }; count_z <= 1; ++count_z)
+      {
+        type_volume[next_pos[0] + count_x][next_pos[1] + count_y][next_pos[2] + count_z] = cube_type::alabaster;
+      }
+    }
+  }
+
   type_volume[next_pos[0]][next_pos[1]][next_pos[2]] = cube_type::next;
 }
 
