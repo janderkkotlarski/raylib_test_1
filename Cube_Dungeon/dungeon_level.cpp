@@ -234,15 +234,13 @@ noexcept
 {
   radius = 6;
 
-  start_posint = { radius + 1, radius, radius };
+  start_posint = { 1, radius, radius };
 
-  block_of_cubes(type_volume, cube_type::alabaster, 0, 2*radius, 0, 2*radius, 0, 2*radius);
+  block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 0, 2*radius);
 
-  block_of_cubes(type_volume, cube_type::none, 0, radius - 2, radius, radius, radius, radius);
+  block_of_cubes(type_volume, cube_type::none, 1, 2*radius - 2, radius, radius, radius, radius);
 
-  block_of_cubes(type_volume, cube_type::none, radius + 1, 2*radius, radius, radius, radius, radius);
-
-  type_volume[radius - 1][radius][radius] = cube_type::next;
+  type_volume[2*radius - 1][radius][radius] = cube_type::next;
 }
 
 void level_2(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
@@ -251,128 +249,36 @@ noexcept
 {
   radius = 6;
 
-  start_posint = { radius + 2, radius, radius };
+  start_posint = { 1, radius, radius };
 
-  block_of_cubes(type_volume, cube_type::alabaster, 0, 2*radius, 0, 2*radius, 0, 2*radius);
+  block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 0, 2*radius);
 
-  block_of_cubes(type_volume, cube_type::none, radius + 2, 2*radius, radius, radius, radius, radius);
+  block_of_cubes(type_volume, cube_type::none, 1, 2*radius - 2, radius, radius, radius, radius);
 
-  block_of_cubes(type_volume, cube_type::none, 0, radius - 3, radius, radius, radius, radius);
+  block_of_cubes(type_volume, cube_type::none, radius - 1, radius + 1, radius - 1, radius + 1, radius - 1, radius + 1);
 
-  block_of_cubes(type_volume, cube_type::none, radius - 2, radius - 2, 0, 2*radius, radius, radius);
+  type_volume[radius][radius][radius] = cube_type::concrete;
 
-  block_of_cubes(type_volume, cube_type::none, radius - 2, radius - 2, 1, 1, 0, 2*radius);
-
-  block_of_cubes(type_volume, cube_type::none, radius, radius, radius, radius, 0, radius - 1);
-
-  block_of_cubes(type_volume, cube_type::none, radius, radius, radius, radius, radius + 2, 2*radius);
-
-  block_of_cubes(type_volume, cube_type::none, radius, radius, 0, radius - 1, radius + 2, radius + 2);
-
-  block_of_cubes(type_volume, cube_type::none, radius, radius, radius + 1, 2*radius, radius + 2, radius + 2);
-
-  block_of_cubes(type_volume, cube_type::none, 0, 2*radius, 2* radius - 1, 2*radius - 1, radius + 2, radius + 2);
-
-  type_volume[radius - 2][0][radius + 2] = cube_type::none;
-  type_volume[radius - 2][2*radius][radius + 2] = cube_type::none;
-
-  type_volume[radius][radius][radius] = cube_type::next;
+  type_volume[2*radius - 1][radius][radius] = cube_type::next;
 }
 
 void level_3(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
              const int level, int &radius, std::vector<int> &start_posint)
 noexcept
 {
-  radius = 12;
+  radius = 6;
 
-  start_posint = { radius + 2, radius, radius };
+  start_posint = { 1, radius, radius };
 
   block_of_cubes(type_volume, cube_type::concrete, 0, 2*radius, 0, 2*radius, 0, 2*radius);
 
-  for (int count_x{ -3 }; count_x <= 2; ++count_x)
-  {
-    const int x = 4*count_x + 2;
+  block_of_cubes(type_volume, cube_type::none, 1, 2*radius - 2, radius, radius, radius, radius);
 
-    const int x2 = 4*count_x;
+  block_of_cubes(type_volume, cube_type::none, radius, radius, 0, 2*radius, radius, radius);
 
-    for (int count_y{ -3 }; count_y <= 2; ++count_y)
-    {
-      const int y = 4*count_y + 2;
+  block_of_cubes(type_volume, cube_type::none, radius, radius, radius, radius, 1, 2*radius - 1);
 
-      const int y2 = 4*count_y;
-
-      {
-        block_of_cubes(type_volume, cube_type::none, 0, 2*radius,
-                                                     radius + x, radius + x,
-                                                     radius + y, radius + y);
-
-        block_of_cubes(type_volume, cube_type::none, radius + x, radius + x,
-                                                     0, 2*radius,
-                                                     radius + y, radius + y);
-
-        block_of_cubes(type_volume, cube_type::none, radius + x, radius + x,
-                                                     radius + y, radius + y,
-                                                     0, 2*radius);
-      }
-
-      if (abs(count_x) != 3 &&
-          abs(count_y) != 3)
-      {
-        block_of_cubes(type_volume, cube_type::none, 0, 2*radius,
-                                                     radius + x2, radius + x2,
-                                                     radius + y2, radius + y2);
-
-        block_of_cubes(type_volume, cube_type::none, radius + x2, radius + x2,
-                                                     0, 2*radius,
-                                                     radius + y2, radius + y2);
-
-        block_of_cubes(type_volume, cube_type::none, radius + x2, radius + x2,
-                                                     radius + y2, radius + y2,
-                                                     0, 2*radius);
-      }
-    }
-  }
-
-  type_volume[radius - 2][radius - 1][radius] = cube_type::alabaster;
-  type_volume[radius - 2][radius + 1][radius] = cube_type::alabaster;
-
-  type_volume[radius - 2][radius][radius - 1] = cube_type::alabaster;
-  type_volume[radius - 2][radius][radius + 1] = cube_type::alabaster;
-
-  type_volume[radius - 1][radius - 2][radius] = cube_type::alabaster;
-  type_volume[radius + 1][radius - 2][radius] = cube_type::alabaster;
-
-  type_volume[radius][radius - 2][radius - 1] = cube_type::alabaster;
-  type_volume[radius][radius - 2][radius + 1] = cube_type::alabaster;
-
-  type_volume[radius - 1][radius + 2][radius] = cube_type::alabaster;
-  type_volume[radius + 1][radius + 2][radius] = cube_type::alabaster;
-
-  type_volume[radius][radius + 2][radius - 1] = cube_type::alabaster;
-  type_volume[radius][radius + 2][radius + 1] = cube_type::alabaster;
-
-  type_volume[radius][radius - 1][radius - 2] = cube_type::alabaster;
-  type_volume[radius][radius + 1][radius - 2] = cube_type::alabaster;
-
-  type_volume[radius - 1][radius][radius - 2] = cube_type::alabaster;
-  type_volume[radius + 1][radius][radius - 2] = cube_type::alabaster;
-
-  type_volume[radius][radius - 1][radius + 2] = cube_type::alabaster;
-  type_volume[radius][radius + 1][radius + 2] = cube_type::alabaster;
-
-  type_volume[radius - 1][radius][radius + 2] = cube_type::alabaster;
-  type_volume[radius + 1][radius][radius + 2] = cube_type::alabaster;
-
-  type_volume[radius - 1][radius][radius] = cube_type::concrete;
-  type_volume[radius + 1][radius][radius] = cube_type::previous;
-
-  type_volume[radius][radius - 1][radius] = cube_type::concrete;
-  type_volume[radius][radius + 1][radius] = cube_type::concrete;
-
-  type_volume[radius][radius][radius - 1] = cube_type::concrete;
-  type_volume[radius][radius][radius + 1] = cube_type::concrete;
-
-  type_volume[radius][radius][radius] = cube_type::next;
+  type_volume[radius][radius][1] = cube_type::next;
 }
 
 void level_4(std::vector< std::vector <std::vector <cube_type>>> &type_volume,
