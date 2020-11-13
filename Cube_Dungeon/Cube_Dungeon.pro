@@ -43,7 +43,8 @@ SOURCES += \
         misc_functions.cpp \
         player_display.cpp \
         raylib_functions.cpp \
-        synchrogear.cpp
+        synchrogear.cpp \
+        transitions.cpp
 
 HEADERS += \
   action.h \
@@ -56,4 +57,5 @@ HEADERS += \
   misc_functions.h \
   player_display.h \
   raylib_functions.h \
-  synchrogear.h
+  synchrogear.h \
+  transitions.h

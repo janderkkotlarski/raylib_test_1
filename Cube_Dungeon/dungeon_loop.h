@@ -44,6 +44,9 @@ private:
   const float m_period
   { 0.5f };
 
+  const float m_transit_period
+  { 2.0f };
+
   float m_time
   { 0.0f };
 
