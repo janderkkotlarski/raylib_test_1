@@ -612,7 +612,10 @@ noexcept
                   counters[0] == (int)m_directions[0][0] &&
                   counters[1] == (int)m_directions[0][1] &&
                   counters[2] == (int)m_directions[0][2]) ||
-                  ((m_collide_type == cube_type::ruby ||
+                  ((m_collide_type == cube_type::next ||
+                    m_collide_type == cube_type::previous ||
+                    m_collide_type == cube_type::special ||
+                    m_collide_type == cube_type::ruby ||
                     m_collide_type == cube_type::citrine ||
                     m_collide_type == cube_type::emerald ||
                     m_collide_type == cube_type::sapphire) &&
