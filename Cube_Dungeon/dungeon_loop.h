@@ -301,6 +301,9 @@ private:
   void transition()
   noexcept;
 
+  void cube_lighting()
+  noexcept;
+
   void game_loop(Camera &camera, std::vector <Model> &cube_models, std::vector <Model> &dark_models,
                  Model &model,
                  std::vector <Shader> &fog_shaders, std::vector <Shader> &dark_shaders,

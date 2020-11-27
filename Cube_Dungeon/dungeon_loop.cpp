@@ -642,6 +642,8 @@ noexcept
 {
   m_screen_opacity = 0.0f;
 
+
+
   if (transit(m_collide_type))
   {
     m_screen_opacity = m_time/m_period;
@@ -657,7 +659,11 @@ noexcept
     for (int count{ 0 }; count < 3; ++count)
     { DrawRectangle(0, 0, m_screen_width, m_screen_height, screen_color); }
   }
+}
 
+void dungeon_loop::cube_lighting()
+noexcept
+{
   candy_blink(m_candy_factor, m_delta_time, m_candy_up);
 
   dark_shift(m_cube_vein_profile, m_delta_time, m_dark_opacity, m_dark_up);
@@ -704,6 +710,8 @@ noexcept
         { DrawRectangleRec(m_start_rect, m_start_color); }
 
         transition();
+
+        cube_lighting();
 
         infos();
       }
