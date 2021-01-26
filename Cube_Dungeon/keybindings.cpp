@@ -1,6 +1,6 @@
 #include "keybindings.h"
 
-#include <raylib.h>
+#include "raylib.h"
 
 void key_bind_actions(action &act)
 noexcept

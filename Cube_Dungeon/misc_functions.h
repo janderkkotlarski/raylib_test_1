@@ -4,7 +4,7 @@
 #include <vector>
 #include <random>
 
-#include <raylib.h>
+#include "raylib.h"
 
 #include "cube_type.h"
 

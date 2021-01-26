@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include <raylib.h>
+#include "raylib.h"
 
 #include "cube_type.h"
 #include "misc_functions.h"

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include <raylib.h>
+#include "raylib.h"
 
 enum class synchrogear
 {

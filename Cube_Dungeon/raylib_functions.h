@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include <raylib.h>
+#include "raylib.h"
 
 #include "fractacube.h"
 #include "dungeon_loop.h"

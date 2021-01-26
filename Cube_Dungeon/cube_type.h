@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include <raylib.h>
+#include "raylib.h"
 
 enum class cube_type
 /// Cube types that may be encountered in the levels.

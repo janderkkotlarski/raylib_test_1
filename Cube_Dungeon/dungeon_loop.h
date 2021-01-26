@@ -4,9 +4,9 @@
 #include <vector>
 #include <cmath>
 
-#include <raylib.h>
+#include "raylib.h"
 #include <raymath.h>
-#include <rlights.h>
+// #include <rlights.h>
 
 #include "misc_functions.h"
 #include "raylib_functions.h"

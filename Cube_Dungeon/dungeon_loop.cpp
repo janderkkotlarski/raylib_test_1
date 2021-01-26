@@ -5,7 +5,7 @@
 #include <time.h>
 
 #define RLIGHTS_IMPLEMENTATION
-#include <rlights.h>
+// #include <rlights.h>
 
 #include "keybindings.h"
 #include "dungeon_maze.h"
@@ -548,6 +548,10 @@ noexcept
     y += 30;
 
     display_string("Collide type: ", type2string(m_collide_type), x, y, size);
+
+    y += 30;
+
+    // display_string("Comment type: ", "5 minuten voor pair programming is te kort, liever 10 minuten", x, y, size);
   }
 }
 
@@ -710,6 +714,10 @@ noexcept
         { DrawRectangleRec(m_start_rect, m_start_color); }
 
         transition();
+
+        candy_blink(m_candy_factor, m_delta_time, m_candy_up);
+
+        dark_shift(m_cube_vein_profile, m_delta_time, m_dark_opacity, m_dark_up);
 
         cube_lighting();
 
